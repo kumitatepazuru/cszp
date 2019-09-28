@@ -11,3 +11,5 @@ Operation check OS
 - debian 10.1
 
 #### [Download!](https://github.com/kumitatepazuru/cszp/raw/master/cszp/setup.tar.gz)
+## Bugs, features you want to add
+#### [Here!](https://github.com/kumitatepazuru/cszp/issues)
