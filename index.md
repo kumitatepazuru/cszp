@@ -1,11 +1,11 @@
-# cszp 簡単サッカー実行プログラムホームページ
-cszp簡単サッカー実行プログラムホームページへようこそ！
+# cszp Easy soccer execution program homepage
+Welcome to the cszp easy soccer run program homepage!
 
-このプログラムは誰でも簡単に使えるrcssserver起動支援プログラムです。
+This program is a rcssserver startup support program that anyone can use easily.
 
 ## Download
-### 注意このプログラムは、linux (redhat系統)での実行が前提になっています。なので、他のOSでは実行できない可能性があります。
-動作確認OS
+### Note This program is premised on running on linux (redhat system). So it may not run on other OS.
+Operation check OS
 
 - ubuntu 16.04LTS
 
