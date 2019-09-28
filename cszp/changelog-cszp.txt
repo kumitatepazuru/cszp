@@ -1,0 +1,33 @@
+~change log~
+
+ver 1.0.5:
+Modification place:
+    Fixed a bug where an error occurs when there is no configuration file
+    Change update destination site
+    
+Additional elements:
+    None :)
+
+
+ver 1.0.2:
+Modification place:
+    Fixed get an error when there is no update
+    
+Additional elements:
+    None :)
+
+
+ver 1.0.1:
+Modification place:
+    Fixed a bug that caused an error when automake
+    
+Additional elements:
+    None :)
+
+
+ver 0.9.8b 5:
+Modification place:
+    None :)
+
+Additional elements:
+    It unveiled the program!
