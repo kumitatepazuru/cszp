@@ -1,5 +1,12 @@
 ~change log~
 
+ver 1.2.1:
+Modification place:
+    None :)
+    
+Additional elements:
+    add loop start
+
 ver 1.0.5:
 Modification place:
     Fixed a bug where an error occurs when there is no configuration file
