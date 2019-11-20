@@ -1,0 +1,115 @@
+def log(data):
+    l = data.find("vs")
+    while data[l] != "\t":
+        l -= 1
+    team1s = l + 2
+
+    l += 2
+    while data[l] != "'":
+        l += 1
+    team1e = l
+
+    l += 1
+    while data[l] != "'":
+        l += 1
+    team2s = l + 1
+
+    l += 1
+    while data[l] != "'":
+        l += 1
+    team2e = l
+
+    team1n = data[team1s:team1e]
+    team2n = data[team2s:team2e]
+
+    while data[l] != " ":
+        l += 1
+
+    l += 1
+    team1s = l
+
+    while data[l] != " ":
+        l += 1
+
+    team1e = l
+    l += 1
+
+    while data[l] != " ":
+        l += 1
+
+    l += 1
+    team2s = l
+
+    while data[l] != "\n":
+        l += 1
+
+    team2e = l
+
+    team1p = data[team1s:team1e]
+    team2p = data[team2s:team2e]
+    return team1n, team2n, team1p, team2p
+
+
+def kekka(logs, lang):
+    csvf = open("data.csv")
+    csv = csvf.read()
+    csv = csv.split("\n")
+    k = log(logs)
+    i = len(csv) - 1
+    if k[2] == k[3]:
+        if lang == 1:
+            return "同点！今後が楽しみです！"
+        else:
+            return "Draw!We look forward to the future!"
+    if max(int(k[2]), int(k[3])) == int(k[2]):
+        ka = 0
+    else:
+        ka = 1
+
+    re = 0
+    rp = 0
+    hit = 0
+    while i >= 0:
+        # print(i)
+        temp = csv[i].split(",")
+        # print(temp)
+        if len(temp) == 1:
+            pass
+        elif temp[0] == k[ka]:
+            hit += 1
+            if int(temp[2]) == int(temp[3]):
+                break
+            elif max(int(temp[2]), int(temp[3])) == int(temp[2]):
+                re += 1
+            else:
+                re = 0
+                rp += 1
+                break
+
+        elif temp[1] == k[ka]:
+            hit += 1
+            if int(temp[2]) == int(temp[3]):
+                break
+            elif max(int(temp[2]), int(temp[3])) == int(temp[3]):
+                re += 1
+            else:
+                re = 0
+                rp += 1
+                break
+        i -= 1
+    if lang == 1:
+        if re == 0:
+            if hit != 0:
+                return k[ka] + "さんの勝ち！そして、連敗復帰！今後が楽しみです！"
+            else:
+                return k[ka] + "さんの勝ち！今後が楽しみです！"
+        else:
+            return k[ka] + "さんの勝ち！そして" + str(re + 1) + "連勝中！"
+    else:
+        if re == 0:
+            if hit != 0:
+                return k[ka] + " Won! And return to consecutive losses! We look forward to the future!"
+            else:
+                return k[ka] + " Won! We look forward to the future!"
+        else:
+            return k[ka] + " won! And " + str(re + 1) + " consecutive wins!"

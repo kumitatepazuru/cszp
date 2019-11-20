@@ -1,0 +1,102 @@
+<HTML>
+<HEAD>
+<meta http-equiv="content-type" charset="utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<script type="text/javascript">
+const timer = 60000    // ミリ秒で間隔の時間を指定
+window.addEventListener('load',function(){
+  setInterval('location.reload()',timer);
+});
+
+//CSVファイルを読み込む関数getCSV()の定義
+function getCSV(){
+    var req = new XMLHttpRequest(); // HTTPでファイルを読み込むためのXMLHttpRrequestオブジェクトを生成
+    req.open("get", "./html.csv", true); // アクセスするファイルを指定
+    req.send(null); // HTTPリクエストの発行
+	
+    // レスポンスが返ってきたらconvertCSVtoArray()を呼ぶ	
+    req.onload = function(){
+	return convertCSVtoArray(req.responseText); // 渡されるのは読み込んだCSVデータ
+    }
+}
+ 
+// 読み込んだCSVデータを二次元配列に変換する関数convertCSVtoArray()の定義
+function convertCSVtoArray(str){ // 読み込んだCSVデータが文字列として渡される
+    var result = []; // 最終的な二次元配列を入れるための配列
+    var tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
+ 
+    // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
+    for(var i=0;i<tmp.length;++i){
+        result[i] = tmp[i].split(',');
+    }
+    //alert(result[2])
+    texth2 = "ただいま、次の試合データを表示中 : "+result[1][0]+" VS "+result[1][1];
+    var player = document.getElementById("player");
+    player.innerHTML= texth2;
+
+    for(var i=0;i<tmp.length;++i){
+        result[i] = tmp[i].split(',').slice(2,4);
+    }
+    makeTable(result,"table2");
+
+    point1 = 0;
+    for(var i=1;i<result.length-1;++i){
+        point1 += Number(result[i][0]);
+    }
+    point1 /= result.length-2;
+
+    point2 = 0;
+    for(var i=1;i<result.length-1;++i){
+        point2 += Number(result[i][1]);
+    }
+    point2 /= result.length-2;
+    var data = [["プレイヤー1の平均点","プレイヤー2の平均点","得失点差"],
+                [String(point1).slice(0,4),String(point2).slice(0,4),String(Math.max(point1,point2)-Math.min(point1,point2)).slice(0,4)],
+                ["","",""]];
+    // console.log(data);
+    makeTable(data,"table1");
+    return texth2;
+}
+
+// 表の動的作成
+function makeTable(data, tableId){
+    // 表の作成開始
+    var rows=[];
+    var table = document.createElement("table");
+
+    // 表に2次元配列の要素を格納
+    for(i = 0; i < data.length-1; i++){
+        rows.push(table.insertRow(-1));  // 行の追加
+        for(j = 0; j < data[0].length; j++){
+            cell=rows[i].insertCell(-1);
+            cell.appendChild(document.createTextNode(data[i][j]));
+            // 背景色の設定
+            if(i==0){
+                cell.style.backgroundColor = "#bbb"; // ヘッダ行
+            }else{
+                cell.style.backgroundColor = "#ddd"; // ヘッダ行以外
+            }
+        }
+    }
+    // 指定したdiv要素に表を加える
+    document.getElementById(tableId).appendChild(table);
+}
+window.onload = function(){ 
+// 表の動的作成
+//makeTable(data,"table");
+var player = document.getElementById("player");
+getCSV();
+};
+
+//getCSV(); //最初に実行される
+</script>
+<TITLE>data</TITLE>
+</HEAD>
+<h2 id="player"></h2>
+<img src="./file.png"></img><br>
+<button type=“button” onclick="location.href='./html_logs/'">過去ログを見る</button>
+<div id="table1"></div><br>
+<div id="table2"></div>
+</BODY>
+</HTML>

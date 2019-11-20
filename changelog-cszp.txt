@@ -1,11 +1,16 @@
 ~change log~
-
+ver 1.3.0b 1:
+Modification place:
+    Fixed a bug that when you close the change log would come back to the home screen at the time of update.
+Additional elements:
+    You can now check the progress in the browser when in loop mode.
+    Added a pass input assist function when pre-setting the game.
 ver 1.2.1:
 Modification place:
-    None :)
+    add loop start
     
 Additional elements:
-    add loop start
+    None :)
 
 ver 1.0.5:
 Modification place:
