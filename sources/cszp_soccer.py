@@ -33,7 +33,7 @@ def loop(cmd, loops):
     i3 = inp.lower()
     if i3 == "y":
         file = subp.Input("FileName?")
-        subprocess.Popen("python3 -m http.server --cgi 6002".split(" "))
+        subprocess.Popen("python3 -m http.server 6002".split(" "))
         time.sleep(1)
         serverpid = \
             subprocess.check_output("ps o pid,cmd | grep -E 'python3.*http.*6002' | grep -v grep", shell=True).decode(

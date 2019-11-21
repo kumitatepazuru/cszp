@@ -100,7 +100,7 @@ def main():
             data.close()
             data = open("lang", "r")
         datas = data.read()
-        data.cloFse()
+        data.close()
         if datas == "1":
             r = cszp_menu.menu_jp()
         else:
