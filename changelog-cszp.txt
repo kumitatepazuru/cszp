@@ -5,6 +5,8 @@ Modification place:
 Additional elements:
     You can now check the progress in the browser when in loop mode.
     Added a pass input assist function when pre-setting the game.
+    You can now specify where to save the log file.
+
 ver 1.2.1:
 Modification place:
     add loop start
