@@ -59,7 +59,7 @@ def update():
             urllib.request.urlretrieve("https://github.com/kumitatepazuru/cszp/archive/master.zip",
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
-            subprocess.check_output("unzip /tmp/cszp.zip && sudo mv sources/* ./", shell=True)
+            subprocess.check_output("unzip /tmp/cszp.zip /tmp/ && sudo mv -f sources/* ./", shell=True)
             print("completed!")
             return 1
         elif b == 1:
