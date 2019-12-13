@@ -4,8 +4,28 @@ import urllib.request
 
 import subp
 
+def killsoccer():
+    try:
+        while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
+            subprocess.check_output("killall rcssserver", shell=True)
+    except:
+        pass
+    try:
+        while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
+            subprocess.check_output("killall soccerwindow2-qt4", shell=True)
+    except:
+        pass
+    try:
+        serverpid = \
+            subprocess.check_output("ps o pid,cmd | grep -E 'python3.*http.*20000' | grep -v grep", shell=True).decode(
+                "utf-8").split(" ")
+        subprocess.check_output("kill " + serverpid, shell=True)
+    except:
+        pass
+
 
 def update():
+    killsoccer()
     subprocess.check_call("clear",shell=True)
     versionlog = urllib.request.urlopen("https://raw.githubusercontent.com/kumitatepazuru/cszp/master/versionlog")
     vlog = versionlog.read().decode("utf-8")
@@ -54,16 +74,16 @@ def update():
         versionlog.close()
 
         if b == 0:
-            subprocess.check_output("reset", shell=True)
+            subp.reset()
             print("file downloading...")
             urllib.request.urlretrieve("https://github.com/kumitatepazuru/cszp/archive/master.zip",
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
-            subprocess.check_output("unzip /tmp/cszp.zip /tmp/ && sudo mv -f sources/* ./", shell=True)
+            subprocess.check_output("unzip -o /tmp/cszp.zip -d /tmp/ && sudo mv -f /tmp/cszp-master/sources/* ./", shell=True)
             print("completed!")
             return 1
         elif b == 1:
-            subprocess.check_output("reset", shell=True)
+            subp.reset()
             urllib.request.urlretrieve(
                 "https://raw.githubusercontent.com/kumitatepazuru/cszp/master/changelog-cszp.txt",
                 "/tmp/changelog.txt")
@@ -71,5 +91,5 @@ def update():
             print(changelog.read())
             changelog.close()
             subp.Input("\nPress Enter Key")
-            subprocess.check_call("reset",shell=True)
+            subp.reset()
             update()

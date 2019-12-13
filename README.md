@@ -16,6 +16,7 @@ Operation check OS
 #### 2.Install
 ``` 
 pip3 install -r requirements.txt
+sudo apt-get install figlet -y
 python3 setup.py [Program installation destination (optional)] #If not specified, it will be installed in /opt/cszp
 ```
 ## Bugs, features you want to add

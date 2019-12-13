@@ -7,12 +7,15 @@ import cszp_setting
 import cszp_soccer
 import cszp_update
 import subp
+import os
 
 
 def menu_jp():
     inp = ""
-    cszp_update.update()
-    subprocess.check_output("reset", shell=True)
+    Return = cszp_update.update()
+    if Return == 1:
+        return 3
+    subp.reset()
     while inp != "start" and inp != "test" and inp != "setting" and inp != "exit" and inp != "colortest" \
             and inp != "reset" and inp != "lang" and inp != "loop" and inp != "server":
         subprocess.check_call("clear", shell=True)
@@ -51,7 +54,7 @@ exit        終了する
         data.write("name,command")
         data.close()
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,/opt/cszp")
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
         data.close()
         subp.Input("\n\n\033[38;5;214mリセットが完了しました。\nEnterを押して続行...", dot=False)
         menu_jp()
@@ -64,7 +67,7 @@ exit        終了する
     elif inp == "lang":
         try:
             data = open("lang", "r")
-        except FileNotFoundError:
+        except:
             data = open("lang", "w")
             data.write("1")
             data.close()
@@ -85,7 +88,7 @@ exit        終了する
     elif inp == "server":
         print("Press Ctrl+C to Exit")
         try:
-            subprocess.check_call("python3 -m http.server 6002",shell=True)
+            subprocess.check_call("python3 -m http.server 20000",shell=True)
         except KeyboardInterrupt:
             menu_jp()
     return 1
@@ -96,7 +99,7 @@ def menu_en():
     Return = cszp_update.update()
     if Return == 1:
         return 3
-    subprocess.check_output("reset", shell=True)
+    subp.reset()
     while inp != "start" and inp != "test" and inp != "setting" and inp != "exit" and inp != "colortest" \
             and inp != "reset" and inp != "lang" and inp != "loop" and inp != "server":
         subprocess.check_call("clear", shell=True)
@@ -135,7 +138,7 @@ exit        Ends
         data.write("name,command")
         data.close()
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,/opt/cszp")
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
         data.close()
         subp.Input("\n\n\033[38;5;214mThe reset is complete.\nPress Enter to continue...", dot=False)
         menu_en()
@@ -169,7 +172,7 @@ exit        Ends
     elif inp == "server":
         print("Press Ctrl+C to Exit")
         try:
-            subprocess.check_call("python3 -m http.server 6002",shell=True)
+            subprocess.check_call("python3 -m http.server 20000",shell=True)
         except KeyboardInterrupt:
             menu_en()
     return 1

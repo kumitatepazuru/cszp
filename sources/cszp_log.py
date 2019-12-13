@@ -47,7 +47,8 @@ def log(data):
 
     team1p = data[team1s:team1e]
     team2p = data[team2s:team2e]
-    return team1n, team2n, team1p, team2p
+    toku = str(int(team1p)-int(team2p))
+    return team1n, team2n, team1p, team2p, toku
 
 
 def kekka(logs, lang):

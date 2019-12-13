@@ -7,7 +7,7 @@ from texttable import *
 
 
 def setting_jp():
-    subprocess.check_output("reset", shell=True)
+    subp.reset()
     inp = ""
     while inp.split(' ')[0] != "add" and inp.split(' ')[0] != "remove" and inp != "back" \
             and inp.split(' ')[0] != "soccerwindow2" and inp.split(' ')[0] != "automake" \
@@ -45,7 +45,7 @@ def setting_jp():
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,/opt/cszp")
+            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
@@ -225,7 +225,7 @@ back                    全ページへ戻る(ホーム)
         setting_jp()
 
 def setting_en():
-    subprocess.check_output("reset", shell=True)
+    subp.reset()
     inp = ""
     while inp.split(' ')[0] != "add" and inp.split(' ')[0] != "remove" and inp != "back" \
             and inp.split(' ')[0] != "soccerwindow2" and inp.split(' ')[0] != "automake" \
@@ -263,7 +263,7 @@ def setting_en():
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,/opt/cszp")
+            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()

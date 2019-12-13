@@ -6,6 +6,10 @@ import shutil
 import glob
 
 
+def reset():
+    print("\033[2J\033[1H")
+
+
 def Input(text, normal=False, textcolor="\033[38;5;10m", dotcolor="\033[38;5;7m", usercolor="\033[38;5;12m", dot=True):
     """ \033[0m	指定をリセットし未指定状態に戻す（0は省略可）
         \033[1m	太字

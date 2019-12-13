@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import subprocess, sys, platform, time, importlib
+import subprocess, sys, platform, time, importlib, subp
 
 try:
     from texttable import *
@@ -54,7 +54,7 @@ except:
 def main():
     # noinspection PyBroadException
     try:
-        subprocess.check_output("reset", shell=True)
+        subp.reset()
         print("\033[0m\033[38;5;172m")
         v = open("./version")
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
@@ -110,7 +110,7 @@ def main():
         r = 0
 
     #  stop
-    subprocess.check_output("reset", shell=True)
+    subp.reset()
     print("\033[0m\033[38;5;172m")
     v = open("./version")
     subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
@@ -127,7 +127,7 @@ def main():
     time.sleep(0.75)
     print("stoped.")
     time.sleep(0.25)
-    subprocess.check_output("reset", shell=True)
+    subp.reset()
     if r == 2:
         main()
     elif r == 3:
