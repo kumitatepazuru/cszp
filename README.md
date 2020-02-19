@@ -7,14 +7,13 @@ Operation check OS
 - ubuntu server 16.04LTS
 - debian 10.1
 
-#### [Download!](https://github.com/kumitatepazuru/cszp/raw/master/cszp/setup.tar.gz)
-
 ## How to install
 
 #### 1.Get this program.
 ```git clone https://github.com/kumitatepazuru/cszp.git```
 #### 2.Install
 ``` 
+cd ./cszp/
 pip3 install -r requirements.txt
 sudo apt-get install figlet -y
 python3 setup.py [Program installation destination (optional)] #If not specified, it will be installed in /opt/cszp
