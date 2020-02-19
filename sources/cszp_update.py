@@ -4,6 +4,7 @@ import urllib.request
 
 import subp
 
+
 def killsoccer():
     try:
         while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
@@ -79,7 +80,8 @@ def update():
             urllib.request.urlretrieve("https://github.com/kumitatepazuru/cszp/archive/master.zip",
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
-            subprocess.check_output("unzip -o /tmp/cszp.zip -d /tmp/ && sudo mv -f /tmp/cszp-master/sources/* ./", shell=True)
+            subprocess.check_output("unzip -o /tmp/cszp.zip -d /tmp/ && sudo mv -fu /tmp/cszp-master/sources/* ./",
+                                    shell=True)
             print("completed!")
             return 1
         elif b == 1:
