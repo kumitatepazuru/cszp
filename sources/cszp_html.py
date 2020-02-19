@@ -21,15 +21,6 @@ def plot_socre(filename):
     plt.title("histogram1")
     plt.savefig("file1.png")
 
-    data = pd.read_csv(filename, sep=',', header=None,
-                       names=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'toku'),
-                       index_col=0)
-    # print(data)
-    plot_hist(data['toku'])
-    # plt.show()
-    plt.title("histogram2")
-    plt.savefig("file2.png")
-
     csv = open(filename)
     csv2 = open("html.csv", "w")
     csvd = csv.read().splitlines()[1:]
