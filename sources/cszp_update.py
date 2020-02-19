@@ -81,7 +81,7 @@ def update():
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
             subprocess.check_output(
-                "unzip -o /tmp/cszp.zip -d /tmp/ && sudo mv -f /tmp/cszp-master/sources/[^html_logs]+ ./",
+                "unzip -o /tmp/cszp.zip -d /tmp/ && sudo mv -f /tmp/cszp-master/sources/[^ht]* ./",
                 shell=True)
             print("completed!")
             return 1
