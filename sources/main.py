@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import subprocess, sys, platform, time, importlib, subp
+import importlib
+import platform
+import subp
+import subprocess
+import sys
+import time
 
 try:
     from texttable import *

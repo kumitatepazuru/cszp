@@ -3,12 +3,11 @@ import subprocess
 import time
 from datetime import datetime
 
-import tqdm
-from texttable import *
-
 import cszp_html
 import cszp_log
 import subp
+import tqdm
+from texttable import *
 
 
 def loop(cmd, loops):
@@ -80,7 +79,8 @@ def loop(cmd, loops):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
@@ -141,11 +141,11 @@ def loop(cmd, loops):
                 data.close()
                 data = open("./config.conf", "r")
             df = data.read()
-            #print(df.split("'"))
-            temp = open(df.split(",")[9]+"/"+exittime + "_team1.log", "w")
+            # print(df.split("'"))
+            temp = open(df.split(",")[9] + "/" + exittime + "_team1.log", "w")
             temp.write(logt1)
             temp.close()
-            temp = open(df.split(",")[9]+"/"+exittime + "_team2.log", "w")
+            temp = open(df.split(",")[9] + "/" + exittime + "_team2.log", "w")
             temp.write(logt2)
             temp.close()
         if i2 == "y":
@@ -159,8 +159,8 @@ def loop(cmd, loops):
                 data.close()
                 data = open("./config.conf", "r")
             df = data.read()
-            #print(df)
-            temp = open(df.split(",")[9]+"/"+exittime + "_server.log", "w")
+            # print(df)
+            temp = open(df.split(",")[9] + "/" + exittime + "_server.log", "w")
             temp.write(logs)
             temp.close()
         if i3 == "y":
@@ -174,10 +174,11 @@ def loop(cmd, loops):
                 data.close()
                 data = open("./config.conf", "r")
             df = data.read()
-            print(df.split(",")[9]+"/"+file)
-            temp = open(df.split(",")[9]+"/"+file, "a")
+            print(df.split(",")[9] + "/" + file)
+            temp = open(df.split(",")[9] + "/" + file, "a")
             soccer = cszp_log.log(logs)
-            temp.write("\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+            temp.write(
+                "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
             temp.close()
             cszp_html.plot_socre(file)
 
@@ -220,7 +221,7 @@ def start(cmd, lang):
         data = open("./config.conf", "r")
     except:
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
         data.close()
         data = open("./config.conf", "r")
     datas = data.read()
@@ -333,14 +334,15 @@ def start(cmd, lang):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
-        temp = open(df.split(",")[9]+"/"+exittime + "_team1.log", "w")
+        temp = open(df.split(",")[9] + "/" + exittime + "_team1.log", "w")
         temp.write(logt1)
         temp.close()
-        temp = open(df.split(",")[9]+"/"+exittime + "_team2.log", "w")
+        temp = open(df.split(",")[9] + "/" + exittime + "_team2.log", "w")
         temp.write(logt2)
         temp.close()
     inp = ""
@@ -353,11 +355,12 @@ def start(cmd, lang):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
-        temp = open(df.split(",")[9]+"/"+exittime + "_server.log", "w")
+        temp = open(df.split(",")[9] + "/" + exittime + "_server.log", "w")
         temp.write(logs)
         temp.close()
     inp = ""
@@ -372,14 +375,16 @@ def start(cmd, lang):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
         data.close()
-        temp = open(df.split(",")[9]+"/"+inp, "a")
+        temp = open(df.split(",")[9] + "/" + inp, "a")
         soccer = cszp_log.log(logs)
-        temp.write("\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+        temp.write(
+            "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
         temp.close()
 
     temp = open("data.csv", "a")
@@ -405,7 +410,7 @@ def start(cmd, lang):
                 data = open("./config.conf", "r")
             df = data.read()
             data.close()
-            temp = open(df.split(",")[9]+"/"+exittime + "_makelog.log", "w")
+            temp = open(df.split(",")[9] + "/" + exittime + "_makelog.log", "w")
             temp.write(makelog)
             temp.close()
 
@@ -426,7 +431,7 @@ def setting_jp(testmode=False):
         data = open("./config.conf", "r")
     except:
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
         data.close()
         data = open("./config.conf", "r")
     datas = data.read()
@@ -563,7 +568,8 @@ def setting_jp(testmode=False):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
@@ -578,7 +584,8 @@ def setting_jp(testmode=False):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
@@ -610,7 +617,7 @@ def setting_en(testmode=False):
         data = open("./config.conf", "r")
     except:
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
         data.close()
         data = open("./config.conf", "r")
     datas = data.read()
@@ -748,7 +755,8 @@ def setting_en(testmode=False):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
@@ -763,7 +771,8 @@ def setting_en(testmode=False):
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
@@ -795,7 +804,7 @@ def setting_en_loop():
         data = open("./config.conf", "r")
     except:
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
         data.close()
         data = open("./config.conf", "r")
     datas = data.read()
@@ -933,7 +942,8 @@ def setting_en_loop():
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
@@ -945,7 +955,8 @@ def setting_en_loop():
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
@@ -977,7 +988,7 @@ def setting_jp_loop():
         data = open("./config.conf", "r")
     except:
         data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
         data.close()
         data = open("./config.conf", "r")
     datas = data.read()
@@ -1114,18 +1125,21 @@ def setting_jp_loop():
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         df = data.read()
         data.close()
-        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir="+df.split(",")[9]+" server::text_log_dir="+df.split(",")[9]
+        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
+               df.split(",")[9] + " server::text_log_dir=" + df.split(",")[9]
         loops = int(subp.Input("\nやる回数を指定", textcolor="\033[38;5;9m"))
         try:
             data = open("./config.conf", "r")
         except:
             data = open("./config.conf", "w")
-            data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output,"+os.getcwd())
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
             data.close()
             data = open("./config.conf", "r")
         datas = data.read()
