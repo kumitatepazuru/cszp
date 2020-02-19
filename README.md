@@ -1,4 +1,5 @@
 # cszp Easy soccer execution program
+[日本語ページはこちら](https://github.com/kumitatepazuru/cszp/blob/master/README_jp.md)
 
 ## Download
 ### Note This program is premised on running on linux (redhat system). So it may not run on other OS.
