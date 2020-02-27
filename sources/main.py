@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import importlib
+import os
 import platform
-import subp
 import subprocess
 import sys
 import time
+
+import subp
 
 try:
     from texttable import *
@@ -82,17 +84,15 @@ def main():
         time.sleep(0.2)
         print("\033[38;5;2mloading Now...")
         time.sleep(0.5)
-        table = Texttable()
-        table.add_rows([["box1", "box2", "box3"],
-                        ["test", 1234567890, 3.1415926535],
-                        ["test2", 123454321, 54e+2]])
-        print("\n" + table.draw())
     else:
         sys.stdout.write("\033[38;5;9m\033[1m[FAILD] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
         print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.2 or higher version.")
         sys.exit()
 
+    if not os.path.isdir("html_logs"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        os.mkdir("html_logs")
     # main
     import cszp_menu
 
@@ -123,11 +123,6 @@ def main():
     sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
     print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     print("\033[38;5;2mloading Now...")
-    table = Texttable()
-    table.add_rows([["box1", "box2", "box3"],
-                    ["test", 1234567890, 3.1415926535],
-                    ["test2", 123454321, 54e+2]])
-    print("\n" + table.draw())
     print("\n\n\033[38;5;2mloading Now...")
     time.sleep(0.75)
     print("stoped.")
