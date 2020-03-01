@@ -1,4 +1,10 @@
 ~change log~
+ver 2.0.0:
+Modification place:
+    Japanese and English are converted into language files. This allows anyone to modify it.
+    Overall server display during loop changed. This makes it easier to see.
+Additional elements:
+    None :)
 ver 1.3.3b 5:
 Modification place:
     Is Error Bugs.
