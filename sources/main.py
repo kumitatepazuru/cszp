@@ -7,6 +7,7 @@ import subprocess
 import sys
 import time
 
+import cszp_lang
 import subp
 
 try:
@@ -97,19 +98,8 @@ def main():
     import cszp_menu
 
     try:
-        try:
-            data = open("lang", "r")
-        except:
-            data = open("lang", "w")
-            data.write("1")
-            data.close()
-            data = open("lang", "r")
-        datas = data.read()
-        data.close()
-        if datas == "1":
-            r = cszp_menu.menu_jp()
-        else:
-            r = cszp_menu.menu_en()
+        lang = cszp_lang.lang()
+        r = cszp_menu.menu(lang)
     except KeyboardInterrupt:
         print("INFO:PROGRAM IS STOP!")
         r = 0
@@ -128,9 +118,8 @@ def main():
     print("stoped.")
     time.sleep(0.25)
     subp.reset()
-    if r == 2:
-        main()
-    elif r == 3:
+    print(r)
+    if r == 2 or r == 3:
         importlib.reload(cszp_menu)
         main()
 

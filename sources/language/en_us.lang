@@ -1,0 +1,118 @@
+cszp 簡単サッカー実行プログラム
+cszp Easy soccer execution program
+
+start       試合をする
+start       Play a match
+
+test        テスト試合をする
+test        Play a test match
+
+setting     設定をする
+setting     Setting
+
+reset       リセットをかける
+reset       Reset
+
+loop        試合を複数回する
+loop        Play multiple matchs
+
+lang        Change language/言語を変更
+lang        Change language/言語を変更
+
+server      過去のloopログをサーバーで確認
+server      Check the previous loop log on the server
+
+exit        終了する
+exit        Exit
+
+>>>
+>>>
+
+ERR:そのようなコマンドはありません。
+ERR:No such command.
+
+Enterキーを押して続行...
+Press enter key to continue...
+
+リセットが完了しました。
+Reset completed.
+
+Ctrl+Cで閲覧を終了します。
+Press Ctrl+C to return.
+
+
+簡単サッカー実行リスト
+Easy soccer execution list
+
+設定
+Settings
+
+※  注 [文字列] は引数を表します。 文字列は引数名です。
+* Note [STRING] indicates argument. STRING is argument name.
+
+add [NAME] [COMMAND]    簡単サッカー実行リストの登録
+add [NAME] [COMMAND]    Register Easy soccer execution list
+
+remove [NAME]           簡単サッカー実行リストの削除
+remove [NAME]           Remove Easy soccer execution list
+
+soccerwindow2 [ON/OFF]  soccerwindow2を試合時に自動起動するかどうか
+soccerwindow2 [ON/OFF]  Show soccerwindow2 automatically
+
+automake [ON/OFF]       試合前に最適化用makeをかけるかどうか
+automake [ON/OFF]       Optimize before match
+
+rcg [ON/OFF]            rcgログを出力するかどうか
+rcg [ON/OFF]            Output rcg log
+
+rcl [ON/OFF]            rclログを出力するかどうか
+rcl [ON/OFF]            Output rcl log
+
+fileout                 ログの保存先を指定
+fileout                 Set log output folder
+
+back                    前ページへ戻る(ホーム)
+back                    Return to previous page
+
+ERR:名前
+ERR:Name
+
+は簡単サッカー実行リストに登録されていません。
+Is Not in Easy soccer execution list.
+
+タイプミスを確認してください
+Check for typo
+
+ERR:使える引数はONまたはOFFです。
+ERR:Only ON and OFF a allowed as argument.
+
+ERR:引数がありません。タイプミスを確認してください
+ERR:No argument found.Check for typo
+
+#-------- cszp_soccer ---------
+設定確認
+Setting
+
+前画面に戻る場合はbackと入力
+Type back to Return to previous page
+
+Team1(黄色)チームのパスまたはリストの名前を入力
+Input path or list name for team1(yellow)team
+
+また、そのようなファイルも存在しません。
+Also,no such file exists.
+
+Team1(黄色)チームのパス:
+Path for team1(yellow)team:
+
+Team2(赤色)チームのパスまたはリストの名前を入力
+Input path or list name for team2(red)team
+
+Team2(赤色)チームのパス:
+Path for team2(red)team:
+
+サーバーの引数を入力（ない場合は空欄）
+Input server argument(leave blank if none)
+
+やる回数を指定
+No to play matchs

@@ -3,11 +3,12 @@ import subprocess
 import time
 from datetime import datetime
 
+import tqdm
+from texttable import *
+
 import cszp_html
 import cszp_log
 import subp
-import tqdm
-from texttable import *
 
 
 def loop(cmd, loops):
@@ -178,7 +179,8 @@ def loop(cmd, loops):
             temp = open(df.split(",")[9] + "/" + file, "a")
             soccer = cszp_log.log(logs)
             temp.write(
-                "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+                "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + str(
+                    int(soccer[2]) - int(soccer[3])) + "," + str(int(soccer[3]) - int(soccer[2])))
             temp.close()
             cszp_html.plot_socre(file)
 
@@ -188,6 +190,7 @@ def loop(cmd, loops):
     # time.sleep(2)
     cszp_html.logs(exittime)
     subp.Input("Press Enter Key")
+
 
 def start(cmd, lang):
     subp.reset()
@@ -415,7 +418,7 @@ def start(cmd, lang):
             temp.close()
 
 
-def setting_jp(testmode=False):
+def setting(lang, testmode=False, loopmode=False):
     ok = 0
     cmd = []
 
@@ -424,8 +427,8 @@ def setting_jp(testmode=False):
     v = open("./version")
     subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
     v.close()
-    print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-    print("\033[38;5;39m設定確認")
+    print("\n\n\033[1m\033[38;5;10m" + lang.lang("cszp 簡単サッカー実行プログラム"))
+    print("\033[38;5;39m" + lang.lang("設定確認"))
     # noinspection PyBroadException
     try:
         data = open("./config.conf", "r")
@@ -454,8 +457,8 @@ def setting_jp(testmode=False):
         v = open("./version")
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
         v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;39m簡単サッカー実行リスト")
+        print("\n\n\033[1m\033[38;5;10mcszp " + lang.lang("cszp 簡単サッカー実行プログラム"))
+        print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         try:
             data = open("./setting.conf", "r")
@@ -474,8 +477,8 @@ def setting_jp(testmode=False):
             datal.append(datat)
         table = Texttable()
         table.add_rows(datal)
-        print(table.draw() + "\n前画面に戻る場合はbackと入力\n")
-        inp = subp.Inputfile("\nTeam1(黄色)チームのパスまたはリストの名前を入力", textcolor="\033[38;5;11m")
+        print(table.draw() + lang.lang("\n前画面に戻る場合はbackと入力\n"))
+        inp = subp.Inputfile(lang.lang("\nTeam1(黄色)チームのパスまたはリストの名前を入力"), textcolor="\033[38;5;11m")
 
         if inp != "back":
             i = 0
@@ -492,9 +495,9 @@ def setting_jp(testmode=False):
                 if os.path.isfile(inp):
                     ok = 1
                 else:
-                    print("\033[38;5;9mERR:名前 " + inp + " は簡単サッカー実行プログラムに登録されていません。\n"
-                                                        "また、そのようなファイルも存在しません。\nタイプミスをを確認してください")
-                    subp.Input("Enterキーを押して続行...", dot=False)
+                    print("\033[38;5;9m" + lang.lang("ERR:名前"), inp,
+                          lang.lang("は簡単サッカー実行リストに登録されていません。\nまた、そのようなファイルも存在しません。\nタイプミスを確認してください"))
+                    subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
         else:
             ok = 2
 
@@ -510,8 +513,8 @@ def setting_jp(testmode=False):
         v = open("./version")
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
         v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;39m簡単サッカー実行リスト")
+        print("\n\n\033[1m\033[38;5;10m" + lang.lang("cszp 簡単サッカー実行プログラム"))
+        print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         try:
             data = open("./setting.conf", "r")
@@ -530,8 +533,9 @@ def setting_jp(testmode=False):
             datal.append(datat)
         table = Texttable()
         table.add_rows(datal)
-        print(table.draw() + "\n前画面に戻る場合はbackと入力\n\033[38;5;11mTeam1(黄色)チームのパス:" + cmd[0])
-        inp = subp.Inputfile("\nTeam2(赤色)チームのパスまたはリストの名前を入力", textcolor="\033[38;5;9m")
+        print(
+            table.draw() + lang.lang("\n前画面に戻る場合はbackと入力") + "\n\033[38;5;11m" + lang.lang("Team1(黄色)チームのパス:") + cmd[0])
+        inp = subp.Inputfile(lang.lang("\nTeam2(赤色)チームのパスまたはリストの名前を入力"), textcolor="\033[38;5;9m")
 
         if inp != "back":
             i = 0
@@ -547,8 +551,8 @@ def setting_jp(testmode=False):
                 if os.path.isfile(inp):
                     ok = 1
                 else:
-                    print("\033[38;5;9mERR:名前 " + inp + " は簡単サッカー実行プログラムに登録されていません。\n"
-                                                        "また、そのようなファイルも存在しません。\nタイプミスをを確認してください")
+                    print("\033[38;5;9m" + lang.lang("ERR:名前"), inp,
+                          lang.lang("は簡単サッカー実行リストに登録されていません。\nまた、そのようなファイルも存在しません。\nタイプミスを確認してください"))
                     subp.Input("Enterキーを押して続行...", dot=False)
         else:
             ok = 2
@@ -560,10 +564,10 @@ def setting_jp(testmode=False):
         v = open("./version")
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
         v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;11mTeam1(黄色)チームのパス:" + cmd[0])
-        print("\033[38;5;9mTeam2(赤色)チームのパス:" + cmd[1])
-        inp = subp.Input("\nサーバーの引数を入力（ない場合は空欄）", textcolor="\033[38;5;9m")
+        print("\n\n\033[1m\033[38;5;10m" + lang.lang("cszp 簡単サッカー実行プログラム"))
+        print("\n\033[38;5;11m" + lang.lang("Team1(黄色)チームのパス:") + cmd[0])
+        print("\033[38;5;9m" + lang.lang("Team2(赤色)チームのパス:") + cmd[1])
+        inp = subp.Input(lang.lang("\nサーバーの引数を入力（ない場合は空欄）"), textcolor="\033[38;5;9m")
         try:
             data = open("./config.conf", "r")
         except:
@@ -579,6 +583,8 @@ def setting_jp(testmode=False):
         if testmode:
             inp += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
                    "server::half_time=10"
+        if loopmode:
+            loops = int(subp.Input("\n" + lang.lang("やる回数を指定"), textcolor="\033[38;5;9m"))
 
         try:
             data = open("./config.conf", "r")
@@ -598,558 +604,7 @@ def setting_jp(testmode=False):
         cmd.append(inp)
         print("\n\033[38;5;14mloading now...")
         time.sleep(0.5)
-        start(cmd, 1)
-
-
-def setting_en(testmode=False):
-    ok = 0
-    cmd = []
-
-    subp.reset()
-    print("\033[0m\033[38;5;172m")
-    v = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-    v.close()
-    print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-    print("\033[38;5;39mSetting confirmation")
-    # noinspection PyBroadException
-    try:
-        data = open("./config.conf", "r")
-    except:
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-        data.close()
-        data = open("./config.conf", "r")
-    datas = data.read()
-    data.close()
-    datas = datas.split(",")
-    datal = []
-    for i in range(0, len(datas), 2):
-        datat = []
-        datat += datas[i:i + 2]
-        datal.append(datat)
-    table = Texttable()
-    table.add_rows(datal)
-    print(table.draw())
-    subp.Input("Press Enter Key")
-
-    subp.reset()
-    while ok == 0:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;39mEasy soccer run list")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\nEnter back to return to the previous screen\n")
-        inp = subp.Inputfile("\nTeam1 (yellow) Enter the team path or list name", textcolor="\033[38;5;11m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                # print(inp)
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:The name " + inp + " is not registered in the easy soccer "
-                                                              "execution program. Check for typos.")
-                    subp.Input("Press Enter to continue...", dot=False)
+        if loopmode:
+            loop(cmd, loops)
         else:
-            ok = 2
-
-    cmd.append(inp)
-    # print(type(inp))
-    # subp.Input("")
-    if ok != 2:
-        ok = 0
-    subp.reset()
-    while ok == 0 and ok != 2:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;39mEasy soccer run list")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\nEnter back to return to the previous screen\n\033[38;5;11mTeam1 "
-                             "(yellow) Team of the path:" + cmd[0])
-        inp = subp.Inputfile("\nEnter Team2 (red) team path or list name", textcolor="\033[38;5;9m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:The name " + inp + " is not registered in the easy soccer "
-                                                              "execution program. Check for typos.")
-                    subp.Input("Press Enter to continue...", dot=False)
-        else:
-            ok = 2
-
-    if ok != 2:
-        cmd.append(inp)
-        subp.reset()
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;11mTeam1 (yellow) Team of the path:" + cmd[0])
-        print("\033[38;5;9mTeam2 (red) Team of the path:" + cmd[1])
-        inp = subp.Input("\nEnter the server argument (blank if none)", textcolor="\033[38;5;9m")
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        df = data.read()
-        data.close()
-        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
-               df.split(",")[9] + " server::text_log_dir=" + df.split(",")[9]
-        if testmode:
-            inp += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
-                   "server::half_time=10"
-
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        datas = data.read()
-        datas = datas.split(",")
-        data.close()
-        if datas[5] == "off":
-            inp += " server::game_logging=false"
-        if datas[7] == "off":
-            inp += " server::text_logging=false"
-        cmd.append(inp)
-        print("\n\033[38;5;14mloading now...")
-        time.sleep(0.5)
-        start(cmd, 0)
-
-
-def setting_en_loop():
-    ok = 0
-    cmd = []
-
-    subp.reset()
-    print("\033[0m\033[38;5;172m")
-    v = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-    v.close()
-    print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-    print("\033[38;5;39mSetting confirmation")
-    # noinspection PyBroadException
-    try:
-        data = open("./config.conf", "r")
-    except:
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-        data.close()
-        data = open("./config.conf", "r")
-    datas = data.read()
-    data.close()
-    datas = datas.split(",")
-    datal = []
-    for i in range(0, len(datas), 2):
-        datat = []
-        datat += datas[i:i + 2]
-        datal.append(datat)
-    table = Texttable()
-    table.add_rows(datal)
-    print(table.draw())
-    subp.Input("Press Enter Key")
-
-    subp.reset()
-    while ok == 0:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;39mEasy soccer run list")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\nEnter back to return to the previous screen\n")
-        inp = subp.Inputfile("\nTeam1 (yellow) Enter the team path or list name", textcolor="\033[38;5;11m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                # print(inp)
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:The name " + inp + " is not registered in the easy soccer "
-                                                              "execution program. Check for typos.")
-                    subp.Input("Press Enter to continue...", dot=False)
-        else:
-            ok = 2
-
-    cmd.append(inp)
-    # print(type(inp))
-    # subp.Input("")
-    if ok != 2:
-        ok = 0
-    subp.reset()
-    while ok == 0 and ok != 2:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;39mEasy soccer run list")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\nEnter back to return to the previous screen\n\033[38;5;11mTeam1 "
-                             "(yellow) Team of the path:" + cmd[0])
-        inp = subp.Inputfile("\nEnter Team2 (red) team path or list name", textcolor="\033[38;5;9m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:The name " + inp + " is not registered in the easy soccer "
-                                                              "execution program. Check for typos.")
-                    subp.Input("Press Enter to continue...", dot=False)
-        else:
-            ok = 2
-
-    if ok != 2:
-        cmd.append(inp)
-        subp.reset()
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp Easy soccer execution program")
-        print("\n\033[38;5;11mTeam1 (yellow) Team of the path:" + cmd[0])
-        print("\033[38;5;9mTeam2 (red) Team of the path:" + cmd[1])
-        inp = subp.Input("\nEnter the server argument (blank if none)", textcolor="\033[38;5;9m")
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        df = data.read()
-        data.close()
-        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
-               df.split(",")[9] + " server::text_log_dir=" + df.split(",")[9]
-        loops = int(subp.Input("Specify the number of loops", textcolor="\033[38;5;9m"))
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        datas = data.read()
-        datas = datas.split(",")
-        data.close()
-        if datas[5] == "off":
-            inp += " server::game_logging=false"
-        if datas[7] == "off":
-            inp += " server::text_logging=false"
-        cmd.append(inp)
-        print("\n\033[38;5;14mloading now...")
-        time.sleep(0.5)
-        loop(cmd, loops)
-
-
-def setting_jp_loop():
-    ok = 0
-    cmd = []
-
-    subp.reset()
-    print("\033[0m\033[38;5;172m")
-    v = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-    v.close()
-    print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-    print("\033[38;5;39m設定確認")
-    # noinspection PyBroadException
-    try:
-        data = open("./config.conf", "r")
-    except:
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-        data.close()
-        data = open("./config.conf", "r")
-    datas = data.read()
-    data.close()
-    datas = datas.split(",")
-    datal = []
-    for i in range(0, len(datas), 2):
-        datat = []
-        datat += datas[i:i + 2]
-        datal.append(datat)
-    table = Texttable()
-    table.add_rows(datal)
-    print(table.draw())
-    subp.Input("Press Enter Key")
-
-    subp.reset()
-    while ok == 0:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;39m簡単サッカー実行リスト")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\n前画面に戻る場合はbackと入力\n")
-        inp = subp.Inputfile("\nTeam1(黄色)チームのパスまたはリストの名前を入力", textcolor="\033[38;5;11m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                # print(inp)
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:名前 " + inp + " は簡単サッカー実行プログラムに登録されていません。\n"
-                                                        "また、そのようなファイルも存在しません。\nタイプミスをを確認してください")
-                    subp.Input("Enterキーを押して続行...", dot=False)
-        else:
-            ok = 2
-
-    cmd.append(inp)
-    # print(type(inp))
-    # subp.Input("")
-    if ok != 2:
-        ok = 0
-    subp.reset()
-    while ok == 0 and ok != 2:
-        subprocess.check_call("clear", shell=True)
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;39m簡単サッカー実行リスト")
-        # noinspection PyBroadException
-        try:
-            data = open("./setting.conf", "r")
-        except:
-            data = open("./setting.conf", "w")
-            data.write("name,command")
-            data.close()
-            data = open("./setting.conf", "r")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\n前画面に戻る場合はbackと入力\n\033[38;5;11mTeam1(黄色)チームのパス:" + cmd[0])
-        inp = subp.Inputfile("\nTeam2(赤色)チームのパスまたはリストの名前を入力", textcolor="\033[38;5;9m")
-
-        if inp != "back":
-            i = 0
-            try:
-                while datas[i] != inp:
-                    i += 2
-                if i < 2:
-                    raise TypeError("data_ERROR")
-                i += 1
-                inp = datas[i]
-                ok = 1
-            except:
-                if os.path.isfile(inp):
-                    ok = 1
-                else:
-                    print("\033[38;5;9mERR:名前 " + inp + " は簡単サッカー実行プログラムに登録されていません。\n"
-                                                        "また、そのようなファイルも存在しません。\nタイプミスをを確認してください")
-                    subp.Input("Enterキーを押して続行...", dot=False)
-        else:
-            ok = 2
-
-    if ok != 2:
-        cmd.append(inp)
-        subp.reset()
-        print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-        print("\n\n\033[1m\033[38;5;10mcszp 簡単サッカー実行プログラム")
-        print("\n\033[38;5;11mTeam1(黄色)チームのパス:" + cmd[0])
-        print("\033[38;5;9mTeam2(赤色)チームのパス:" + cmd[1])
-        inp = subp.Input("\nサーバーの引数を入力（ない場合は空欄）", textcolor="\033[38;5;9m")
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        df = data.read()
-        data.close()
-        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
-               df.split(",")[9] + " server::text_log_dir=" + df.split(",")[9]
-        loops = int(subp.Input("\nやる回数を指定", textcolor="\033[38;5;9m"))
-        try:
-            data = open("./config.conf", "r")
-        except:
-            data = open("./config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
-            data.close()
-            data = open("./config.conf", "r")
-        datas = data.read()
-        datas = datas.split(",")
-        data.close()
-        if datas[5] == "off":
-            inp += " server::game_logging=false"
-        if datas[7] == "off":
-            inp += " server::text_logging=false"
-        cmd.append(inp)
-        print("\n\033[38;5;14mloading now...")
-        time.sleep(0.5)
-        loop(cmd, loops)
+            start(cmd, 1)

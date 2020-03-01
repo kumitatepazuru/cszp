@@ -30,14 +30,17 @@
         for(var i=0;i<tmp.length;++i){
             result[i] = tmp[i].split(',');
         }
+
         //alert(result[2])
+        var temp = [result[1][0]+"の平均点",result[1][1]+"の平均点"]
         texth2 = "ただいま、次の試合データを表示中 : "+result[1][0]+" VS "+result[1][1];
         var player = document.getElementById("player");
         player.innerHTML= texth2;
 
         for(var i=0;i<tmp.length;++i){
-            result[i] = tmp[i].split(',').slice(2,4);
+            result[i] = tmp[i].split(',').slice(2,6);
         }
+        //alert(result)
         makeTable(result,"table2");
 
         point1 = 0;
@@ -51,7 +54,7 @@
             point2 += Number(result[i][1]);
         }
         point2 /= result.length-2;
-        var data = [["プレイヤー1の平均点","プレイヤー2の平均点"],
+        var data = [temp,
                     [String(point1).slice(0,4),String(point2).slice(0,4)],
                     ["",""]];
         // console.log(data);

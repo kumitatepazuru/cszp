@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import glob
 import os
+import shutil
 import sys
 import termios
-import shutil
-import glob
 
 
 def reset():
@@ -90,7 +90,7 @@ def Inputfile(text, textcolor="\033[38;5;10m"):
                     j = 1
                     while fi != 0 and len(tfl[0]) > len(pk)+j:
                         for i in tfl:
-                            #print(j)
+                            # print(j)
                             if i.find(tfl[0][0:len(pk)+j]) == -1:
                                 fi = 0
                                 j = 0

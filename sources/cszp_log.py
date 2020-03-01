@@ -47,8 +47,7 @@ def log(data):
 
     team1p = data[team1s:team1e]
     team2p = data[team2s:team2e]
-    toku = str(int(team1p)-int(team2p))
-    return team1n, team2n, team1p, team2p, toku
+    return team1n, team2n, team1p, team2p
 
 
 def kekka(logs, lang):
@@ -58,7 +57,7 @@ def kekka(logs, lang):
     k = log(logs)
     i = len(csv) - 1
     if k[2] == k[3]:
-        if lang == 1:
+        if lang == 0:
             return "同点！今後が楽しみです！"
         else:
             return "Draw!We look forward to the future!"
@@ -98,7 +97,7 @@ def kekka(logs, lang):
                 rp += 1
                 break
         i -= 1
-    if lang == 1:
+    if lang == 0:
         if re == 0:
             if hit != 0:
                 return k[ka] + "さんの勝ち！そして、連敗復帰！今後が楽しみです！"
