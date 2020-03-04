@@ -2,7 +2,7 @@
 [日本語ページはこちら](https://github.com/kumitatepazuru/cszp/blob/master/README_jp.md)
 
 ## Download
-### Note This program is premised on running on linux (redhat system). So it may not run on other OS.
+### Note This program is premised on running on linux (Debian system). So it may not run on other OS.
 Operation check OS
 - ubuntu 16.04LTS
 - ubuntu server 16.04LTS
