@@ -1,4 +1,9 @@
 ~change log~
+ver 2.1.0:
+Modification place:
+    None :)
+Additional elements:
+    We created an evolutionary version of setup.py.
 ver 2.0.0:
 Modification place:
     Japanese and English are converted into language files. This allows anyone to modify it.

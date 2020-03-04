@@ -16,9 +16,7 @@
 #### 2.インストールをする
 ``` 
 cd ./cszp/
-pip3 install -r requirements.txt
-sudo apt-get install figlet -y
-python3 setup.py [Program installation destination (optional)] #If not specified, it will be installed in /opt/cszp
+python3 install.py
 ```
 ## バグ・追加してほしい機能など
 #### [こちらから！](https://github.com/kumitatepazuru/cszp/issues)

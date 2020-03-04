@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import shutil
 import subprocess
 
 import colortest
@@ -65,22 +66,50 @@ exit        終了する
         cszp_soccer.setting(lang)
         r = menu(lang)
     elif inp == "lang":
-        try:
-            data = open("lang", "r")
-        except:
-            data = open("lang", "w")
-            data.write("1")
-            data.close()
-            data = open("lang", "r")
-        datas = data.read()
-        data.close()
-        if datas == "1":
-            datas = "0"
-        else:
-            datas = "1"
-        data = open("lang", "w")
-        data.write(datas)
-        data.close()
+        terminal_size = shutil.get_terminal_size()
+        printtext = ["Select Language"]
+        for i in range(len(lang.lang_list)):
+            if lang.lang_list[str(i)] == lang.enable_lang:
+                select = i
+                printtext.append(">> " + os.path.splitext(os.path.basename(lang.lang_list[str(i)]))[0])
+            else:
+                printtext.append("   " + os.path.splitext(os.path.basename(lang.lang_list[str(i)]))[0])
+        printtext.append("")
+        k = ""
+        while k != "\n":
+            lentext = max(map(len, printtext))
+            for i in range(len(printtext)):
+                if i == 0:
+                    print("\033[" + str(int(terminal_size[1] / 2 + i)) + ";" + str(
+                        int(terminal_size[0] / 2 - lentext / 2)) + "H┏" + printtext[i].center(lentext, '━') + "┓")
+                elif i == len(printtext) - 1:
+                    print("\033[" + str(int(terminal_size[1] / 2 + i)) + ";" + str(
+                        int(terminal_size[0] / 2 - lentext / 2)) + "H┗" + printtext[i].center(lentext, '━') + "┛")
+                else:
+                    print("\033[" + str(int(terminal_size[1] / 2 + i)) + ";" + str(
+                        int(terminal_size[0] / 2 - lentext / 2)) + "H┃" + printtext[i].center(lentext, ' ') + "┃")
+            k = subp.Key()
+            if k == "\x1b":
+                subp.Key()
+                k = subp.Key()
+                if k == "B":
+                    if select < len(lang.lang_list) - 1:
+                        select += 1
+                elif k == "A":
+                    if select > 0:
+                        select -= 1
+
+            printtext = ["Select Language"]
+            for i in range(len(lang.lang_list)):
+                if i == select:
+                    printtext.append(">> " + os.path.splitext(os.path.basename(lang.lang_list[str(i)]))[0])
+                else:
+                    printtext.append("   " + os.path.splitext(os.path.basename(lang.lang_list[str(i)]))[0])
+            printtext.append("")
+
+        langf = open("lang", "w")
+        langf.write(str(select))
+        langf.close()
         return 2
     elif inp == "loop":
         cszp_soccer.setting(lang, loopmode=True)

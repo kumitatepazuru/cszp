@@ -116,3 +116,52 @@ Input server argument(leave blank if none)
 
 やる回数を指定
 No to play matchs
+
+#------ SETUP ------
+cszp 簡単サッカー実行プログラム セットアップウィザードへようこそ
+Welcome to the cszp Easy soccer execution program Setup Wizard
+
+いくつかのステップでcszpをインストールしましょう
+Let's install cszp in several steps
+
+確認
+Confirm
+
+はい
+Yes
+
+いいえ
+No
+
+cszp の実行に必要なプログラムがあるか確認し
+Make sure you have the necessary programs to run cszp.
+
+可能ならばインストールすることができます。
+You can install it if you can.
+
+この操作をスキップすることもできます。
+You can also skip this operation.
+
+ただし、手動で必要なプログラムをインストールする必要があります。
+However, you must manually install the required programs.
+
+cszp の実行に必要なプログラムがあるか確認しインストールしますか？
+Are you sure you have the program you need to run cszp and want to install it?
+
+エラー
+error
+
+インストール実行中にエラーが発生しました。
+An error occurred during installation.
+
+このプログラムにroot権限を与えてください
+Grant root privileges to this program
+
+インストールするパスを選択
+Select the path to install
+
+インストール中...
+Installing...
+
+インストール成功
+Installed!

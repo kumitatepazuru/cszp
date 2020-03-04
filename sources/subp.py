@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import glob
+import math
 import os
 import shutil
+import subprocess
 import sys
 import termios
+import unicodedata
 
 
 def reset():
@@ -81,20 +84,20 @@ def Inputfile(text, textcolor="\033[38;5;10m"):
             fl = []
             for i in tfl:
                 if os.path.isdir(i):
-                    fl.append(os.path.basename(i)+"/")
+                    fl.append(os.path.basename(i) + "/")
                 else:
                     fl.append(os.path.basename(i))
             if k == "\t":
                 if len(fl) != 0:
                     fi = 1
                     j = 1
-                    while fi != 0 and len(tfl[0]) > len(pk)+j:
+                    while fi != 0 and len(tfl[0]) > len(pk) + j:
                         for i in tfl:
                             # print(j)
-                            if i.find(tfl[0][0:len(pk)+j]) == -1:
+                            if i.find(tfl[0][0:len(pk) + j]) == -1:
                                 fi = 0
                                 j = 0
-                            elif len(tfl[0]) < len(pk)+j:
+                            elif len(tfl[0]) < len(pk) + j:
                                 fi = 0
                                 j = 0
                         j += 1
@@ -102,7 +105,7 @@ def Inputfile(text, textcolor="\033[38;5;10m"):
                     if len(fl) == 1:
                         pk = tfl[0]
                     elif j != 1:
-                        pk = tfl[0][0:len(pk)+j]
+                        pk = tfl[0][0:len(pk) + j]
 
             print("\033[" + str(int(terminal_size[1] / 2)) + ";1H" + "-" * terminal_size[0])
             if len(fl) == 0:
@@ -121,3 +124,45 @@ def Inputfile(text, textcolor="\033[38;5;10m"):
                 print("")
             print("\033[1H")
     return pk
+
+
+def count_zen(str):
+    n = 0
+    for c in str:
+        wide_chars = "WFA"
+        eaw = unicodedata.east_asian_width(c)
+        if wide_chars.find(eaw) > -1:
+            n += 1
+    return n
+
+
+def width_kana(str):
+    all = len(str)  # 全文字数
+    zenkaku = count_zen(str)  # 全角文字数
+    hankaku = all - zenkaku  # 半角文字数
+
+    return zenkaku * 2 + hankaku
+
+
+def center_kana(str, size, pad=" "):
+    space = size - width_kana(str)
+    if space > 0:
+        str = pad * int(math.floor(space / 2.0)) + str + pad * int(math.ceil(space / 2.0))
+    return str
+
+
+def get_lines(cmd):
+    '''
+    :param cmd: str 実行するコマンド.
+    :rtype: generator
+    :return: 標準出力 (行毎).
+    '''
+    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+
+    while True:
+        line = proc.stdout.readline()
+        if line:
+            yield line
+
+        if not line and proc.poll() is not None:
+            break

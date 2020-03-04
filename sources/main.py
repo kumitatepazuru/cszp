@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import importlib
+import json
+import locale
 import os
 import platform
 import subprocess
@@ -98,6 +100,17 @@ def main():
     import cszp_menu
 
     try:
+        if not os.path.isfile("lang"):
+            file = open("lang.json")
+            lang_list = json.load(file)
+            file.close()
+            langf = open("lang", "w")
+            langn = [k for k, v in lang_list.items() if v == locale.getlocale()[0].lower() + ".lang"]
+            if len(langn) == 1:
+                langf.write(langn[0])
+            else:
+                langf.write("1")
+            langf.close()
         lang = cszp_lang.lang()
         r = cszp_menu.menu(lang)
     except KeyboardInterrupt:
@@ -118,7 +131,6 @@ def main():
     print("stoped.")
     time.sleep(0.25)
     subp.reset()
-    print(r)
     if r == 2 or r == 3:
         importlib.reload(cszp_menu)
         main()

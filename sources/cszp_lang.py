@@ -10,7 +10,8 @@ class lang:
         self.lang_list = json.load(file)
         file.close()
 
-        file = open("./language/" + self.lang_list[ld])
+        self.enable_lang = self.lang_list[ld]
+        file = open("./language/" + self.enable_lang)
         self.ld = file.read()
 
     def lang(self, text):

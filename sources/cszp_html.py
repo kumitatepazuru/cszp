@@ -6,9 +6,9 @@ import pandas as pd
 
 def plot_hist(d, c):
     if max(d) - min(d) != 0:
-        d.hist(alpha=0.3, bins=max(d), color=c)
+        d.hist(alpha=0.4, bins=max(d), color=c)
     else:
-        d.hist(alpha=0.3, color=c)
+        d.hist(alpha=0.4, color=c)
 
 
 def plot_socre(filename):
