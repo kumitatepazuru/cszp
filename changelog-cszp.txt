@@ -1,4 +1,9 @@
 ~change log~
+ver 2.1.1:
+Modification place:
+    Is Error Bugs.
+Additional elements:
+    None :)
 ver 2.1.0:
 Modification place:
     None :)
