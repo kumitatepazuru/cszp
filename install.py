@@ -243,3 +243,4 @@ while k != "\n":
     subp.reset()
     box([lang.lang("インストール成功"), "Welcome to cszp!", ">> OK", ""])
     k = subp.Key()
+os.remove(text + "/cszp/lang")
