@@ -50,7 +50,7 @@ def install():
     if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
             or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
             or out == "":
-        out = run("apt install -y python3-pip figlet")
+        out = run("apt install -y figlet python3-tk")
         if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
                 or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
                 or out == "":
@@ -169,12 +169,42 @@ while k != "\n":
 
     subp.reset()
 
-error_ = 0
+if select == 0:
+    k = ""
+    while k != "\n":
+        printtext = ["Step 3/2.5 " + lang.lang("確認"),
+                     lang.lang("下記のソフトをインストールします。"),
+                     lang.lang("インストール済みのものも表示されます"), "",
+                     "figlet python3-tk" + lang.lang("とその依存"),
+                     "texttable matplotlib tqdm pandas urllib3" + lang.lang("とその依存"), "",
+                     lang.lang("インストールしますか？")]
+        if select == 0:
+            printtext.append(">> " + lang.lang("はい"))
+            printtext.append("   " + lang.lang("いいえ"))
+        else:
+            printtext.append("   " + lang.lang("はい"))
+            printtext.append(">> " + lang.lang("いいえ"))
+        printtext.append("")
+        box(printtext)
+        k = subp.Key()
+        if k == "\x1b":
+            subp.Key()
+            k = subp.Key()
+            if k == "B":
+                if select < len(lang.lang_list) - 1:
+                    select += 1
+            elif k == "A":
+                if select > 0:
+                    select -= 1
+        subp.reset()
+
+ok = 0
 if select == 0:
     ok = 0
     th = threading.Thread(target=install)
     th.start()
 
+error_ = 0
 k = ""
 text = "/opt/"
 while k != "\n" and error_ == 0:
@@ -193,11 +223,12 @@ while k != "\n" and error_ == 0:
 if error_ == 1:
     sys.exit()
 subp.reset()
-while ok == 0 and error_ == 0:
-    box(["Loading...", "Welcome to cszp!", ""])
-    time.sleep(0.2)
-if error_ == 1:
-    sys.exit()
+if select == 0:
+    while ok == 0 and error_ == 0:
+        box(["Loading...", "Welcome to cszp!", ""])
+        time.sleep(0.2)
+    if error_ == 1:
+        sys.exit()
 
 subp.reset()
 box([lang.lang("インストール中..."), "Welcome to cszp!", ""])
