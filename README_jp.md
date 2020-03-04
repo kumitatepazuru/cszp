@@ -1,4 +1,6 @@
 # cszp 簡単サッカー実行プログラム
+![Logo](https://raw.githubusercontent.com/kumitatepazuru/cszp/master/logo.png)
+
 [Click here for English page](https://github.com/kumitatepazuru/cszp/blob/master/README.md)
 
 

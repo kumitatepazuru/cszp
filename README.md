@@ -1,4 +1,6 @@
 # cszp Easy soccer execution program
+![Logo](https://raw.githubusercontent.com/kumitatepazuru/cszp/master/logo.png)
+
 [日本語ページはこちら](https://github.com/kumitatepazuru/cszp/blob/master/README_jp.md)
 
 ## Download
