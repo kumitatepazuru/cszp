@@ -3,12 +3,12 @@ import subprocess
 import time
 from datetime import datetime
 
+import cuitools as subp
 import tqdm
 from texttable import *
 
 import cszp_html
 import cszp_log
-import subp
 
 
 def loop(cmd, loops):

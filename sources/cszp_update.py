@@ -2,7 +2,7 @@ import shutil
 import subprocess
 import urllib.request
 
-import subp
+import cuitools as subp
 
 
 def killsoccer():

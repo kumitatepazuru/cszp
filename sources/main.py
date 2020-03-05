@@ -10,7 +10,6 @@ import sys
 import time
 
 import cszp_lang
-import subp
 
 try:
     from texttable import *
@@ -21,6 +20,18 @@ except:
     print(
         "\033[1mERR:\033[0mtexttable package is not installed.\ncszp (easy soccer run program) requires texttable.\n"
         "Execute the following command and try again.\n\033[38;5;11mpip3 install texttable"
+    )
+    sys.exit()
+
+try:
+    import cuitools as subp
+except:
+    v = open("./version")
+    print("\033[2Jcszp " + v.read())
+    v.close()
+    print(
+        "\033[1mERR:\033[0mcuitools package is not installed.\ncszp (easy soccer run program) requires cuitools.\n"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install cuitools"
     )
     sys.exit()
 

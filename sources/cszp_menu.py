@@ -4,11 +4,12 @@ import os
 import shutil
 import subprocess
 
+import cuitools as subp
+
 import colortest
 import cszp_setting
 import cszp_soccer
 import cszp_update
-import subp
 
 
 def menu(lang):

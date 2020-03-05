@@ -7,7 +7,9 @@ import sys
 import threading
 import time
 
-from sources import subp, cszp_lang
+import cuitools as subp
+
+from sources import cszp_lang
 
 
 def run(cmd):
@@ -175,8 +177,8 @@ if select == 0:
         printtext = ["Step 3/2.5 " + lang.lang("確認"),
                      lang.lang("下記のソフトをインストールします。"),
                      lang.lang("インストール済みのものも表示されます"), "",
-                     "figlet python3-tk" + lang.lang("とその依存"),
-                     "texttable matplotlib tqdm pandas urllib3" + lang.lang("とその依存"), "",
+                     "figlet" + lang.lang("とその依存"),
+                     "texttable matplotlib tqdm pandas urllib3 cuitools" + lang.lang("とその依存"), "",
                      lang.lang("インストールしますか？")]
         if select == 0:
             printtext.append(">> " + lang.lang("はい"))

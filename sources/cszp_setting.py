@@ -3,9 +3,8 @@
 import os
 import subprocess
 
+import cuitools as subp
 from texttable import *
-
-import subp
 
 
 def setting(lang):
