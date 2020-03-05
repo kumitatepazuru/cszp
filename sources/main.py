@@ -20,7 +20,7 @@ except:
     v.close()
     print(
         "\033[1mERR:\033[0mtexttable package is not installed.\ncszp (easy soccer run program) requires texttable.\n"
-        "Execute the following command and try again.\n\033[38;5;11msudo apt install python3-pip && pip3 install texttable"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install texttable"
     )
     sys.exit()
 
@@ -32,7 +32,7 @@ except:
     v.close()
     print(
         "\033[1mERR:\033[0mtqdm package is not installed.\ncszp (easy soccer run program) requires tqdm.\n"
-        "Execute the following command and try again.\n\033[38;5;11msudo apt install python3-pip && pip3 install tqdm"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install tqdm"
     )
     sys.exit()
 
@@ -44,7 +44,7 @@ except:
     v.close()
     print(
         "\033[1mERR:\033[0mmatplotlib package is not installed.\ncszp (easy soccer run program) requires matplotlib.\n"
-        "Execute the following command and try again.\n\033[38;5;11msudo apt install python3-pip && pip3 install matplotlib"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install matplotlib"
     )
     sys.exit()
 
@@ -56,7 +56,7 @@ except:
     v.close()
     print(
         "\033[1mERR:\033[0mpandas package is not installed.\ncszp (easy soccer run program) requires pandas.\n"
-        "Execute the following command and try again.\n\033[38;5;11msudo apt install python3-pip && pip3 install pandas"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install pandas"
     )
     sys.exit()
 
