@@ -1,4 +1,11 @@
 ~change log~
+ver 2.2.0:
+Modification place:
+    Fix pyenv bug
+    Graph display changed
+    Click the graph to enlarge it. This will improve the efficiency of the analysis.
+Additional elements:
+    None :)
 ver 2.1.2:
 Modification place:
     cszp now uses the library cuitools.

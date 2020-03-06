@@ -17,6 +17,7 @@ Operation check OS
 #### 2.Install
 ``` 
 cd ./cszp/
+pip3 install cuitools
 python3 install.py
 ```
 ## Bugs, features you want to add

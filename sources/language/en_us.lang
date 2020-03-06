@@ -115,7 +115,7 @@ Path for team2(red)team:
 Input server argument(leave blank if none)
 
 やる回数を指定
-No to play matchs
+Please enter the number of matches
 
 #------ SETUP ------
 cszp 簡単サッカー実行プログラム セットアップウィザードへようこそ
@@ -154,8 +154,8 @@ error
 インストール実行中にエラーが発生しました。
 An error occurred during installation.
 
-このプログラムにroot権限を与えてください
-Grant root privileges to this program
+ログを確認してください
+Please check the log
 
 インストールするパスを選択
 Select the path to install

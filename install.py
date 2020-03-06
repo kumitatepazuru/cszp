@@ -40,7 +40,7 @@ def error(error_log):
     log.write(error_log)
     log.close()
     errtext = [lang.lang("エラー"), lang.lang("インストール実行中にエラーが発生しました。"),
-               lang.lang("このプログラムにroot権限を与えてください"),
+               lang.lang("ログを確認してください"),
                "install.log",
                ""]
     box(errtext)
@@ -48,11 +48,11 @@ def error(error_log):
 
 
 def install():
-    out = run("apt update")
+    out = run("sudo apt update")
     if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
             or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
             or out == "":
-        out = run("apt install -y figlet python3-tk")
+        out = run("sudo apt install -y figlet")
         if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
                 or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
                 or out == "":
@@ -70,17 +70,20 @@ def install():
 
 def box(printtext):
     terminal_size = shutil.get_terminal_size()
-    lentext = max(map(subp.width_kana, printtext))
+    lentext = max(map(subp.subp.width_kana, printtext))
     for i in range(len(printtext)):
         if i == 0:
             print("\033[" + str(int(terminal_size[1] / 2 - len(printtext) / 2 + i)) + ";" + str(
-                int(terminal_size[0] / 2 - lentext / 2)) + "H┏" + subp.center_kana(printtext[i], lentext, "━") + "┓")
+                int(terminal_size[0] / 2 - lentext / 2)) + "H┏" + subp.subp.center_kana(printtext[i], lentext,
+                                                                                        "━") + "┓")
         elif i == len(printtext) - 1:
             print("\033[" + str(int(terminal_size[1] / 2 - len(printtext) / 2 + i)) + ";" + str(
-                int(terminal_size[0] / 2 - lentext / 2)) + "H┗" + subp.center_kana(printtext[i], lentext, "━") + "┛")
+                int(terminal_size[0] / 2 - lentext / 2)) + "H┗" + subp.subp.center_kana(printtext[i], lentext,
+                                                                                        "━") + "┛")
         else:
             print("\033[" + str(int(terminal_size[1] / 2 - len(printtext) / 2 + i)) + ";" + str(
-                int(terminal_size[0] / 2 - lentext / 2)) + "H┃" + subp.center_kana(printtext[i], lentext, " ") + "┃")
+                int(terminal_size[0] / 2 - lentext / 2)) + "H┃" + subp.subp.center_kana(printtext[i], lentext,
+                                                                                        " ") + "┃")
 
 
 os.chdir("./sources/")
@@ -235,10 +238,10 @@ if select == 0:
 subp.reset()
 box([lang.lang("インストール中..."), "Welcome to cszp!", ""])
 os.chdir("../")
-subprocess.check_output("mkdir -p " + text + "/cszp && cp -r ./sources/* " + text + "/cszp", shell=True)
-subprocess.check_output("chmod a+rw " + text + "/cszp", shell=True)
+subprocess.check_output("sudo mkdir -p " + text + "/cszp && sudo cp -r ./sources/* " + text + "/cszp", shell=True)
+subprocess.check_output("sudo chmod a+rw " + text + "/cszp", shell=True)
 subprocess.check_output(
-    "bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo LANG=C.UTF-8 python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
+    "sudo bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo LANG=C.UTF-8 python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && sudo chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
     shell=True)
 k = ""
 while k != "\n":

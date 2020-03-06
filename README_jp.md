@@ -18,6 +18,7 @@
 #### 2.インストールをする
 ``` 
 cd ./cszp/
+pip3 install cuitools
 python3 install.py
 ```
 ## バグ・追加してほしい機能など
