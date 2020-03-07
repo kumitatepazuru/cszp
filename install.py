@@ -48,11 +48,11 @@ def error(error_log):
 
 
 def install():
-    out = run("sudo apt update")
+    out = run("apt update")
     if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
             or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
             or out == "":
-        out = run("sudo apt install -y figlet")
+        out = run("apt install -y figlet")
         if out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\ndebconf: delaying package configuration, since apt-utils is not installed\n' \
                 or out == '\nWARNING: apt does not have a stable CLI interface. Use with caution in scripts.\n\n' \
                 or out == "":
@@ -208,6 +208,13 @@ if select == 0:
     ok = 0
     th = threading.Thread(target=install)
     th.start()
+else:
+    k = ""
+    while k != "\n":
+        subp.reset()
+        box([lang.lang("以下のライブラリをインストールしてください"), "apt: figlet",
+             "pip: requirements.txt", ">> OK", ""])
+        k = subp.Key()
 
 error_ = 0
 k = ""
@@ -238,10 +245,10 @@ if select == 0:
 subp.reset()
 box([lang.lang("インストール中..."), "Welcome to cszp!", ""])
 os.chdir("../")
-subprocess.check_output("sudo mkdir -p " + text + "/cszp && sudo cp -r ./sources/* " + text + "/cszp", shell=True)
-subprocess.check_output("sudo chmod a+rw " + text + "/cszp", shell=True)
+subprocess.check_output("mkdir -p " + text + "/cszp && cp -r ./sources/* " + text + "/cszp", shell=True)
+subprocess.check_output("chmod a+rw " + text + "/cszp", shell=True)
 subprocess.check_output(
-    "sudo bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo LANG=C.UTF-8 python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && sudo chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
+    "bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
     shell=True)
 k = ""
 while k != "\n":

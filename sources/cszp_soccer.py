@@ -130,7 +130,6 @@ def loop(cmd, loops):
                 subprocess.check_output("killall soccerwindow2-qt4", shell=True)
         except:
             pass
-        soccer = cszp_log.log(logs)
         if i1 == "y":
             try:
                 data = open("./config.conf", "r")
@@ -175,7 +174,7 @@ def loop(cmd, loops):
                 data.close()
                 data = open("./config.conf", "r")
             df = data.read()
-            print(df.split(",")[9] + "/" + file)
+            # print(df.split(",")[9] + "/" + file)
             temp = open(df.split(",")[9] + "/" + file, "a")
             soccer = cszp_log.log(logs)
             temp.write(
@@ -392,7 +391,8 @@ def start(cmd, lang):
 
     temp = open("data.csv", "a")
     soccer = cszp_log.log(logs)
-    temp.write("\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+    temp.write(
+        "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
     temp.close()
 
     inp = ""
