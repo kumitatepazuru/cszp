@@ -1,4 +1,10 @@
 ~change log~
+ver 2.3.0:
+Modification place:
+    I changed the detailed display.
+    We also fixed bugs.
+Additional elements:
+    None :)
 ver 2.2.1:
 Modification place:
     Bug fixed.

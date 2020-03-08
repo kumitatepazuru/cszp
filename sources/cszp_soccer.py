@@ -11,25 +11,25 @@ import cszp_html
 import cszp_log
 
 
-def loop(cmd, loops):
+def loop(cmd, loops, lang):
     subp.reset()
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
-        inp = subp.Input("Do you want to save the program log? Y/n")
+        inp = subp.Input(lang.lang("プログラムログを保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     i1 = inp.lower()
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
-        inp = subp.Input("Do you want to save the server log? Y/n")
+        inp = subp.Input(lang.lang("サーバーログを保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     i2 = inp.lower()
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
-        inp = subp.Input("Would you like to collect the results of the battle in a csv file? Y/n")
+        inp = subp.Input(lang.lang("試合の結果をcsvファイルに保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     i3 = inp.lower()
     if i3 == "y":
         file = subp.Input("FileName?")
@@ -46,6 +46,14 @@ def loop(cmd, loops):
         temp.write("ただいま、情報を収集中です。しばらくお待ちください。")
         temp.close()
         subprocess.check_call("cp ./nofile.png ./file1.png", shell=True)
+    inp = ""
+    while inp.lower() != "y" and inp.lower() != "n":
+        inp = subp.Input(lang.lang("synch_modeで試合をしますか？ Y/n"))
+        if inp.lower() != "y" and inp.lower() != "n":
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
+    i4 = inp.lower()
+    if i4 == "y":
+        cmd[2] = cmd[2] + " server::synch_mode=true"
     subp.reset()
     print("\033[1m\033[38;5;172m---------- " + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " -----------")
     print("\033[38;5;2mTeam1-CMD : bash " + cmd[0])
@@ -77,13 +85,13 @@ def loop(cmd, loops):
         logs += "SERVER-CMD : " + sc + "\n"
 
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         datas = data.read()
         data.close()
         datas = datas.split(",")
@@ -132,14 +140,14 @@ def loop(cmd, loops):
             pass
         if i1 == "y":
             try:
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             except:
-                data = open("./config.conf", "w")
+                data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
                 )
                 data.close()
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             df = data.read()
             # print(df.split("'"))
             temp = open(df.split(",")[9] + "/" + exittime + "_team1.log", "w")
@@ -150,14 +158,14 @@ def loop(cmd, loops):
             temp.close()
         if i2 == "y":
             try:
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             except:
-                data = open("./config.conf", "w")
+                data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
                 )
                 data.close()
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             df = data.read()
             # print(df)
             temp = open(df.split(",")[9] + "/" + exittime + "_server.log", "w")
@@ -165,14 +173,14 @@ def loop(cmd, loops):
             temp.close()
         if i3 == "y":
             try:
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             except:
-                data = open("./config.conf", "w")
+                data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
                 )
                 data.close()
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             df = data.read()
             # print(df.split(",")[9] + "/" + file)
             temp = open(df.split(",")[9] + "/" + file, "a")
@@ -183,12 +191,19 @@ def loop(cmd, loops):
             temp.close()
             cszp_html.plot_socre(file)
 
+            temp = open("./csvdata/data.csv", "a")
+            soccer = cszp_log.log(logs)
+            temp.write(
+                "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + str(
+                    int(soccer[2]) - int(soccer[3])) + "," + str(int(soccer[3]) - int(soccer[2])))
+            temp.close()
+
     print("\033[1m\033[38;5;172m---------- " + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " -----------")
     # print(serverpid)
     subprocess.check_output("kill " + serverpid, shell=True)
     # time.sleep(2)
     cszp_html.logs(exittime)
-    subp.Input("Press Enter Key")
+    subp.Input(lang.lang("Enterキーを押して続行..."))
 
 
 def start(cmd, lang):
@@ -220,12 +235,13 @@ def start(cmd, lang):
     print("WINDOW-CMD : " + wc + "\033[0m")
 
     try:
-        data = open("./config.conf", "r")
+        data = open("./config/config.conf", "r")
     except:
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+        data = open("./config/config.conf", "w")
+        data.write(
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
         data.close()
-        data = open("./config.conf", "r")
+        data = open("./config/config.conf", "r")
     datas = data.read()
     data.close()
     datas = datas.split(",")
@@ -322,24 +338,21 @@ def start(cmd, lang):
     except:
         pass
     soccer = cszp_log.log(logs)
-    if lang == 1:
-        print(soccer[0] + " " + soccer[2] + " - " + soccer[3] + " " + soccer[1] + "で" + cszp_log.kekka(logs, 1))
-    else:
-        print(soccer[0] + " " + soccer[2] + " - " + soccer[3] + " " + soccer[1] + " " + cszp_log.kekka(logs, 0))
+    print(soccer[0] + " " + soccer[2] + " - " + soccer[3] + " " + soccer[1] + " " + cszp_log.kekka(logs, 0))
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
-        inp = subp.Input("Do you want to save the program log? Y/n")
+        inp = subp.Input(lang.lang("プログラムログを保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     if inp.lower() == "y":
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         df = data.read()
         temp = open(df.split(",")[9] + "/" + exittime + "_team1.log", "w")
         temp.write(logt1)
@@ -349,18 +362,18 @@ def start(cmd, lang):
         temp.close()
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
-        inp = subp.Input("Do you want to save the server log? Y/n")
+        inp = subp.Input(lang.lang("サーバーログを保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     if inp.lower() == "y":
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         df = data.read()
         temp = open(df.split(",")[9] + "/" + exittime + "_server.log", "w")
         temp.write(logs)
@@ -368,49 +381,51 @@ def start(cmd, lang):
     inp = ""
     while inp.lower() != "y" and inp.lower() != "n":
 
-        inp = subp.Input("Would you like to collect the results of the battle in a csv file? Y/n")
+        inp = subp.Input(lang.lang("試合の結果をcsvファイルに保存しますか？ Y/n"))
         if inp.lower() != "y" and inp.lower() != "n":
-            print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+            print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
     if inp.lower() == "y":
         inp = subp.Input("FileName?")
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         df = data.read()
         data.close()
         temp = open(df.split(",")[9] + "/" + inp, "a")
         soccer = cszp_log.log(logs)
         temp.write(
-            "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+            "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + str(
+                int(soccer[2]) - int(soccer[3])) + "," + str(int(soccer[3]) - int(soccer[2])))
         temp.close()
 
-    temp = open("data.csv", "a")
+    temp = open("./csvdata/data.csv", "a")
     soccer = cszp_log.log(logs)
     temp.write(
-        "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + soccer[4])
+        "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[3] + "," + str(
+            int(soccer[2]) - int(soccer[3])) + "," + str(int(soccer[3]) - int(soccer[2])))
     temp.close()
 
     inp = ""
     if datas[3] == "on":
         while inp.lower() != "y" and inp.lower() != "n":
-            inp = subp.Input("Do you want to save the make log? Y/n")
+            inp = subp.Input(lang.lang("makeログを保存しますか? Y/n"))
             if inp.lower() != "y" and inp.lower() != "n":
-                print("\033[1m\033[38;5;9mERR:\033[0mPlease answer with y or n")
+                print("\033[1m\033[38;5;9mERR:\033[0m" + lang.lang("yまたはnで答えてください"))
         if inp.lower() == "y":
             try:
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             except:
-                data = open("./config.conf", "w")
+                data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
                 )
                 data.close()
-                data = open("./config.conf", "r")
+                data = open("./config/config.conf", "r")
             df = data.read()
             data.close()
             temp = open(df.split(",")[9] + "/" + exittime + "_makelog.log", "w")
@@ -431,12 +446,13 @@ def setting(lang, testmode=False, loopmode=False):
     print("\033[38;5;39m" + lang.lang("設定確認"))
     # noinspection PyBroadException
     try:
-        data = open("./config.conf", "r")
+        data = open("./config/config.conf", "r")
     except:
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+        data = open("./config/config.conf", "w")
+        data.write(
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
         data.close()
-        data = open("./config.conf", "r")
+        data = open("./config/config.conf", "r")
     datas = data.read()
     data.close()
     datas = datas.split(",")
@@ -461,12 +477,12 @@ def setting(lang, testmode=False, loopmode=False):
         print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         try:
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         except:
-            data = open("./setting.conf", "w")
+            data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         datas = data.read()
         data.close()
         datas = datas.split(",")
@@ -517,12 +533,12 @@ def setting(lang, testmode=False, loopmode=False):
         print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         try:
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         except:
-            data = open("./setting.conf", "w")
+            data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         datas = data.read()
         data.close()
         datas = datas.split(",")
@@ -569,13 +585,13 @@ def setting(lang, testmode=False, loopmode=False):
         print("\033[38;5;9m" + lang.lang("Team2(赤色)チームのパス:") + cmd[1])
         inp = subp.Input(lang.lang("\nサーバーの引数を入力（ない場合は空欄）"), textcolor="\033[38;5;9m")
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         df = data.read()
         data.close()
         inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
@@ -584,16 +600,21 @@ def setting(lang, testmode=False, loopmode=False):
             inp += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
                    "server::half_time=10"
         if loopmode:
-            loops = int(subp.Input("\n" + lang.lang("やる回数を指定"), textcolor="\033[38;5;9m"))
+            loops = 0
+            while loops == 0:
+                try:
+                    loops = int(subp.Input("\n" + lang.lang("やる回数を指定"), textcolor="\033[38;5;9m"))
+                except ValueError:
+                    print("\033[38;5;9m" + lang.lang("ERR:数字を入力してください"))
 
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         datas = data.read()
         datas = datas.split(",")
         data.close()
@@ -605,6 +626,6 @@ def setting(lang, testmode=False, loopmode=False):
         print("\n\033[38;5;14mloading now...")
         time.sleep(0.5)
         if loopmode:
-            loop(cmd, loops)
+            loop(cmd, loops, lang)
         else:
-            start(cmd, 1)
+            start(cmd, lang)

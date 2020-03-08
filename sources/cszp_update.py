@@ -81,7 +81,7 @@ def update():
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
             subprocess.check_output(
-                "unzip -o /tmp/cszp.zip -d /tmp/ && sudo rm ./language/* -r && sudo mv -fv /tmp/cszp-master/sources/* ./",
+                "rm -fr /tmp/cszp-master && unzip -o /tmp/cszp.zip -d /tmp/ && find . -maxdepth 1 -type f | xargs rm && rm -r language && sudo mv -fv /tmp/cszp-master/sources/* ./",
                 shell=True)
             print("completed!")
             return 1

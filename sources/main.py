@@ -107,6 +107,12 @@ def main():
     if not os.path.isdir("html_logs"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory")
         os.mkdir("html_logs")
+    if not os.path.isdir("csvdata"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        os.mkdir("csvdata")
+    if not os.path.isdir("config"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        os.mkdir("config")
     # main
     import cszp_menu
 

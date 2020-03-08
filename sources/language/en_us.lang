@@ -180,3 +180,26 @@ Do you want to install it?
 
 以下のライブラリをインストールしてください
 Please install the following libraries
+
+# ------ cszp_soccer.py ------
+
+プログラムログを保存しますか？ Y/n
+Do you want to save the program log? Y/n
+
+サーバーログを保存しますか？ Y/n
+Do you want to save the server log? Y/n
+
+試合の結果をcsvファイルに保存しますか？ Y/n
+Would you like to collect the results of the battle in a csv file? Y/n
+
+makeログを保存しますか? Y/n
+Do you want to save the make log? Y/n
+
+yまたはnで答えてください
+Please answer with y or n
+
+synch_modeで試合をしますか？ Y/n
+Do you play games with synch_mode? Y/n
+
+ERR:数字を入力してください
+ERR: Please enter a number

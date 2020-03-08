@@ -22,12 +22,12 @@ def setting(lang):
         print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         try:
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         except:
-            data = open("./setting.conf", "w")
+            data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
         datas = data.read()
         data.close()
         datas = datas.split(",")
@@ -43,13 +43,13 @@ def setting(lang):
         print("\033[38;5;39m" + lang.lang("設定"))
         # noinspection PyBroadException
         try:
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         except:
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
             data.close()
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
         datas = data.read()
         data.close()
         datas = datas.split(",")
@@ -83,17 +83,17 @@ back                    前ページへ戻る(ホーム)
             pass
 
         elif inp.split(' ')[0] == "add":
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
             datas = data.read()
             data.close()
-            data = open("./setting.conf", "w")
+            data = open("./config/setting.conf", "w")
             datas += "," + inp.split(' ')[1] + "," + inp.split(' ')[2]
             data.write(datas)
             data.close()
             setting(lang)
 
         elif inp.split(' ')[0] == "remove":
-            data = open("./setting.conf", "r")
+            data = open("./config/setting.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -109,7 +109,7 @@ back                    前ページへ戻る(ホーム)
                 for i in datat:
                     datas += i + ","
                 datas = datas[:len(datas) - 1]
-                data = open("./setting.conf", "w")
+                data = open("./config/setting.conf", "w")
                 data.write(datas)
                 data.close()
             except:
@@ -119,7 +119,7 @@ back                    前ページへ戻る(ホーム)
             setting(lang)
 
         elif inp.split(' ')[0] == "soccerwindow2":
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -135,13 +135,13 @@ back                    前ページへ戻る(ホーム)
             for i in datat:
                 datas += i + ","
             datas = datas[:len(datas) - 1]
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)
 
         elif inp.split(' ')[0] == "automake":
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -157,13 +157,13 @@ back                    前ページへ戻る(ホーム)
             for i in datat:
                 datas += i + ","
             datas = datas[:len(datas) - 1]
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)
 
         elif inp.split(' ')[0] == "rcg":
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -179,13 +179,13 @@ back                    前ページへ戻る(ホーム)
             for i in datat:
                 datas += i + ","
             datas = datas[:len(datas) - 1]
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)
 
         elif inp.split(' ')[0] == "rcl":
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -201,13 +201,13 @@ back                    前ページへ戻る(ホーム)
             for i in datat:
                 datas += i + ","
             datas = datas[:len(datas) - 1]
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)
 
         elif inp.split(' ')[0] == "fileout":
-            data = open("./config.conf", "r")
+            data = open("./config/config.conf", "r")
             datas = data.read()
             datas = datas.split(",")
             data.close()
@@ -217,7 +217,7 @@ back                    前ページへ戻る(ホーム)
             for i in datat:
                 datas += i + ","
             datas = datas[:len(datas) - 1]
-            data = open("./config.conf", "w")
+            data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)

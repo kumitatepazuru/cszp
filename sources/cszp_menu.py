@@ -52,11 +52,12 @@ exit        終了する
         cszp_setting.setting(lang)
         r = menu(lang)
     elif inp == "reset":
-        data = open("./setting.conf", "w")
+        data = open("./config/setting.conf", "w")
         data.write("name,command")
         data.close()
-        data = open("./config.conf", "w")
-        data.write("soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd())
+        data = open("./config/config.conf", "w")
+        data.write(
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
         data.close()
         subp.Input("\n\n\033[38;5;214m" + lang.lang("リセットが完了しました。\nEnterキーを押して続行..."), dot=False)
         r = menu(lang)

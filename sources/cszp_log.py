@@ -51,7 +51,7 @@ def log(data):
 
 
 def kekka(logs, lang):
-    csvf = open("data.csv")
+    csvf = open("./csvdata/data.csv")
     csv = csvf.read()
     csv = csv.split("\n")
     k = log(logs)

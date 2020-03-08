@@ -13,7 +13,7 @@ def plot_hist(d, c):
 
 
 def plot_socre(filename):
-    data = pd.read_csv(filename, sep=',', header=None,
+    data = pd.read_csv("./csvdata/" + filename, sep=',', header=None,
                        names=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'toku1', "toku2"),
                        index_col=0)
     heikin = data.mean()
@@ -22,14 +22,14 @@ def plot_socre(filename):
     for i in data["team1_score"]:
         y[i] += 1
     plt.bar(x - 0.15, y, color="y", width=0.3,
-            label=data["team1"].values[0] + "\nAverage:" + str(heikin["team1_score"]))
+            label=data["team1"].values[0] + "\nAverage:" + str(np.round(heikin["team1_score"], decimals=2)))
 
     x = np.array(range(max(max(data["team1_score"]), max(data["team2_score"])) + 1))
     y = np.array([0] * (max(max(data["team1_score"]), max(data["team2_score"])) + 1))
     for i in data["team2_score"]:
         y[i] += 1
     plt.bar(x + 0.15, y, color="r", width=0.3,
-            label=data["team2"].values[0] + "\nAverage:" + str(heikin["team2_score"]))
+            label=data["team2"].values[0] + "\nAverage:" + str(np.round(heikin["team2_score"], decimals=2)))
     plt.ylabel("number of times")
     plt.xlabel("point")
     plt.legend(loc='best')
@@ -37,7 +37,7 @@ def plot_socre(filename):
     plt.savefig("file1.png", dpi=300)
     plt.clf()
 
-    csv = open(filename)
+    csv = open("./csvdata/" + filename)
     csv2 = open("html.csv", "w")
     csvd = csv.read().splitlines()[1:]
     csvtd = []
