@@ -3,6 +3,7 @@
 import os
 import shutil
 import subprocess
+from importlib import import_module
 
 import cuitools as subp
 
@@ -18,28 +19,15 @@ def menu(lang):
     if Return == 1:
         return 3
     subp.reset()
-    while inp != "start" and inp != "test" and inp != "setting" and inp != "exit" and inp != "colortest" \
-            and inp != "reset" and inp != "lang" and inp != "loop" and inp != "server":
+    while not lang.searchcmd("menu", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
         v = open("./version")
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
         v.close()
         print("\n")
-        inp = subp.Input(lang.lang("""
-cszp 簡単サッカー実行プログラム
-
-start       試合をする
-test        テスト試合をする
-setting     設定をする
-reset       リセットをかける
-loop        試合を複数回する
-lang        Change language/言語を変更
-server      過去のloopログをサーバーで確認
-exit        終了する
->>>""") + " ", dot=False)
-        if inp != "start" and inp != "test" and inp != "setting" and inp != "exit" and inp != "colortest" \
-                and inp != "reset" and inp != "lang" and inp != "loop" and inp != "server":
+        inp = subp.Input(lang.question("menu"), dot=False)
+        if not lang.searchcmd("menu", inp):
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
             subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
     if inp == "exit":
@@ -122,4 +110,9 @@ exit        終了する
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
             r = menu(lang)
+    else:
+        plugin = import_module(lang.functo("menu", inp))
+        plugin.plugin()
+        r = menu(lang)
+
     return r

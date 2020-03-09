@@ -603,7 +603,7 @@ def setting(lang, testmode=False, loopmode=False):
             loops = 0
             while loops == 0:
                 try:
-                    loops = int(subp.Input("\n" + lang.lang("やる回数を指定"), textcolor="\033[38;5;9m"))
+                    loops = int(subp.Input("\n" + lang.lang("試合数を指定"), textcolor="\033[38;5;9m"))
                 except ValueError:
                     print("\033[38;5;9m" + lang.lang("ERR:数字を入力してください"))
 

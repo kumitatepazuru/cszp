@@ -105,14 +105,17 @@ def main():
         sys.exit()
 
     if not os.path.isdir("html_logs"):
-        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")
         os.mkdir("html_logs")
     if not os.path.isdir("csvdata"):
-        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: csvdata")
         os.mkdir("csvdata")
     if not os.path.isdir("config"):
-        print("\033[38;5;4m[INFO]\033[0mCreate directory")
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
         os.mkdir("config")
+    if not os.path.isdir("plugins"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: plugins")
+        os.mkdir("plugins")
     # main
     import cszp_menu
 

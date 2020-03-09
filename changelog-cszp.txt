@@ -1,4 +1,11 @@
 ~change log~
+ver 3.0.0:
+Modification place:
+    Bug fixed.
+Additional elements:
+    The plug-in is now available.
+    The plugin wiki will be available at a later date.
+
 ver 2.3.0-r2:
 Modification place:
     Bug fixed.

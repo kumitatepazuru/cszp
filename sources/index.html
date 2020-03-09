@@ -37,7 +37,7 @@
 
         //alert(result[2])
         var temp = ["試合数",result[1][0]+"の平均点",result[1][1]+"の平均点"]
-        texth2 = "ただいま、次の試合データを表示中 : "+result[1][0]+" VS "+result[1][1];
+        texth2 = "次の試合データを表示中 : "+result[1][0]+" VS "+result[1][1]+" "+tmp.length-2+"試合";
         var player = document.getElementById("player");
         player.innerHTML= texth2;
 
@@ -110,8 +110,8 @@
     <img alt="点数グラフ" height="75%" src="file1.png">
 </a><br>
 <button onclick="location.href='./html_logs/'" type=“button”>過去ログを見る</button>
-<div id="table1"></div>
+<div align="right" id="table1"></div>
 <br>
-<div id="table2"></div>
+<div align="right" id="table2"></div>
 </BODY>
 </HTML>

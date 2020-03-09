@@ -62,16 +62,7 @@ def setting(lang):
         table.add_rows(datal)
         print(table.draw() + "\n\n")
 
-        inp = subp.Input(lang.lang("""※  注 [文字列] は引数を表します。 文字列は引数名です。
-add [NAME] [COMMAND]    簡単サッカー実行リストの登録
-remove [NAME]           簡単サッカー実行リストの削除
-soccerwindow2 [ON/OFF]  soccerwindow2を試合時に自動起動するかどうか
-automake [ON/OFF]       試合前に最適化用makeをかけるかどうか
-rcg [ON/OFF]            rcgログを出力するかどうか
-rcl [ON/OFF]            rclログを出力するかどうか
-fileout                 ログの保存先を指定
-back                    前ページへ戻る(ホーム)
->>>""") + " ", dot=False)
+        inp = subp.Input(lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。"), dot=False)
         if inp.split(' ')[0] != "add" and inp.split(' ')[0] != "remove" and inp != "back" \
                 and inp.split(' ')[0] != "soccerwindow2" and inp.split(' ')[0] != "automake" \
                 and inp.split(' ')[0] != "rcg" and inp.split(' ')[0] != "rcl" and inp.split(' ')[0] != "fileout":

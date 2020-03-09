@@ -27,7 +27,6 @@ def killsoccer():
 
 def update():
     killsoccer()
-    subprocess.check_call("clear",shell=True)
     versionlog = urllib.request.urlopen("https://raw.githubusercontent.com/kumitatepazuru/cszp/master/versionlog")
     vlog = versionlog.read().decode("utf-8")
     vlog = vlog.split("\n")[0]
@@ -39,6 +38,7 @@ def update():
             terminal_size = shutil.get_terminal_size()
             x = terminal_size[0]
             y = terminal_size[1]
+            print("\033[0m")
             text1 = "Software Update!"
             text2 = "NEW version " + vlog + "!"
             text3 = "Update_Now Read_changelog do_nothing"
@@ -81,7 +81,7 @@ def update():
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
             subprocess.check_output(
-                "rm -fr /tmp/cszp-master && unzip -o /tmp/cszp.zip -d /tmp/ && find . -maxdepth 1 -type f | xargs rm && rm -r language && sudo mv -fv /tmp/cszp-master/sources/* ./",
+                "rm -fr /tmp/cszp-master && unzip -o /tmp/cszp.zip -d /tmp/ && find . -maxdepth 1 -type f | xargs 'sudo rm' && sudo rm -r language && sudo mv -fv /tmp/cszp-master/sources/* ./",
                 shell=True)
             print("completed!")
             return 1

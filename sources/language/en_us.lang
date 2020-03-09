@@ -1,32 +1,29 @@
 cszp 簡単サッカー実行プログラム
 cszp Easy soccer execution program
 
-start       試合をする
-start       Play a match
+試合をする
+Play a match
 
-test        テスト試合をする
-test        Play a test match
+テスト試合をする
+Play a test match
 
-setting     設定をする
-setting     Setting
+設定をする
+Setting
 
-reset       リセットをかける
-reset       Reset
+リセットをかける
+Reset
 
-loop        試合を複数回する
-loop        Play multiple matchs
+試合を複数回する
+Play multiple matchs
 
-lang        Change language/言語を変更
-lang        Change language/言語を変更
+Change language/言語を変更
+Change language/言語を変更
 
-server      過去のloopログをサーバーで確認
-server      Check the previous loop log on the server
+過去のloopログをサーバーで確認
+Check the previous loop log on the server
 
-exit        終了する
-exit        Exit
-
->>>
->>>
+終了する
+Exit
 
 ERR:そのようなコマンドはありません。
 ERR:No such command.
@@ -50,29 +47,29 @@ Settings
 ※  注 [文字列] は引数を表します。 文字列は引数名です。
 * Note [STRING] indicates argument. STRING is argument name.
 
-add [NAME] [COMMAND]    簡単サッカー実行リストの登録
-add [NAME] [COMMAND]    Register Easy soccer execution list
+簡単サッカー実行リストの登録
+Register Easy soccer execution list
 
-remove [NAME]           簡単サッカー実行リストの削除
-remove [NAME]           Remove Easy soccer execution list
+簡単サッカー実行リストの削除
+Remove Easy soccer execution list
 
-soccerwindow2 [ON/OFF]  soccerwindow2を試合時に自動起動するかどうか
-soccerwindow2 [ON/OFF]  Show soccerwindow2 automatically
+soccerwindow2を試合時に自動起動するかどうか
+Show soccerwindow2 automatically
 
-automake [ON/OFF]       試合前に最適化用makeをかけるかどうか
-automake [ON/OFF]       Optimize before match
+試合前に最適化用makeをかけるかどうか
+Optimize before match
 
-rcg [ON/OFF]            rcgログを出力するかどうか
-rcg [ON/OFF]            Output rcg log
+rcgログを出力するかどうか
+Output rcg log
 
-rcl [ON/OFF]            rclログを出力するかどうか
-rcl [ON/OFF]            Output rcl log
+rclログを出力するかどうか
+Output rcl log
 
-fileout                 ログの保存先を指定
-fileout                 Set log output folder
+ログの保存先を指定
+Set log output folder
 
-back                    前ページへ戻る(ホーム)
-back                    Return to previous page
+前ページへ戻る(ホーム)
+Return to previous page
 
 ERR:名前
 ERR:Name
@@ -114,7 +111,7 @@ Path for team2(red)team:
 サーバーの引数を入力（ない場合は空欄）
 Input server argument(leave blank if none)
 
-やる回数を指定
+試合数を指定
 Please enter the number of matches
 
 #------ SETUP ------

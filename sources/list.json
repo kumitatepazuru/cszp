@@ -1,0 +1,86 @@
+{
+  "menu": [
+    {
+      "title": "start",
+      "description": "試合をする",
+      "cmd": "start"
+    },
+    {
+      "title": "test",
+      "description": "テスト試合をする",
+      "cmd": "test"
+    },
+    {
+      "title": "setting",
+      "description": "設定をする",
+      "cmd": "setting"
+    },
+    {
+      "title": "reset",
+      "description": "リセットをかける",
+      "cmd": "reset"
+    },
+    {
+      "title": "loop",
+      "description": "試合を複数回する",
+      "cmd": "loop"
+    },
+    {
+      "title": "lang",
+      "description": "Change language/言語を変更",
+      "cmd": "lang"
+    },
+    {
+      "title": "server",
+      "description": "過去のloopログをサーバーで確認",
+      "cmd": "server"
+    },
+    {
+      "title": "exit",
+      "description": "終了する",
+      "cmd": "exit"
+    }
+  ],
+  "setting": [
+    {
+      "title": "add [NAME] [COMMAND]",
+      "description": "簡単サッカー実行リストの登録",
+      "cmd": "add"
+    },
+    {
+      "title": "remove [NAME]",
+      "description": "簡単サッカー実行リストの削除",
+      "cmd": "remove"
+    },
+    {
+      "title": "soccerwindow2 [ON/OFF]",
+      "description": "soccerwindow2を試合時に自動起動するかどうか",
+      "cmd": "soccerwindow2"
+    },
+    {
+      "title": "automake [ON/OFF]",
+      "description": "試合前に最適化用makeをかけるかどうか",
+      "cmd": "automake"
+    },
+    {
+      "title": "rcg [ON/OFF]",
+      "description": "rcgログを出力するかどうか",
+      "cmd": "rcg"
+    },
+    {
+      "title": "rcl [ON/OFF]",
+      "description": "rclログを出力するかどうか",
+      "cmd": "rcl"
+    },
+    {
+      "title": "fileout",
+      "description": "ログの保存先を指定",
+      "cmd": "fileout"
+    },
+    {
+      "title": "back",
+      "description": "前ページへ戻る(ホーム)",
+      "cmd": "back"
+    }
+  ]
+}
