@@ -27,6 +27,7 @@ def killsoccer():
 
 def update():
     killsoccer()
+    subp.reset()
     versionlog = urllib.request.urlopen("https://raw.githubusercontent.com/kumitatepazuru/cszp/master/versionlog")
     vlog = versionlog.read().decode("utf-8")
     vlog = vlog.split("\n")[0]
