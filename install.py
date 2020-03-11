@@ -247,7 +247,7 @@ subp.reset()
 box([lang.lang("インストール中..."), "Welcome to cszp!", ""])
 os.chdir("../")
 subprocess.check_output("mkdir -p " + text + "/cszp && cp -r ./sources/* " + text + "/cszp", shell=True)
-subprocess.check_output("chmod a+rw " + text + "/cszp", shell=True)
+subprocess.check_output("chmod a+rw " + text + "/cszp && chmod a+rw /opt/cszp/*", shell=True)
 subprocess.check_output(
     "bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
     shell=True)
