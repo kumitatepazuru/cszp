@@ -100,7 +100,8 @@ if not os.path.isfile("lang"):
     else:
         langf.write("1")
     langf.close()
-os.mkdir("./plugins/")
+if not os.path.isdir("./plugins/"):
+    os.mkdir("./plugins/")
 lang = cszp_lang.lang()
 
 printtext = ["Step2/1 Select Language", lang.lang("cszp 簡単サッカー実行プログラム セットアップウィザードへようこそ"),
@@ -256,3 +257,5 @@ while k != "\n":
     subp.reset()
     box([lang.lang("インストール成功"), "Welcome to cszp!", ">> OK", ""])
     k = subp.Key()
+
+os.remove(text + "/cszp/lang")
