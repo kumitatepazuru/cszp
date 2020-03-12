@@ -1,4 +1,9 @@
 ~change log~
+ver 3.0.2:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None :)
 ver 3.0.1:
 Modification place:
     Bug fixed.

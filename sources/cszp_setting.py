@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+from importlib import import_module
 
 import cuitools as subp
 from texttable import *
@@ -10,9 +11,7 @@ from texttable import *
 def setting(lang):
     subp.reset()
     inp = ""
-    while inp.split(' ')[0] != "add" and inp.split(' ')[0] != "remove" and inp != "back" \
-            and inp.split(' ')[0] != "soccerwindow2" and inp.split(' ')[0] != "automake" \
-            and inp.split(' ')[0] != "rcg" and inp.split(' ')[0] != "rcl" and inp.split(' ')[0] != "fileout":
+    while not lang.searchcmd("setting", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
         v = open("./version")
@@ -63,9 +62,7 @@ def setting(lang):
         print(table.draw() + "\n\n")
 
         inp = subp.Input(lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。"), dot=False)
-        if inp.split(' ')[0] != "add" and inp.split(' ')[0] != "remove" and inp != "back" \
-                and inp.split(' ')[0] != "soccerwindow2" and inp.split(' ')[0] != "automake" \
-                and inp.split(' ')[0] != "rcg" and inp.split(' ')[0] != "rcl" and inp.split(' ')[0] != "fileout":
+        if not lang.searchcmd("setting", inp):
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
             subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
 
@@ -211,6 +208,10 @@ def setting(lang):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
+            setting(lang)
+        else:
+            plugin = import_module(lang.functo("menu", inp))
+            plugin.plugin()
             setting(lang)
     except IndexError:
         print("\033[38;5;9m" + lang.lang("ERR:引数がありません。タイプミスを確認してください"))
