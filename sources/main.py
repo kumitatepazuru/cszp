@@ -114,7 +114,7 @@ def main():
         if not os.path.isfile("./csvdata/data.csv"):
             print("\033[38;5;4m[INFO]\033[0mCreate file: data.csv")
             temp = open("./csvdata/data.csv", "w")
-            temp.write("")
+            temp.write("\n")
             temp.close()
     if not os.path.isdir("config"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
