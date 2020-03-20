@@ -80,7 +80,7 @@ class lang:
             listf.close()
             if key in listd:
                 for i in listd[key]:
-                    if i["cmd"] == text:
+                    if i["cmd"] == text.split(" ")[0]:
                         hit = 1
         return hit
 
