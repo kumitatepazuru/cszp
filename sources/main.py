@@ -5,6 +5,7 @@ import json
 import locale
 import os
 import platform
+import shutil
 import subprocess
 import sys
 import time
@@ -13,7 +14,7 @@ import cszp_lang
 
 try:
     from texttable import *
-except:
+except ModuleNotFoundError:
     v = open("./version")
     print("\033[2Jcszp " + v.read())
     v.close()
@@ -25,7 +26,7 @@ except:
 
 try:
     import cuitools as subp
-except:
+except ModuleNotFoundError:
     v = open("./version")
     print("\033[2Jcszp " + v.read())
     v.close()
@@ -37,7 +38,7 @@ except:
 
 try:
     import tqdm
-except:
+except ModuleNotFoundError:
     v = open("./version")
     print("\033[2Jcszp " + v.read())
     v.close()
@@ -49,7 +50,7 @@ except:
 
 try:
     import matplotlib
-except:
+except ModuleNotFoundError:
     v = open("./version")
     print("\033[2Jcszp " + v.read())
     v.close()
@@ -61,7 +62,7 @@ except:
 
 try:
     import pandas
-except:
+except ModuleNotFoundError:
     v = open("./version")
     print("\033[2Jcszp " + v.read())
     v.close()
@@ -77,16 +78,16 @@ def main():
     try:
         subp.reset()
         print("\033[0m\033[38;5;172m")
-        v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-        v.close()
-    except:
-        v = open("./version")
-        print("\033[2Jcszp " + v.read())
-        v.close()
+        ver = open("./version")
+        subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
+        ver.close()
+    except Exception:
+        ver = open("./version")
+        print("\033[2Jcszp " + ver.read())
+        ver.close()
         print(
-            "\033[1mERR:\033[0mfiglet package is not installed.\ncszp (easy soccer run program) requires figlet.\nExecute "
-            "the following command and try again.\n\033[38;5;11msudo apt install figlet "
+            "\033[1mERR:\033[0mfiglet package is not installed.\ncszp (easy soccer run program) requires figlet."
+            "\nExecute the following command and try again.\n\033[38;5;11msudo apt install figlet "
         )
         sys.exit()
     time.sleep(1)
@@ -119,30 +120,46 @@ def main():
     # main
     import cszp_menu
 
+    if not os.path.isfile("lang"):
+        file = open("lang.json")
+        lang_list = json.load(file)
+        file.close()
+        langf = open("lang", "w")
+        langn = [k for k, n in lang_list.items() if n == locale.getlocale()[0].lower() + ".lang"]
+        if len(langn) == 1:
+            langf.write(langn[0])
+        else:
+            langf.write("1")
+        langf.close()
+    lang = cszp_lang.lang()
     try:
-        if not os.path.isfile("lang"):
-            file = open("lang.json")
-            lang_list = json.load(file)
-            file.close()
-            langf = open("lang", "w")
-            langn = [k for k, v in lang_list.items() if v == locale.getlocale()[0].lower() + ".lang"]
-            if len(langn) == 1:
-                langf.write(langn[0])
-            else:
-                langf.write("1")
-            langf.close()
-        lang = cszp_lang.lang()
         r = cszp_menu.menu(lang)
     except KeyboardInterrupt:
-        print("INFO:PROGRAM IS STOP!")
         r = 0
+    except Exception:
+        r = 0
+        import traceback
+        temp = "CSZP PROGRAM ERROR\ncszp=" + open("version").read() + "\n"
+        file = open("./errorlog.log", "w")
+        temp += "---------- error log ----------\n" + traceback.format_exc() + "\n"
+        temp += "---------- computer information ----------\nwhich python3 : " + shutil.which(
+            'python3') + "\n" + "\n".join(map(lambda n: "=".join(n), list(os.environ.items())))
+        temp += "\n\n---------- file list ----------\n" + subprocess.check_output("ls -al", shell=True).decode("utf-8")
+        file.write(temp)
+        file.close()
+        print("\033[0m")
+        subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "", "errorlog.log", "",
+                                    lang.lang("Enterキーを押して続行...")])
+        k = ""
+        while k != "\n":
+            k = subp.Key()
 
     #  stop
     subp.reset()
     print("\033[0m\033[38;5;172m")
-    v = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
-    v.close()
+    ver = open("./version")
+    subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
+    ver.close()
     sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
     print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     print("\033[38;5;2mloading Now...")

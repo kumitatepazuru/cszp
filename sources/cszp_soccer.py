@@ -64,7 +64,7 @@ def loop(cmd, loops, lang):
     print("WINDOW-CMD : " + wc + "\033[0m")
     tqdmd = tqdm.tqdm(range(loops))
 
-    for i in tqdmd:
+    for _ in tqdmd:
         logs = ""
         logt1 = ""
         logt2 = ""
@@ -75,21 +75,22 @@ def loop(cmd, loops, lang):
         try:
             while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
                 subprocess.check_output("killall rcssserver", shell=True)
-        except:
+        except subprocess.CalledProcessError:
             pass
         try:
             while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
                 subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-        except:
+        except subprocess.CalledProcessError:
             pass
         logs += "SERVER-CMD : " + sc + "\n"
 
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except subprocess.CalledProcessError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         datas = data.read()
@@ -99,7 +100,7 @@ def loop(cmd, loops, lang):
         if datas[1] == "on":
             try:
                 subprocess.Popen(wc, shell=True)
-            except:
+            except subprocess.CalledProcessError:
                 print("\033[38;5;9m\033[1mERR:SOCCERWINDOW2_ERROR")
 
         try:
@@ -122,7 +123,7 @@ def loop(cmd, loops, lang):
             stdout = stdout.decode("utf-8")
             logt2 += stdout + stderr
             logt2 += "\n"
-        except:
+        except subprocess.CalledProcessError or KeyboardInterrupt:
             print("\033[38;5;9m\033[1mERR:RCSSSERVER_ERROR")
             import traceback
             traceback.print_exc()
@@ -136,15 +137,16 @@ def loop(cmd, loops, lang):
         try:
             while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
                 subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-        except:
+        except subprocess.CalledProcessError:
             pass
         if i1 == "y":
             try:
                 data = open("./config/config.conf", "r")
-            except:
+            except FileNotFoundError:
                 data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    + "/csvdata"
                 )
                 data.close()
                 data = open("./config/config.conf", "r")
@@ -159,10 +161,11 @@ def loop(cmd, loops, lang):
         if i2 == "y":
             try:
                 data = open("./config/config.conf", "r")
-            except:
+            except FileNotFoundError:
                 data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    + "/csvdata"
                 )
                 data.close()
                 data = open("./config/config.conf", "r")
@@ -174,10 +177,11 @@ def loop(cmd, loops, lang):
         if i3 == "y":
             try:
                 data = open("./config/config.conf", "r")
-            except:
+            except FileNotFoundError:
                 data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    + "/csvdata"
                 )
                 data.close()
                 data = open("./config/config.conf", "r")
@@ -223,12 +227,12 @@ def start(cmd, lang):
     try:
         while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall rcssserver", shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
     try:
         while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
     logs += "SERVER-CMD : " + sc + "\n"
     print("\033[38;5;2mSERVER-CMD : " + sc)
@@ -236,10 +240,11 @@ def start(cmd, lang):
 
     try:
         data = open("./config/config.conf", "r")
-    except:
+    except FileNotFoundError:
         data = open("./config/config.conf", "w")
         data.write(
-            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+            "/csvdata")
         data.close()
         data = open("./config/config.conf", "r")
     datas = data.read()
@@ -300,7 +305,7 @@ def start(cmd, lang):
     if datas[1] == "on":
         try:
             subprocess.Popen(wc, shell=True)
-        except:
+        except subprocess.CalledProcessError:
             print("\033[38;5;9m\033[1mERR:SOCCERWINDOW2_ERROR")
 
     try:
@@ -323,7 +328,7 @@ def start(cmd, lang):
         stdout = stdout.decode("utf-8")
         logt2 += stdout + stderr
         logt2 += "\n"
-    except:
+    except KeyboardInterrupt:
         print("\033[38;5;9m\033[1mERR:RCSSSERVER_ERROR")
         return "error"
 
@@ -335,7 +340,7 @@ def start(cmd, lang):
     try:
         while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
     soccer = cszp_log.log(logs)
     print(soccer[0] + " " + soccer[2] + " - " + soccer[3] + " " + soccer[1] + " " + cszp_log.kekka(logs, 0))
@@ -347,10 +352,11 @@ def start(cmd, lang):
     if inp.lower() == "y":
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         df = data.read()
@@ -368,10 +374,11 @@ def start(cmd, lang):
     if inp.lower() == "y":
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         df = data.read()
@@ -388,10 +395,11 @@ def start(cmd, lang):
         inp = subp.Input("FileName?")
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         df = data.read()
@@ -419,10 +427,11 @@ def start(cmd, lang):
         if inp.lower() == "y":
             try:
                 data = open("./config/config.conf", "r")
-            except:
+            except FileNotFoundError:
                 data = open("./config/config.conf", "w")
                 data.write(
-                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata"
+                    "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd()
+                    + "/csvdata"
                 )
                 data.close()
                 data = open("./config/config.conf", "r")
@@ -447,10 +456,11 @@ def setting(lang, testmode=False, loopmode=False):
     # noinspection PyBroadException
     try:
         data = open("./config/config.conf", "r")
-    except:
+    except Exception:
         data = open("./config/config.conf", "w")
         data.write(
-            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+            "/csvdata")
         data.close()
         data = open("./config/config.conf", "r")
     datas = data.read()
@@ -478,7 +488,7 @@ def setting(lang, testmode=False, loopmode=False):
         # noinspection PyBroadException
         try:
             data = open("./config/setting.conf", "r")
-        except:
+        except Exception:
             data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
@@ -507,7 +517,7 @@ def setting(lang, testmode=False, loopmode=False):
                 inp = datas[i]
                 # print(inp)
                 ok = 1
-            except:
+            except TypeError:
                 if os.path.isfile(inp):
                     ok = 1
                 else:
@@ -534,7 +544,7 @@ def setting(lang, testmode=False, loopmode=False):
         # noinspection PyBroadException
         try:
             data = open("./config/setting.conf", "r")
-        except:
+        except Exception:
             data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
@@ -563,7 +573,7 @@ def setting(lang, testmode=False, loopmode=False):
                 i += 1
                 inp = datas[i]
                 ok = 1
-            except:
+            except TypeError:
                 if os.path.isfile(inp):
                     ok = 1
                 else:
@@ -586,15 +596,17 @@ def setting(lang, testmode=False, loopmode=False):
         inp = subp.Input(lang.lang("\nサーバーの引数を入力（ない場合は空欄）"), textcolor="\033[38;5;9m")
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         df = data.read()
         data.close()
-        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 server::game_log_dir=" + \
+        inp += " server::auto_mode=true server::kick_off_wait=10 server::game_over_wait=10 server::connect_wait=1500 " \
+               "server::game_log_dir=" + \
                df.split(",")[9] + " server::text_log_dir=" + df.split(",")[9]
         if testmode:
             inp += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
@@ -609,10 +621,11 @@ def setting(lang, testmode=False, loopmode=False):
 
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         datas = data.read()

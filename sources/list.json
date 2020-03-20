@@ -36,6 +36,16 @@
       "cmd": "server"
     },
     {
+      "title": "plugin",
+      "description": "プラグイン情報を確認",
+      "cmd": "plugin"
+    },
+    {
+      "title": "about",
+      "description": "cszpの情報を表示する",
+      "cmd": "about"
+    },
+    {
       "title": "exit",
       "description": "終了する",
       "cmd": "exit"

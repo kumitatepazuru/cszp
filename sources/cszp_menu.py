@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
-
 import os
+import platform
 import shutil
 import subprocess
-from importlib import import_module
+import sys
+from importlib import import_module, reload
 
 import cuitools as subp
 
 import colortest
+import cszp_plugin
 import cszp_setting
 import cszp_soccer
 import cszp_update
@@ -45,7 +46,8 @@ def menu(lang):
         data.close()
         data = open("./config/config.conf", "w")
         data.write(
-            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+            "/csvdata")
         data.close()
         subp.Input("\n\n\033[38;5;214m" + lang.lang("リセットが完了しました。\nEnterキーを押して続行..."), dot=False)
         r = menu(lang)
@@ -58,6 +60,7 @@ def menu(lang):
     elif inp == "lang":
         terminal_size = shutil.get_terminal_size()
         printtext = ["Select Language"]
+        select = 0
         for i in range(len(lang.lang_list)):
             if lang.lang_list[str(i)] == lang.enable_lang:
                 select = i
@@ -109,10 +112,52 @@ def menu(lang):
         try:
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
-            r = menu(lang)
+            pass
+        r = menu(lang)
+    elif inp == "plugin":
+        cszp_plugin.plugin(lang)
+        r = menu(lang)
+    elif inp == "about":
+        print("\033[0m")
+        v = open("./version")
+        vd = v.read().splitlines()[0]
+        v.close()
+        printtext = [
+            "CSZP VER " + vd,
+            "VERSION:" + vd,
+            "",
+            sys.version.splitlines()[0],
+            sys.version.splitlines()[1],
+            "",
+            "SYSTEM:" + platform.system() + " " + platform.machine(),
+            "PLATFORM:" + platform.platform(),
+            "PC-NAME:" + platform.node(),
+            "PYTHON-IMPLEMENTATION:" + platform.python_implementation()
+        ]
+        subp.printlist("about cszp", printtext)
+        r = menu(lang)
     else:
         plugin = import_module(lang.functo("menu", inp))
-        plugin.plugin()
+        reload(plugin)
+        try:
+            plugin.plugin(lang)
+        except Exception:
+            import traceback
+            temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
+            file = open("./errorlog.log", "w")
+            temp += "---------- error log ----------\n" + traceback.format_exc() + "\n"
+            temp += "---------- computer information ----------\nwhich python3 : " + shutil.which(
+                'python3') + "\n" + "\n".join(map(lambda n: "=".join(n), list(os.environ.items())))
+            temp += "\n\n---------- file list ----------\n" + subprocess.check_output("ls -al", shell=True).decode(
+                "utf-8")
+            file.write(temp)
+            file.close()
+            print("\033[0m")
+            subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "", "errorlog.log", "",
+                                        lang.lang("Enterキーを押して続行...")])
+            k = ""
+            while k != "\n":
+                k = subp.Key()
         r = menu(lang)
 
     return r

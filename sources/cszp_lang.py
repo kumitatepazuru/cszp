@@ -16,14 +16,17 @@ class lang:
         files = os.listdir(path)
         files_dir = [f for f in files if os.path.isdir(os.path.join(path, f))]
         self.files = ["./list.json"]
+        self.pluginlist = []
         langs = ["./language/" + self.enable_lang]
         for i in files_dir:
-            if os.path.isfile("./plugins/" + i + "/list.json") and os.path.isfile("./plugins/" + i + "/setup.json"):
+            if os.path.isfile("./plugins/" + i + "/list.json") and os.path.isfile("./plugins/" + i + "/setup.json") \
+                    and os.path.isfile("./plugins/" + i + "/__init__.py"):
                 setupf = open("./plugins/" + i + "/setup.json")
                 setupd = json.load(setupf)
                 if "name" in setupd and "version" in setupd and "author" in setupd and "author_email" in setupd and \
                         "description" in setupd:
                     self.files.append("./plugins/" + i + "/list.json")
+                    self.pluginlist.append("./plugins/" + i)
                     langs.append("./plugins/" + i + "/language/" + self.enable_lang)
 
         self.ld = ""
@@ -61,7 +64,7 @@ class lang:
                     description.append(self.lang(i["description"]))
 
         titlemax = len(max(title, key=lambda n: len(n)))
-        title = list(map(lambda i: i.ljust(titlemax), title))
+        title = list(map(lambda n: n.ljust(titlemax), title))
         temp = self.lang(note) + "\n\n"
         for i in range(len(title)):
             temp += title[i] + " " * 4 + description[i] + "\n"

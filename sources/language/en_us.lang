@@ -16,11 +16,17 @@ Reset
 試合を複数回する
 Play multiple matchs
 
+プラグイン情報を確認
+Check plugin information
+
 Change language/言語を変更
 Change language/言語を変更
 
 過去のloopログをサーバーで確認
 Check the previous loop log on the server
+
+cszpの情報を表示する
+Display cszp information
 
 終了する
 Exit
@@ -200,3 +206,22 @@ Do you play games with synch_mode? Y/n
 
 ERR:数字を入力してください
 ERR: Please enter a number
+
+#------ cszp_plugin.py ------
+名前:
+Name:
+
+バージョン:
+Version:
+
+管理者:
+Author:
+
+管理者のメールアドレス:
+Author email address:
+
+詳細情報
+More information about
+
+説明を読む
+Read the description

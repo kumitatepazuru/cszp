@@ -9,19 +9,19 @@ def killsoccer():
     try:
         while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall rcssserver", shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
     try:
         while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
     try:
         serverpid = \
             subprocess.check_output("ps o pid,cmd | grep -E 'python3.*http.*20000' | grep -v grep", shell=True).decode(
                 "utf-8").split(" ")
         subprocess.check_output("kill " + serverpid, shell=True)
-    except:
+    except subprocess.CalledProcessError:
         pass
 
 
@@ -82,7 +82,8 @@ def update():
                                        "/tmp/cszp.zip")
             print("During unzip the file...")
             subprocess.check_output(
-                "rm -fr /tmp/cszp-master && unzip -o /tmp/cszp.zip -d /tmp/ && find . -maxdepth 1 -type f | xargs 'sudo rm' && sudo rm -r language && sudo mv -fv /tmp/cszp-master/sources/* ./",
+                "rm -fr /tmp/cszp-master && unzip -o /tmp/cszp.zip -d /tmp/ && find . -maxdepth 1 -type f | xargs "
+                "'sudo rm' && sudo rm -r language && sudo mv -fv /tmp/cszp-master/sources/* ./",
                 shell=True)
             print("completed!")
             return 1

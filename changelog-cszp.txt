@@ -1,14 +1,22 @@
-~change log~
+change log
+ver 3.2.0:
+Modification place:
+    Bug fixed.
+    Added error avoidance.
+Additional elements:
+    Plug-in information display function and cszp information display function were added.
+
 ver 3.0.2:
 Modification place:
     Bug fixed.
 Additional elements:
-    None :)
+    None
+
 ver 3.0.1:
 Modification place:
     Bug fixed.
 Additional elements:
-    None :)
+    None
 
 ver 3.0.0:
 Modification place:
@@ -21,20 +29,20 @@ ver 2.3.0-r2:
 Modification place:
     Bug fixed.
 Additional elements:
-    None :)
+    None
     
 ver 2.3.0:
 Modification place:
     I changed the detailed display.
     We also fixed bugs.
 Additional elements:
-    None :)
+    None
 
 ver 2.2.1:
 Modification place:
     Bug fixed.
 Additional elements:
-    None :)
+    None
 
 ver 2.2.0:
 Modification place:
@@ -42,24 +50,24 @@ Modification place:
     Graph display changed
     Click the graph to enlarge it. This will improve the efficiency of the analysis.
 Additional elements:
-    None :)
+    None
 
 ver 2.1.2:
 Modification place:
     cszp now uses the library cuitools.
     This requires that cuitools be installed.
 Additional elements:
-    None :)
+    Non
 
 ver 2.1.1:
 Modification place:
     Is Error Bugs.
 Additional elements:
-    None :)
+    None
 
 ver 2.1.0:
 Modification place:
-    None :)
+    None
 Additional elements:
     We created an evolutionary version of setup.py.
 
@@ -68,31 +76,31 @@ Modification place:
     Japanese and English are converted into language files. This allows anyone to modify it.
     Overall server display during loop changed. This makes it easier to see.
 Additional elements:
-    None :)
+    None
 
 ver 1.3.3b 5:
 Modification place:
     Is Error Bugs.
 Additional elements:
-    None :)
+    None
 
 ver 1.3.3b 2:
 Modification place:
     Is Error Bugs.
 Additional elements:
-    None :)
+    None
 
 ver 1.3.3b 1:
 Modification place:
     Is Loop Bugs.
 Additional elements:
-    None :)
+    None
 
 ver 1.3.0b 1:
 Modification place:
     is update Bug.
 Additional elements:
-    None :)
+    None
 
 ver 1.3.0b 1:
 Modification place:
@@ -107,7 +115,7 @@ Modification place:
     add loop start
     
 Additional elements:
-    None :)
+    None
 
 ver 1.0.5:
 Modification place:
@@ -115,28 +123,26 @@ Modification place:
     Change update destination site
     
 Additional elements:
-    None :)
-
+    None
 
 ver 1.0.2:
 Modification place:
     Fixed get an error when there is no update
     
 Additional elements:
-    None :)
-
+    None
 
 ver 1.0.1:
 Modification place:
     Fixed a bug that caused an error when automake
     
 Additional elements:
-    None :)
+    None
 
 
 ver 0.9.8b 5:
 Modification place:
-    None :)
+    None
 
 Additional elements:
-    It unveiled the program!
+    It unveiled the program

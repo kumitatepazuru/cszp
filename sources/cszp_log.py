@@ -1,49 +1,49 @@
 def log(data):
-    l = data.find("vs")
-    while data[l] != "\t":
-        l -= 1
-    team1s = l + 2
+    logdata = data.find("vs")
+    while data[logdata] != "\t":
+        logdata -= 1
+    team1s = logdata + 2
 
-    l += 2
-    while data[l] != "'":
-        l += 1
-    team1e = l
+    logdata += 2
+    while data[logdata] != "'":
+        logdata += 1
+    team1e = logdata
 
-    l += 1
-    while data[l] != "'":
-        l += 1
-    team2s = l + 1
+    logdata += 1
+    while data[logdata] != "'":
+        logdata += 1
+    team2s = logdata + 1
 
-    l += 1
-    while data[l] != "'":
-        l += 1
-    team2e = l
+    logdata += 1
+    while data[logdata] != "'":
+        logdata += 1
+    team2e = logdata
 
     team1n = data[team1s:team1e]
     team2n = data[team2s:team2e]
 
-    while data[l] != " ":
-        l += 1
+    while data[logdata] != " ":
+        logdata += 1
 
-    l += 1
-    team1s = l
+    logdata += 1
+    team1s = logdata
 
-    while data[l] != " ":
-        l += 1
+    while data[logdata] != " ":
+        logdata += 1
 
-    team1e = l
-    l += 1
+    team1e = logdata
+    logdata += 1
 
-    while data[l] != " ":
-        l += 1
+    while data[logdata] != " ":
+        logdata += 1
 
-    l += 1
-    team2s = l
+    logdata += 1
+    team2s = logdata
 
-    while data[l] != "\n":
-        l += 1
+    while data[logdata] != "\n":
+        logdata += 1
 
-    team2e = l
+    team2e = logdata
 
     team1p = data[team1s:team1e]
     team2p = data[team2s:team2e]

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-
 import os
+import shutil
 import subprocess
-from importlib import import_module
+from importlib import import_module, reload
 
 import cuitools as subp
 from texttable import *
@@ -22,7 +21,7 @@ def setting(lang):
         # noinspection PyBroadException
         try:
             data = open("./config/setting.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/setting.conf", "w")
             data.write("name,command")
             data.close()
@@ -43,10 +42,11 @@ def setting(lang):
         # noinspection PyBroadException
         try:
             data = open("./config/config.conf", "r")
-        except:
+        except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() + "/csvdata")
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")
         datas = data.read()
@@ -100,7 +100,7 @@ def setting(lang):
                 data = open("./config/setting.conf", "w")
                 data.write(datas)
                 data.close()
-            except:
+            except TypeError:
                 print("\033[38;5;9m" + lang.lang("ERR:名前"), inp.split(" ")[1], lang.lang(
                     "は簡単サッカー実行リストに登録されていません。\nタイプミスを確認してください"))
                 subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
@@ -210,8 +210,27 @@ def setting(lang):
             data.close()
             setting(lang)
         else:
-            plugin = import_module(lang.functo("menu", inp))
-            plugin.plugin()
+            plugin = import_module(lang.functo("setting", inp))
+            reload(plugin)
+            try:
+                plugin.plugin(lang)
+            except Exception:
+                import traceback
+                temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
+                file = open("./errorlog.log", "w")
+                temp += "---------- error log ----------\n" + traceback.format_exc() + "\n"
+                temp += "---------- computer information ----------\nwhich python3 : " + shutil.which(
+                    'python3') + "\n" + "\n".join(map(lambda n: "=".join(n), list(os.environ.items())))
+                temp += "\n\n---------- file list ----------\n" + subprocess.check_output("ls -al", shell=True).decode(
+                    "utf-8")
+                file.write(temp)
+                file.close()
+                print("\033[0m")
+                subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "", "errorlog.log", "",
+                                            lang.lang("Enterキーを押して続行...")])
+                k = ""
+                while k != "\n":
+                    k = subp.Key()
             setting(lang)
     except IndexError:
         print("\033[38;5;9m" + lang.lang("ERR:引数がありません。タイプミスを確認してください"))
