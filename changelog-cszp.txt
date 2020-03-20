@@ -1,4 +1,10 @@
 change log
+ver 3.2.3:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
 ver 3.2.2:
 Modification place:
     Bug fixed.

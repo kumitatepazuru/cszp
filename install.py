@@ -251,9 +251,12 @@ subprocess.check_output("mkdir -p " + text + "/cszp && cp -r ./sources/* " + tex
 subprocess.check_output(
     "chmod a+rw " + text + "/cszp && chmod a+rw " + text + "/cszp/* && chmod a+rw " + text + "/cszp/plugins",
     shell=True)
-subprocess.check_output(
-    "bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
-    shell=True)
+try:
+    subprocess.check_output(
+        "bash -c 'echo cd " + text + "/cszp/ > " + text + "/cszp/cszp.sh && echo python3 " + text + "/cszp/main.py >> " + text + "/cszp/cszp.sh && chmod 755 " + text + "/cszp/cszp.sh && ln -sf " + text + "/cszp/cszp.sh /usr/bin/cszp'",
+        shell=True)
+except subprocess.CalledProcessError:
+    error("no root!")
 k = ""
 while k != "\n":
     subp.reset()
