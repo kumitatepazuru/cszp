@@ -7,18 +7,11 @@ from importlib import import_module, reload
 
 import cuitools as subp
 
-import colortest
-import cszp_plugin
-import cszp_setting
-import cszp_soccer
-import cszp_update
+from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer
 
 
 def menu(lang):
     inp = ""
-    Return = cszp_update.update()
-    if Return == 1:
-        return 3
     subp.reset()
     while not lang.searchcmd("menu", inp):
         subprocess.check_call("clear", shell=True)
@@ -44,10 +37,18 @@ def menu(lang):
         data = open("./config/setting.conf", "w")
         data.write("name,command")
         data.close()
-        data = open("./config/config.conf", "w")
-        data.write(
-            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
-            "/csvdata")
+        try:
+            data = open("./config/config.conf", "r")
+        except FileNotFoundError:
+            data = open("./config/config.conf", "w")
+            data.write(
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.path.expanduser(
+                    "~") +
+                "/csvdata")
+            data.close()
+            data = open("./config/config.conf", "r")
+        temp = open(data.read().split(",")[9] + "/data.csv", "w")
+        temp.close()
         data.close()
         subp.Input("\n\n\033[38;5;214m" + lang.lang("リセットが完了しました。\nEnterキーを押して続行..."), dot=False)
         r = menu(lang)
@@ -128,6 +129,7 @@ def menu(lang):
             "",
             sys.version.splitlines()[0],
             sys.version.splitlines()[1],
+            "Install Location:" + os.getcwd(),
             "",
             "SYSTEM:" + platform.system() + " " + platform.machine(),
             "PLATFORM:" + platform.platform(),

@@ -45,7 +45,8 @@ def setting(lang):
         except FileNotFoundError:
             data = open("./config/config.conf", "w")
             data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.getcwd() +
+                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.path.expanduser(
+                    "~") +
                 "/csvdata")
             data.close()
             data = open("./config/config.conf", "r")

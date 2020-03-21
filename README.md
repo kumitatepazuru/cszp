@@ -12,13 +12,6 @@ Operation check OS
 
 ## How to install
 
-#### 1.Get this program.
-```git clone https://github.com/kumitatepazuru/cszp.git```
-#### 2.Install
-``` 
-cd ./cszp/
-pip3 install cuitools
-python3 install.py
-```
+```pip3 install cszp```
 ## Bugs, features you want to add
 #### [Here!](https://github.com/kumitatepazuru/cszp/issues)

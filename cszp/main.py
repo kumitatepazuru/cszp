@@ -10,8 +10,9 @@ import subprocess
 import sys
 import time
 
-import cszp_lang
+from cszp import cszp_lang
 
+os.chdir(os.path.dirname(__file__))
 try:
     from texttable import *
 except ModuleNotFoundError:
@@ -114,7 +115,6 @@ def main():
     if not os.path.isfile("./csvdata/data.csv"):
         print("\033[38;5;4m[INFO]\033[0mCreate file: data.csv")
         temp = open("./csvdata/data.csv", "w")
-        temp.write("\n")
         temp.close()
     if not os.path.isdir("config"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
@@ -123,7 +123,7 @@ def main():
         print("\033[38;5;4m[INFO]\033[0mCreate directory: plugins")
         os.mkdir("plugins")
     # main
-    import cszp_menu
+    from cszp import cszp_menu
 
     if not os.path.isfile("lang"):
         file = open("lang.json")
@@ -140,6 +140,8 @@ def main():
     try:
         r = cszp_menu.menu(lang)
     except KeyboardInterrupt:
+        r = 0
+    except EOFError:
         r = 0
     except Exception:
         r = 0

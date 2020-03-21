@@ -1,10 +1,17 @@
 change log
+ver 4.0.0:
+Modification place:
+    Bug fixed.
+    I installed it with pip.
+    This eliminates the installation clutter.
+Additional elements:
+    None
+
 ver 3.2.5:
 Modification place:
     Bug fixed.
 Additional elements:
     None
-
 
 ver 3.2.4:
 Modification place:

@@ -13,13 +13,7 @@
 
 ## インストール方法
 
-#### 1.プログラムを取得する
-```git clone https://github.com/kumitatepazuru/cszp.git```
-#### 2.インストールをする
-``` 
-cd ./cszp/
-pip3 install cuitools
-python3 install.py
-```
+```pip3 install cszp```
+
 ## バグ・追加してほしい機能など
 #### [こちらから！](https://github.com/kumitatepazuru/cszp/issues)
