@@ -12,7 +12,7 @@ import time
 
 from cszp import cszp_lang
 
-os.chdir(os.path.dirname(__file__))
+os.chdir(sys.prefix + "/cszp")
 try:
     from texttable import *
 except ModuleNotFoundError:
