@@ -1,4 +1,11 @@
 change log
+ver 3.2.5:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
+
 ver 3.2.4:
 Modification place:
     Bug fixed.
@@ -81,7 +88,7 @@ Modification place:
     cszp now uses the library cuitools.
     This requires that cuitools be installed.
 Additional elements:
-    Non
+    None
 
 ver 2.1.1:
 Modification place:

@@ -88,12 +88,7 @@ def update():
             return 1
         elif b == 1:
             subp.reset()
-            urllib.request.urlretrieve(
-                "https://raw.githubusercontent.com/kumitatepazuru/cszp/master/changelog-cszp.txt",
-                "/tmp/changelog.txt")
-            changelog = open("/tmp/changelog.txt")
-            print(changelog.read())
-            changelog.close()
-            subp.Input("\nPress Enter Key")
-            subp.reset()
+            subp.printlist("changelog", urllib.request.urlopen('https://raw.githubusercontent.com/kumitatepazuru/cszp'
+                                                               '/master/changelog-cszp.txt').read().decode(
+                "utf-8").splitlines(), False)
             update()

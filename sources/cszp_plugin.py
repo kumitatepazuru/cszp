@@ -11,7 +11,6 @@ def plugin(lang):
     print("\033[0m")
     select = cuitools.printlist("select plugin", plugin_text(lang, "name"))
     if select != -1:
-        k = ""
         sselect = 0
         while True:
 
@@ -44,4 +43,4 @@ def plugin(lang):
                 if sselect == 0:
                     break
                 else:
-                    cuitools.printlist(lang.lang("説明を読む"), plugin_text(lang, "description")[select].splitlines())
+                    cuitools.printlist(lang.lang("説明を読む"), plugin_text(lang, "description")[select].splitlines(), False)
