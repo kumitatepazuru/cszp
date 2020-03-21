@@ -1,7 +1,0 @@
-numpy
-texttable
-matplotlib
-tqdm
-pandas
-urllib3
-cuitools
