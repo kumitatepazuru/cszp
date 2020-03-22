@@ -5,13 +5,6 @@ import numpy as np
 import pandas as pd
 
 
-def plot_hist(d, c):
-    if max(d) - min(d) != 0:
-        d.hist(alpha=0.4, bins=max(d), color=c)
-    else:
-        d.hist(alpha=0.4, color=c)
-
-
 def plot_socre(filename):
     data = pd.read_csv("./csvdata/" + filename, sep=',', header=None,
                        names=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'toku1', "toku2"),

@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+import sys
 from importlib import import_module, reload
 
 import cuitools as subp
@@ -211,7 +212,7 @@ def setting(lang):
             data.close()
             setting(lang)
         else:
-
+            sys.path.append(lang.functo("setting", inp)[0])
             plugin = import_module(lang.functo("setting", inp)[1])
             reload(plugin)
             try:

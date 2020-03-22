@@ -139,7 +139,7 @@ def menu(lang):
         subp.printlist("about cszp", printtext)
         r = menu(lang)
     else:
-
+        sys.path.append(lang.functo("menu", inp)[0])
         plugin = import_module(lang.functo("menu", inp)[1])
         reload(plugin)
         try:

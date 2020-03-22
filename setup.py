@@ -43,7 +43,7 @@ setup(
         "tqdm",
         "pandas",
         "urllib3",
-        "cuitools"
+        "cuitools==1.3.0"
     ],
     license="MIT",
     classifiers=[
