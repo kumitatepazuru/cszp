@@ -10,7 +10,7 @@ from texttable import *
 def setting(lang):
     subp.reset()
     inp = ""
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
     while not lang.searchcmd("setting", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
@@ -76,8 +76,8 @@ def setting(lang):
             data = open("./config/setting.conf", "r")
             datas = data.read()
             data.close()
-            data = open("./config/setting.conf", "w")
             datas += "," + inp.split(' ')[1] + "," + inp.split(' ')[2]
+            data = open("./config/setting.conf", "w")
             data.write(datas)
             data.close()
             setting(lang)

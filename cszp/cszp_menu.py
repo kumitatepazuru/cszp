@@ -13,7 +13,7 @@ from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer
 def menu(lang):
     inp = ""
     subp.reset()
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
     while not lang.searchcmd("menu", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")

@@ -12,6 +12,7 @@ import time
 
 from cszp import cszp_lang
 
+os.chdir(os.path.abspath(os.path.dirname(__file__)))
 try:
     from texttable import *
 except ModuleNotFoundError:
@@ -105,22 +106,34 @@ def main():
         print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.2 or higher version.")
         sys.exit()
 
-    if not os.path.isdir("html_logs"):
-        print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")
-        os.mkdir("html_logs")
-    if not os.path.isdir("csvdata"):
-        print("\033[38;5;4m[INFO]\033[0mCreate directory: csvdata")
-        os.mkdir("csvdata")
-    if not os.path.isfile("./csvdata/data.csv"):
-        print("\033[38;5;4m[INFO]\033[0mCreate file: data.csv")
-        temp = open("./csvdata/data.csv", "w")
-        temp.close()
     if not os.path.isdir("config"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
         os.mkdir("config")
+    try:
+        data = open("./config/config.conf", "r")
+    except FileNotFoundError:
+        data = open("./config/config.conf", "w")
+        data.write(
+            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.path.expanduser(
+                "~") +
+            "/csvdata")
+        data.close()
+        data = open("./config/config.conf", "r")
+    path = data.read().split(",")[9]
+    if not os.path.isdir("html_logs"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")
+        os.mkdir("html_logs")
+    if not os.path.isdir(path):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: csvdata")
+        os.mkdir(path)
+    if not os.path.isfile(path + "/data.csv"):
+        print("\033[38;5;4m[INFO]\033[0mCreate file: data.csv")
+        temp = open(path + "/data.csv", "w")
+        temp.close()
     if not os.path.isdir("plugins"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: plugins")
         os.mkdir("plugins")
+
     # main
     from cszp import cszp_menu
 
@@ -170,7 +183,7 @@ def main():
     print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     print("\033[38;5;2mloading Now...")
     print("\n\n\033[38;5;2mloading Now...")
-    time.sleep(0.75)
+    time.sleep(0.5)
     print("stoped.")
     time.sleep(0.25)
     subp.reset()
