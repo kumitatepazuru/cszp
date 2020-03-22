@@ -13,7 +13,10 @@
 
 ## インストール方法
 
-```pip3 install cszp```
+```
+pip3 install cszp
+sudo apt-get install figlet
+```
 
 ## バグ・追加してほしい機能など
 #### [こちらから！](https://github.com/kumitatepazuru/cszp/issues)

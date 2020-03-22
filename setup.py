@@ -2,6 +2,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import glob
+import os
 
 from setuptools import setup, find_packages
 
@@ -10,11 +11,22 @@ def find(filename):
     return glob.glob(filename)
 
 
+def read_file(filename):
+    basepath = os.path.dirname(os.path.dirname(__file__))
+    filepath = os.path.join(basepath, filename)
+    if os.path.exists(filepath):
+        return open(filepath).read()
+    else:
+        return ''
+
+
+LONG_DESC = ''
 try:
-    with open('README.md') as f:
-        readme = f.read()
-except IOError:
-    readme = ''
+    import pypandoc
+
+    LONG_DESC = pypandoc.convert('README.md', 'rst', format='markdown_github')
+except (IOError, ImportError):
+    LONG_DESC = read_file('README.md')
 
 
 def _requires_from_file(filename):
@@ -53,5 +65,5 @@ setup(
       [console_scripts]
       cszp = cszp.__init__:main
     """,
-    data_files=[("cszp", cszp_files), ("cszp/language", find("cszp/language/*.lang"))]
+    data_files=[("/cszp", cszp_files), ("/cszp/language", find("cszp/language/*.lang"))]
 )
