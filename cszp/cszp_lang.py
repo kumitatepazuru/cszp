@@ -86,6 +86,7 @@ class lang:
 
     def functo(self, key, text):
         func = None
+        path = None
         for j in self.files:
             listf = open(j)
             listd = json.load(listf)
@@ -94,5 +95,6 @@ class lang:
                 for i in listd[key]:
                     # print(i["cmd"], text, i["cmd"] == text)
                     if i["cmd"] == text:
+                        path = os.path.dirname(j)
                         func = os.path.dirname(j).replace(".", "").replace("/", ".")[1:] + ".__init__"
-        return func
+        return path, func

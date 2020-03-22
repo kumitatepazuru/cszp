@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import glob
-import os
 
 from setuptools import setup, find_packages
 
@@ -11,22 +10,12 @@ def find(filename):
     return glob.glob(filename)
 
 
-def read_file(filename):
-    basepath = os.path.dirname(os.path.dirname(__file__))
-    filepath = os.path.join(basepath, filename)
-    if os.path.exists(filepath):
-        return open(filepath).read()
-    else:
-        return ''
+# read the contents of your README file
+from os import path
 
-
-LONG_DESC = ''
-try:
-    import pypandoc
-
-    LONG_DESC = pypandoc.convert('README.md', 'rst', format='markdown_github')
-except (IOError, ImportError):
-    LONG_DESC = read_file('README.md')
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 
 def _requires_from_file(filename):
@@ -44,7 +33,8 @@ setup(
     maintainer='kumitatepazuru',
     maintainer_email='teltelboya18@gmail.com',
     description='cszp Easy soccer execution program',
-    long_description=readme,
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
         "numpy",

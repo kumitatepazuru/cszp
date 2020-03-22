@@ -1,4 +1,16 @@
 change log
+ver 4.1.5:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
+ver 4.1.4:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
 ver 4.1.3:
 Modification place:
     Bug fixed.
