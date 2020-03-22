@@ -10,7 +10,6 @@ from texttable import *
 def setting(lang):
     subp.reset()
     inp = ""
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
     while not lang.searchcmd("setting", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
@@ -212,8 +211,8 @@ def setting(lang):
             data.close()
             setting(lang)
         else:
-            os.chdir(lang.functo("menu", inp)[0])
-            plugin = import_module(lang.functo("setting", inp))
+
+            plugin = import_module(lang.functo("setting", inp)[1])
             reload(plugin)
             try:
                 plugin.plugin(lang)
