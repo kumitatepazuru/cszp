@@ -1,4 +1,12 @@
 change log
+ver 4.1.7:
+Modification place:
+    Bug fixed.
+    We made the path selection part easier to use. This improves efficiency.
+    We made the program lighter.
+Additional elements:
+    None
+
 ver 4.1.6.x:
 Modification place:
     Bug fixed.

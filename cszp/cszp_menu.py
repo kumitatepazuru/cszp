@@ -7,10 +7,11 @@ from importlib import import_module, reload
 
 import cuitools as subp
 
-from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer
+from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module
 
 
-def menu(lang):
+def menu(lang, module):
+    cszp_module.killsoccer()
     inp = ""
     subp.reset()
     while not lang.searchcmd("menu", inp):
@@ -29,35 +30,26 @@ def menu(lang):
     elif inp == "colortest":
         colortest.colortest()
         subp.Input(lang.lang("Enterキーを押して続行..."))
-        r = menu(lang)
+        r = menu(lang, module)
     elif inp == "setting":
-        cszp_setting.setting(lang)
-        r = menu(lang)
+        cszp_setting.setting(lang, module)
+        r = menu(lang, module)
     elif inp == "reset":
         data = open("./config/setting.conf", "w")
         data.write("name,command")
         data.close()
-        try:
-            data = open("./config/config.conf", "r")
-        except FileNotFoundError:
-            data = open("./config/config.conf", "w")
-            data.write(
-                "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.path.expanduser(
-                    "~") +
-                "/csvdata")
-            data.close()
-            data = open("./config/config.conf", "r")
+        data = module.Open("./config/config.conf")
         temp = open(data.read().split(",")[9] + "/data.csv", "w")
         temp.close()
         data.close()
         subp.Input("\n\n\033[38;5;214m" + lang.lang("リセットが完了しました。\nEnterキーを押して続行..."), dot=False)
-        r = menu(lang)
+        r = menu(lang, module)
     elif inp == "test":
-        cszp_soccer.setting(lang, testmode=True)
-        r = menu(lang)
+        cszp_soccer.setting(lang, testmode=True, module=module)
+        r = menu(lang, module)
     elif inp == "start":
-        cszp_soccer.setting(lang)
-        r = menu(lang)
+        cszp_soccer.setting(lang, module=module)
+        r = menu(lang, module)
     elif inp == "lang":
         terminal_size = shutil.get_terminal_size()
         printtext = ["Select Language"]
@@ -106,18 +98,18 @@ def menu(lang):
         langf.close()
         return 2
     elif inp == "loop":
-        cszp_soccer.setting(lang, loopmode=True)
-        r = menu(lang)
+        cszp_soccer.setting(lang, loopmode=True, module=module)
+        r = menu(lang, module)
     elif inp == "server":
         print(lang.lang("Ctrl+Cで閲覧を終了します。"))
         try:
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
             pass
-        r = menu(lang)
+        r = menu(lang, module)
     elif inp == "plugin":
         cszp_plugin.plugin(lang)
-        r = menu(lang)
+        r = menu(lang, module)
     elif inp == "about":
         print("\033[0m")
         v = open("./version")
@@ -137,7 +129,7 @@ def menu(lang):
             "PYTHON-IMPLEMENTATION:" + platform.python_implementation()
         ]
         subp.printlist("about cszp", printtext)
-        r = menu(lang)
+        r = menu(lang, module)
     else:
         sys.path.append(lang.functo("menu", inp)[0])
         plugin = import_module(lang.functo("menu", inp)[1])
@@ -156,11 +148,12 @@ def menu(lang):
             file.write(temp)
             file.close()
             print("\033[0m")
-            subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "", "errorlog.log", "",
-                                        lang.lang("Enterキーを押して続行...")])
+            subp.box(lang.lang("エラー"),
+                     [temp.splitlines()[0], lang.lang("ログを確認してください"), "", os.getcwd() + "/errorlog.log", "",
+                      lang.lang("Enterキーを押して続行...")])
             k = ""
             while k != "\n":
                 k = subp.Key()
-        r = menu(lang)
+        r = menu(lang, module)
 
     return r

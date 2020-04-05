@@ -50,8 +50,11 @@ def log(data):
     return team1n, team2n, team1p, team2p
 
 
-def kekka(logs, lang):
-    csvf = open("./csvdata/data.csv")
+def kekka(logs, lang, module):
+    data = module.Open("./config/config.conf")
+    path = data.read().split(",")[9]
+    data.close()
+    csvf = open(path + "/data.csv")
     csv = csvf.read()
     csv = csv.split("\n")
     k = log(logs)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import importlib
 import json
 import locale
@@ -10,10 +8,14 @@ import subprocess
 import sys
 import time
 
-from cszp import cszp_lang
-
+sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
-sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+from cszp_module import Open, terminal
+
+# sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
+
+module = Open()
 try:
     from texttable import *
 except ModuleNotFoundError:
@@ -110,17 +112,9 @@ def main():
     if not os.path.isdir("config"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
         os.mkdir("config")
-    try:
-        data = open("./config/config.conf", "r")
-    except FileNotFoundError:
-        data = open("./config/config.conf", "w")
-        data.write(
-            "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," + os.path.expanduser(
-                "~") +
-            "/csvdata")
-        data.close()
-        data = open("./config/config.conf", "r")
+    data = module.Open("./config/config.conf")
     path = data.read().split(",")[9]
+    data.close()
     if not os.path.isdir("html_logs"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")
         os.mkdir("html_logs")
@@ -149,9 +143,9 @@ def main():
         else:
             langf.write("1")
         langf.close()
-    lang = cszp_lang.lang()
+    lang = terminal()
     try:
-        r = cszp_menu.menu(lang)
+        r = cszp_menu.menu(lang, module)
     except KeyboardInterrupt:
         r = 0
     except EOFError:
@@ -168,8 +162,9 @@ def main():
         file.write(temp)
         file.close()
         print("\033[0m")
-        subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "", "errorlog.log", "",
-                                    lang.lang("Enterキーを押して続行...")])
+        subp.box(lang.lang("エラー"),
+                 [temp.splitlines()[0], lang.lang("ログを確認してください"), "", os.getcwd() + "/errorlog.log", "",
+                  lang.lang("Enterキーを押して続行...")])
         k = ""
         while k != "\n":
             k = subp.Key()

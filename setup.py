@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 
 
 def find(filename):
-    return glob.glob(filename)
+    return list(map(lambda n: n[5:], glob.glob(filename)))
 
 
 # read the contents of your README file
@@ -22,8 +22,9 @@ def _requires_from_file(filename):
     return open(filename).read().splitlines()
 
 
-cszp_files = ["cszp/index.html", "cszp/nofile.png", "cszp/version"]
+cszp_files = ["index.html", "nofile.png", "version"] + find("cszp/language/*.lang")
 cszp_files += find("cszp/*.json")
+# print(find("cszp/language/*.lang"))
 setup(
     name="cszp",
     version=open("cszp/version").read().splitlines()[0],
@@ -43,7 +44,7 @@ setup(
         "tqdm",
         "pandas",
         "urllib3",
-        "cuitools==1.3.0"
+        "cuitools>=1.6.0"
     ],
     license="MIT",
     classifiers=[
@@ -55,5 +56,5 @@ setup(
       [console_scripts]
       cszp = cszp.__init__:main
     """,
-    data_files=[("/cszp", cszp_files), ("/cszp/language", find("cszp/language/*.lang"))]
+    package_data={"cszp": cszp_files}
 )

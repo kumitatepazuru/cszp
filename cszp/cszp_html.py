@@ -5,8 +5,11 @@ import numpy as np
 import pandas as pd
 
 
-def plot_socre(filename):
-    data = pd.read_csv("./csvdata/" + filename, sep=',', header=None,
+def plot_socre(filename, module):
+    data = module.Open("./config/config.conf")
+    path = data.read().split(",")[9]
+    data.close()
+    data = pd.read_csv(path + "/" + filename, sep=',', header=None,
                        names=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'toku1', "toku2"),
                        index_col=0)
     heikin = data.mean()
@@ -30,7 +33,7 @@ def plot_socre(filename):
     plt.savefig("file1.png", dpi=300)
     plt.clf()
 
-    csv = open("./csvdata/" + filename)
+    csv = open(path + "/" + filename)
     csv2 = open("html.csv", "w")
     csvd = csv.read().splitlines()[1:]
     csvtd = []

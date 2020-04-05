@@ -99,8 +99,11 @@ Setting
 前画面に戻る場合はbackと入力
 Type back to Return to previous page
 
-Team1(黄色)チームのパスまたはリストの名前を入力
-Input path or list name for team1(yellow)team
+Team1(黄色)チームのパスを入力(リストの名前を入力したい場合はQキー)
+Enter Team1 (yellow) team path (To enter a name for the list, press Q.)
+
+Team1(黄色)チームのリストの名前を入力
+Team1 (yellow) Enter a name for the team list
 
 また、そのようなファイルも存在しません。
 Also,no such file exists.
@@ -108,11 +111,14 @@ Also,no such file exists.
 Team1(黄色)チームのパス:
 Path for team1(yellow)team:
 
-Team2(赤色)チームのパスまたはリストの名前を入力
-Input path or list name for team2(red)team
+Team2(赤色)チームのパスを入力(リストの名前を入力したい場合はQキー)
+Enter Team2 (red) team path (To enter a name for the list, press Q.)
 
 Team2(赤色)チームのパス:
 Path for team2(red)team:
+
+Team2(赤色)チームのリストの名前を入力
+Team2 (Red) Enter a name for the team list
 
 サーバーの引数を入力（ない場合は空欄）
 Input server argument(leave blank if none)
