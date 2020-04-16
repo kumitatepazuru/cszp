@@ -10,7 +10,7 @@ import time
 
 sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
-from cszp_module import Open, terminal
+from cszp.cszp_module import Open, terminal
 
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
