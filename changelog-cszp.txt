@@ -1,4 +1,15 @@
 change log
+
+ver 4.1.9:
+Modification place:
+    In order to improve efficiency, there is no longer the historical starting and ending direction that has been continued since ver 0.9.8 b5.
+    I'm quite sad myself, but I can't help it.
+    When installing the language switching plug-in, cszp now reloads some programs internally instead of restarting.
+    Fixed bugs.
+Additional elements:
+    Warn when there is a problem with the plug-in.
+    I have created a system that will install the plug-in. This feature can be added via plugin- > Add Plugins.
+
 ver 4.1.7.x:
 Modification place:
     Bug fixed.

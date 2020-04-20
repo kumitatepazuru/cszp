@@ -1,15 +1,43 @@
-import importlib
-import json
-import locale
-import os
-import platform
-import shutil
 import subprocess
 import sys
-import time
+import os
 
 sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
+try:
+    import cuitools as subp
+except ModuleNotFoundError:
+    v = open("./version")
+    print("\033[2Jcszp " + v.read())
+    v.close()
+    print(
+        "\033[1mERR:\033[0mcuitools package is not installed.\ncszp (easy soccer run program) requires cuitools.\n"
+        "Execute the following command and try again.\n\033[38;5;11mpip3 install cuitools"
+    )
+    sys.exit()
+
+try:
+    subp.reset()
+    print("\033[1;1H\033[0m\033[38;5;172m")
+    ver = open("./version")
+    subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
+    ver.close()
+    print("\033[38;5;2mloading Now...")
+except Exception:
+    ver = open("./version")
+    print("\033[2Jcszp " + ver.read())
+    ver.close()
+    print(
+        "\033[1mERR:\033[0mfiglet package is not installed.\ncszp (easy soccer run program) requires figlet."
+        "\nExecute the following command and try again.\n\033[38;5;11msudo apt install figlet "
+    )
+    sys.exit()
+
+import json
+import locale
+import platform
+import shutil
+
 from cszp.cszp_module import Open, terminal
 
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
@@ -25,18 +53,6 @@ except ModuleNotFoundError:
     print(
         "\033[1mERR:\033[0mtexttable package is not installed.\ncszp (easy soccer run program) requires texttable.\n"
         "Execute the following command and try again.\n\033[38;5;11mpip3 install texttable"
-    )
-    sys.exit()
-
-try:
-    import cuitools as subp
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mcuitools package is not installed.\ncszp (easy soccer run program) requires cuitools.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install cuitools"
     )
     sys.exit()
 
@@ -79,30 +95,10 @@ except ModuleNotFoundError:
 
 def main():
     # noinspection PyBroadException
-    try:
-        subp.reset()
-        print("\033[0m\033[38;5;172m")
-        ver = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
-        ver.close()
-    except Exception:
-        ver = open("./version")
-        print("\033[2Jcszp " + ver.read())
-        ver.close()
-        print(
-            "\033[1mERR:\033[0mfiglet package is not installed.\ncszp (easy soccer run program) requires figlet."
-            "\nExecute the following command and try again.\n\033[38;5;11msudo apt install figlet "
-        )
-        sys.exit()
-    time.sleep(1)
-
     print("")
     if int(sys.version_info[0]) == 3 and int(sys.version_info[1]) > 2:
         sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
-        time.sleep(0.2)
-        print("\033[38;5;2mloading Now...")
-        time.sleep(0.5)
     else:
         sys.stdout.write("\033[38;5;9m\033[1m[FAILD] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
@@ -133,7 +129,7 @@ def main():
     from cszp import cszp_menu
 
     if not os.path.isfile("lang"):
-        file = open("lang.json")
+        file = open("language/lang.json")
         lang_list = json.load(file)
         file.close()
         langf = open("lang", "w")
@@ -145,13 +141,12 @@ def main():
         langf.close()
     lang = terminal()
     try:
-        r = cszp_menu.menu(lang, module)
+        cszp_menu.menu(lang, module)
     except KeyboardInterrupt:
-        r = 0
+        pass
     except EOFError:
-        r = 0
+        pass
     except Exception:
-        r = 0
         import traceback
         temp = "CSZP PROGRAM ERROR\ncszp=" + open("version").read() + "\n"
         file = open("./errorlog.log", "w")
@@ -171,21 +166,7 @@ def main():
 
     #  stop
     subp.reset()
-    print("\033[0m\033[38;5;172m")
-    ver = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
-    ver.close()
-    sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
-    print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
-    print("\033[38;5;2mloading Now...")
-    print("\n\n\033[38;5;2mloading Now...")
-    time.sleep(0.5)
-    print("stoped.")
-    time.sleep(0.25)
-    subp.reset()
-    if r == 2 or r == 3:
-        importlib.reload(cszp_menu)
-        main()
+    print("\033[38;5;10mgood bye!")
 
 
 if __name__ == '__main__':

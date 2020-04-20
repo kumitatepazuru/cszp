@@ -1,6 +1,8 @@
 import json
+import zipfile
 
 import cuitools
+from cszp_module import terminal
 
 
 def plugin_text(lang, text):
@@ -9,8 +11,9 @@ def plugin_text(lang, text):
 
 def plugin(lang):
     print("\033[0m")
-    select = cuitools.printlist("select plugin", plugin_text(lang, "name"))
-    if select != -1:
+    select = cuitools.printlist(lang.lang("プラグインを選択"), plugin_text(lang, "name") + [lang.lang("プラグインを追加"),
+                                                                                    lang.lang("前ページへ戻る(ホーム)")])
+    if select != -1 and select < len(plugin_text(lang, "name")):
         sselect = 0
         while True:
 
@@ -44,3 +47,47 @@ def plugin(lang):
                     break
                 else:
                     cuitools.printlist(lang.lang("説明を読む"), plugin_text(lang, "description")[select].splitlines(), False)
+    elif select == len(plugin_text(lang, "name")):
+        k = ""
+        while k != "\n":
+            cuitools.box(lang.lang("プラグインを追加"), [
+                lang.lang("プラグインの追加を行います。"),
+                lang.lang("プラグインの入ったzipファイルを選択してください。"),
+                lang.lang("終了したい場合は次の画面に行ってからqキーを押してください。"),
+                lang.lang("Enterキーを押して続行...")
+            ])
+            k = cuitools.Key()
+        ok = 0
+        while ok == 0:
+            path = cuitools.Inputfilegui(lang.lang("プラグインの入ったzipファイルを選択（終了したい場合はQキー）"))
+            if path == -1:
+                plugin(lang)
+                break
+            elif path == -2:
+                raise KeyboardInterrupt()
+            else:
+                cuitools.reset()
+                try:
+                    with zipfile.ZipFile(path) as existing_zip:
+                        existing_zip.extractall('./plugins/')
+                except zipfile.BadZipFile:
+                    k = ""
+                    while k != "\n":
+                        cuitools.box(lang.lang("エラー"),[
+                            lang.lang("zipファイルではありません。"),
+                            lang.lang("Enterキーを押して続行...")
+                        ],reset_=True)
+                        k = cuitools.Key()
+                else:
+                    k = ""
+                    lang = terminal(noenter=True)
+                    while k != "\n":
+                        cuitools.box("完了",[
+                            lang.lang("正常にプラグインが追加されました。"),
+                            lang.lang("Enterキーを押して続行...")
+                        ])
+                        k = cuitools.Key()
+                    ok = 1
+
+    elif select == len(plugin_text(lang, "name"))+1:
+        pass

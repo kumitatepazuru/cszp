@@ -23,7 +23,7 @@ def _requires_from_file(filename):
 
 
 cszp_files = ["index.html", "nofile.png", "version"] + find("cszp/language/*.lang")
-cszp_files += find("cszp/*.json")
+cszp_files += find("cszp/*.json") + find("cszp/language/*.json")
 # print(find("cszp/language/*.lang"))
 setup(
     name="cszp",
@@ -44,7 +44,7 @@ setup(
         "tqdm",
         "pandas",
         "urllib3",
-        "cuitools>=1.6.0"
+        "cuitools>=1.6.6.5"
     ],
     license="MIT",
     classifiers=[

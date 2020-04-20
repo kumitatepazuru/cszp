@@ -288,8 +288,11 @@ def start(cmd, lang, module):
         stdout = stdout.decode("utf-8")
         logt2 += stdout + stderr
         logt2 += "\n"
-    except KeyboardInterrupt:
+    except subprocess.CalledProcessError or KeyboardInterrupt:
         print("\033[38;5;9m\033[1mERR:RCSSSERVER_ERROR")
+        import traceback
+        traceback.print_exc()
+        subp.Input("press Enter Key")
         return "error"
 
     logs += "---------- " + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + " -----------\n"
@@ -545,8 +548,6 @@ def setting(lang, module, testmode=False, loopmode=False):
         if datas[7] == "off":
             inp += " server::text_logging=false"
         cmd.append(inp)
-        print("\n\033[38;5;14mloading now...")
-        time.sleep(0.5)
         if loopmode:
             loop(cmd, loops, lang, module)
         else:

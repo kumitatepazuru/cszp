@@ -2,7 +2,7 @@ import json
 import os
 import subprocess
 
-import cszp.cszp_lang
+from cszp import cszp_lang
 
 
 def killsoccer():
@@ -44,7 +44,7 @@ class Open:
         return data
 
 
-class terminal(cszp.cszp_lang.lang):
+class terminal(cszp_lang.lang):
     def question(self, key, note="cszp 簡単サッカー実行プログラム"):
         title = []
         description = []

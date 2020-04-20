@@ -37,7 +37,7 @@
     },
     {
       "title": "plugin",
-      "description": "プラグイン情報を確認",
+      "description": "プラグインの追加・確認をする",
       "cmd": "plugin"
     },
     {

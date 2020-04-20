@@ -1,13 +1,36 @@
 import json
 import os
+import cuitools
+
+
+def isfile(path):
+    if os.path.isfile(path):
+        print("\033[38;5;10m\033[1m[OK]\tReview", os.path.basename(path))
+        return True
+    else:
+        print("\033[38;5;3m[WARNING]\033[0m\tThe plug-in is missing a required file:", os.path.basename(path))
+        return False
+
+
+class inname:
+    def __init__(self, listd):
+        self.list = listd
+
+    def inname(self, name):
+        if name in self.list:
+            print("\033[38;5;10m\033[1m[OK]\tVerify the", name, "tag is present")
+            return True
+        else:
+            print("\033[38;5;3m[WARNING]\033[0m\tRequired information has not been written. Please confirm.", name)
+            return False
 
 
 class lang:
-    def __init__(self):
+    def __init__(self,noenter=False):
         file = open("lang")
         ld = file.read()
         file.close()
-        file = open("lang.json")
+        file = open("language/lang.json")
         self.lang_list = json.load(file)
         file.close()
 
@@ -19,15 +42,25 @@ class lang:
         self.pluginlist = []
         langs = ["./language/" + self.enable_lang]
         for i in files_dir:
-            if os.path.isfile("./plugins/" + i + "/list.json") and os.path.isfile("./plugins/" + i + "/setup.json") \
-                    and os.path.isfile("./plugins/" + i + "/__init__.py"):
+            print("\033[38;5;4m[INFO]\033[0mThere was", i, "in the plugins folder. Checking for plug-ins.")
+            if isfile("./plugins/" + i + "/list.json") and isfile("./plugins/" + i + "/setup.json") \
+                    and isfile("./plugins/" + i + "/__init__.py"):
                 setupf = open("./plugins/" + i + "/setup.json")
                 setupd = json.load(setupf)
-                if "name" in setupd and "version" in setupd and "author" in setupd and "author_email" in setupd and \
-                        "description" in setupd:
+                print("\033[38;5;4[INFO]\033[0m\tI checked that all the necessary files are present. "
+                      "Verify that the required information has been written.")
+                c = inname(setupd)
+                if c.inname("name") and c.inname("version") and c.inname("author") and c.inname("author_email") and \
+                        c.inname("description"):
                     self.files.append("./plugins/" + i + "/list.json")
                     self.pluginlist.append("./plugins/" + i)
                     langs.append("./plugins/" + i + "/language/" + self.enable_lang)
+                else:
+                    if not noenter:
+                        cuitools.Input("\nPress enter key to run cszp")
+            else:
+                if not noenter:
+                    cuitools.Input("\nPress enter key to run cszp")
 
         self.ld = ""
         for i in langs:

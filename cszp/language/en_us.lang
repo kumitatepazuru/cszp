@@ -16,8 +16,8 @@ Reset
 試合を複数回する
 Play multiple matchs
 
-プラグイン情報を確認
-Check plugin information
+プラグインの追加・確認をする
+Adding and checking plug-ins
 
 Change language/言語を変更
 Change language/言語を変更
@@ -214,6 +214,9 @@ ERR:数字を入力してください
 ERR: Please enter a number
 
 #------ cszp_plugin.py ------
+プラグインを選択
+select plugin
+
 名前:
 Name:
 
@@ -231,3 +234,27 @@ More information about
 
 説明を読む
 Read the description
+
+プラグインの入ったzipファイルを選択してください。
+Select the zip file containing the plug-in.
+
+終了したい場合は次の画面に行ってからqキーを押してください。
+To exit, go to the next screen and press the q key.
+
+プラグインの入ったzipファイルを選択（終了したい場合はQキー）
+Select zip file with plugins (To exit, press Q.)
+
+zipファイルではありません。
+Not a zip file.
+
+プラグインを追加
+Add Plugin
+
+プラグインの追加を行います。
+Add plug-ins.
+
+完了
+added
+
+正常にプラグインが追加されました。
+The plug-in was successfully added.
