@@ -100,7 +100,7 @@ def main():
         sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     else:
-        sys.stdout.write("\033[38;5;9m\033[1m[FAILD] ")
+        sys.stdout.write("\033[38;5;9m\033[1m[ERR] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
         print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.2 or higher version.")
         sys.exit()
@@ -140,6 +140,7 @@ def main():
             langf.write("1")
         langf.close()
     lang = terminal()
+    lang.autostart()
     try:
         cszp_menu.menu(lang, module)
     except KeyboardInterrupt:

@@ -5,7 +5,7 @@ import cuitools
 
 def isfile(path):
     if os.path.isfile(path):
-        print("\033[38;5;10m\033[1m[OK]\tReview", os.path.basename(path))
+        print("\033[38;5;10m\033[1m[OK]\033[0m\tReview", os.path.basename(path))
         return True
     else:
         print("\033[38;5;3m[WARNING]\033[0m\tThe plug-in is missing a required file:", os.path.basename(path))
@@ -18,7 +18,7 @@ class inname:
 
     def inname(self, name):
         if name in self.list:
-            print("\033[38;5;10m\033[1m[OK]\tVerify the", name, "tag is present")
+            print("\033[38;5;10m\033[1m[OK]\033[0m\tVerify the", name, "tag is present")
             return True
         else:
             print("\033[38;5;3m[WARNING]\033[0m\tRequired information has not been written. Please confirm.", name)
@@ -47,7 +47,7 @@ class lang:
                     and isfile("./plugins/" + i + "/__init__.py"):
                 setupf = open("./plugins/" + i + "/setup.json")
                 setupd = json.load(setupf)
-                print("\033[38;5;4[INFO]\033[0m\tI checked that all the necessary files are present. "
+                print("\033[38;5;4m[INFO]\033[0m\tI checked that all the necessary files are present. "
                       "Verify that the required information has been written.")
                 c = inname(setupd)
                 if c.inname("name") and c.inname("version") and c.inname("author") and c.inname("author_email") and \

@@ -57,8 +57,8 @@ def plugin(lang):
                 lang.lang("Enterキーを押して続行...")
             ])
             k = cuitools.Key()
-        ok = 0
-        while ok == 0:
+        ok = None
+        while ok is None:
             path = cuitools.Inputfilegui(lang.lang("プラグインの入ったzipファイルを選択（終了したい場合はQキー）"))
             if path == -1:
                 plugin(lang)
@@ -73,21 +73,24 @@ def plugin(lang):
                 except zipfile.BadZipFile:
                     k = ""
                     while k != "\n":
-                        cuitools.box(lang.lang("エラー"),[
+                        cuitools.box(lang.lang("エラー"), [
                             lang.lang("zipファイルではありません。"),
                             lang.lang("Enterキーを押して続行...")
-                        ],reset_=True)
+                        ], reset_=True)
                         k = cuitools.Key()
                 else:
                     k = ""
                     lang = terminal(noenter=True)
+                    lang.autostart()
                     while k != "\n":
-                        cuitools.box("完了",[
+                        cuitools.box("完了", [
                             lang.lang("正常にプラグインが追加されました。"),
+                            lang.lang("正常にプラグインが動作するか確認してください。"),
                             lang.lang("Enterキーを押して続行...")
                         ])
                         k = cuitools.Key()
-                    ok = 1
+                    ok = lang
+        return ok
 
-    elif select == len(plugin_text(lang, "name"))+1:
+    elif select == len(plugin_text(lang, "name")) + 1:
         pass

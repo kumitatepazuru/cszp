@@ -1,5 +1,17 @@
 change log
 
+var 4.1.10:
+Modification place:
+    Bug fixed.
+    Added user_input argument to pass to add-on.
+    Arguments describe commands that the user has executed, and can be used to take arguments to the command itself or to distinguish commands.
+Additional elements:
+    Added a function to execute when cszp is started. __ init __.autostart.
+    json with the following statement:
+    "auto_start":[
+        {"cmd": "auto_start"}
+    ]
+
 ver 4.1.9:
 Modification place:
     In order to improve efficiency, there is no longer the historical starting and ending direction that has been continued since ver 0.9.8 b5.

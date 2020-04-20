@@ -95,6 +95,7 @@ def menu(lang, module):
         langf.write(str(select))
         langf.close()
         lang = cszp_module.terminal(noenter=True)
+        lang.autostart()
         menu(lang, module)
     elif inp == "loop":
         cszp_soccer.setting(lang, loopmode=True, module=module)
@@ -133,11 +134,11 @@ def menu(lang, module):
         subp.printlist("about cszp", printtext)
         menu(lang, module)
     else:
-        sys.path.append(lang.functo("menu", inp)[0])
-        plugin = import_module(lang.functo("menu", inp)[1])
+        sys.path.append(lang.functo("menu", inp)[0][0])
+        plugin = import_module(lang.functo("menu", inp)[1][0])
         reload(plugin)
         try:
-            plugin.plugin(lang)
+            plugin.plugin(lang,inp)
         except Exception:
             import traceback
             temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"

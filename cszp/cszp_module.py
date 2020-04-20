@@ -1,6 +1,8 @@
 import json
 import os
 import subprocess
+import sys
+from importlib import import_module, reload
 
 from cszp import cszp_lang
 
@@ -80,8 +82,8 @@ class terminal(cszp_lang.lang):
         return hit
 
     def functo(self, key, text):
-        func = None
-        path = None
+        func = []
+        path = []
         for j in self.files:
             listf = open(j)
             listd = json.load(listf)
@@ -90,6 +92,15 @@ class terminal(cszp_lang.lang):
                 for i in listd[key]:
                     # print(i["cmd"], text, i["cmd"] == text)
                     if i["cmd"] == text:
-                        path = os.path.dirname(j)
-                        func = os.path.dirname(j).replace(".", "").replace("/", ".")[1:] + ".__init__"
+                        path.append(os.path.dirname(j))
+                        func.append(os.path.dirname(j).replace(".", "").replace("/", ".")[1:] + ".__init__")
         return path, func
+
+    def autostart(self):
+        plugin_list = self.functo("auto_start", "auto_start")
+        for i in plugin_list[0]:
+            sys.path.append(i)
+        for i in plugin_list[1]:
+            plugin = import_module(i)
+            plugin.autostart()
+

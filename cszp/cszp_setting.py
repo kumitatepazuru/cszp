@@ -193,11 +193,11 @@ def setting(lang, module):
             data.close()
             setting(lang, module)
         else:
-            sys.path.append(lang.functo("setting", inp)[0])
-            plugin = import_module(lang.functo("setting", inp)[1])
+            sys.path.append(lang.functo("setting", inp)[0][0])
+            plugin = import_module(lang.functo("setting", inp)[1][0])
             reload(plugin)
             try:
-                plugin.plugin(lang)
+                plugin.plugin(lang,inp)
             except Exception:
                 import traceback
                 temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
