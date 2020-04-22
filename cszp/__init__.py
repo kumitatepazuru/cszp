@@ -140,7 +140,7 @@ def main():
             langf.write("1")
         langf.close()
     lang = terminal()
-    lang.autostart()
+    lang.autostart(lang)
     try:
         cszp_menu.menu(lang, module)
     except KeyboardInterrupt:

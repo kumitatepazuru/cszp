@@ -96,11 +96,11 @@ class terminal(cszp_lang.lang):
                         func.append(os.path.dirname(j).replace(".", "").replace("/", ".")[1:] + ".__init__")
         return path, func
 
-    def autostart(self):
+    def autostart(self,lang):
         plugin_list = self.functo("auto_start", "auto_start")
         for i in plugin_list[0]:
             sys.path.append(i)
         for i in plugin_list[1]:
             plugin = import_module(i)
-            plugin.autostart()
+            plugin.autostart(lang)
 
