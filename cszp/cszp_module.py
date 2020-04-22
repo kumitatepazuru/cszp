@@ -47,7 +47,7 @@ class Open:
 
 
 class terminal(cszp_lang.lang):
-    def question(self, key, note="cszp 簡単サッカー実行プログラム"):
+    def question(self, key, note="cszp 簡単サッカー実行プログラム",inp=True):
         title = []
         description = []
         for j in self.files:
@@ -65,7 +65,8 @@ class terminal(cszp_lang.lang):
         temp = self.lang(note) + "\n\n"
         for i in range(len(title)):
             temp += title[i] + " " * 4 + description[i] + "\n"
-        temp += ">>> "
+        if inp:
+            temp += ">>> "
         return temp
 
     def searchcmd(self, key, text):
