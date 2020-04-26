@@ -10,6 +10,8 @@ Operation check OS
 - ubuntu 16.04LTS
 - ubuntu server 16.04LTS
 - debian 10.1
+- zorinos 15.2
+- ubuntu 18.04LTS
 
 ## How to install
 
