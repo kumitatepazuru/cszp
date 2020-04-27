@@ -1,10 +1,25 @@
 change log
+var 4.5.0:
+Modification place:
+    Rewrite the cszp_soccer.py file to use the prompt toolkit for everything else, as cuitools has been updated.
+    Using the prompt toolkit, the start, test, and loop commands executed in cszp_soccer.py can now be mouse-clicked in most cases. We also changed to the button interactive execution method.
+    The previous user input function cuitools.Input has been replaced by the internal program cszp_module.Input to allow up and down history checking. (history from program execution) Also, you can use the input aid function in some areas, so you can enter commands easily.
+    Removed cszp_html.py.
+    When checking the server in loop mode, html.csv and so on are now passed in memory instead of being returned and accessed. Also, the load screen is now displayed on import.
+    Remove cszp_log.kekka function. This eliminates the need to create data.csv and prevents it from being created.
+    The log is now displayed correctly.
+    The progress bar creation library tqdm is no longer used. Instead, we developed a time remaining display system that uses our own algorithm.
+    Removed automake feature. It remains in the setting command, but does not work. Will be removed in a future update.
+    The loop, start, and test commands have the same execution parts.
+    We have strengthened our error monitoring system during matches.
+Additional elements:
+    None
+
 var 4.1.10.x:
 Modification place:
     Bug fixed.
 Additional elements:
     None
-
 
 var 4.1.10:
 Modification place:

@@ -8,7 +8,7 @@ import cuitools as subp
 from texttable import *
 
 
-def setting(lang, module):
+def setting(lang, module,Input):
     subp.reset()
     inp = ""
     while not lang.searchcmd("setting", inp):
@@ -48,10 +48,11 @@ def setting(lang, module):
         table.add_rows(datal)
         print(table.draw() + "\n\n")
 
-        inp = subp.Input(lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。"), dot=False)
+        q = lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。")
+        inp = Input.Input(q[0], dot=False, normal=False,word=q[1])
         if not lang.searchcmd("setting", inp):
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
-            subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+            Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
 
     try:
         if inp == "back":
@@ -61,7 +62,7 @@ def setting(lang, module):
             data = open("./config/setting.conf", "a")
             data.write("," + inp.split(' ')[1] + "," + inp.split(' ')[2])
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "remove":
             data = module.Open("./config/setting.conf")
@@ -86,8 +87,8 @@ def setting(lang, module):
             except TypeError:
                 print("\033[38;5;9m" + lang.lang("ERR:名前"), inp.split(" ")[1], lang.lang(
                     "は簡単サッカー実行リストに登録されていません。\nタイプミスを確認してください"))
-                subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            setting(lang, module)
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "soccerwindow2":
             data = module.Open("./config/config.conf")
@@ -100,7 +101,7 @@ def setting(lang, module):
                 datas[1] = "off"
             else:
                 print("\033[38;5;9m" + lang.lang("ERR:使える引数はONまたはOFFです。\nタイプミスを確認してください"))
-                subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             datat = datas
             datas = ""
             for i in datat:
@@ -109,7 +110,7 @@ def setting(lang, module):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "automake":
             data = module.Open("./config/config.conf")
@@ -122,7 +123,7 @@ def setting(lang, module):
                 datas[3] = "off"
             else:
                 print("\033[38;5;9m" + lang.lang("ERR:使える引数はONまたはOFFです。\nタイプミスを確認してください"))
-                subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             datat = datas
             datas = ""
             for i in datat:
@@ -131,7 +132,7 @@ def setting(lang, module):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "rcg":
             data = module.Open("./config/config.conf")
@@ -144,7 +145,7 @@ def setting(lang, module):
                 datas[5] = "off"
             else:
                 print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
-                subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             datat = datas
             datas = ""
             for i in datat:
@@ -153,7 +154,7 @@ def setting(lang, module):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "rcl":
             data = module.Open("./config/config.conf")
@@ -166,7 +167,7 @@ def setting(lang, module):
                 datas[7] = "off"
             else:
                 print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
-                subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             datat = datas
             datas = ""
             for i in datat:
@@ -175,7 +176,7 @@ def setting(lang, module):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
 
         elif inp.split(' ')[0] == "fileout":
             data = module.Open("./config/config.conf")
@@ -191,7 +192,7 @@ def setting(lang, module):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module)
+            setting(lang, module,Input)
         else:
             sys.path.append(lang.functo("setting", inp)[0][0])
             plugin = import_module(lang.functo("setting", inp)[1][0])
@@ -215,8 +216,8 @@ def setting(lang, module):
                 k = ""
                 while k != "\n":
                     k = subp.Key()
-            setting(lang, module)
+            setting(lang, module,Input)
     except IndexError:
         print("\033[38;5;9m" + lang.lang("ERR:引数がありません。タイプミスを確認してください"))
-        subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-        setting(lang, module)
+        Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+        setting(lang, module,Input)

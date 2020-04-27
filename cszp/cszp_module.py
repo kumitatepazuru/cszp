@@ -2,27 +2,69 @@ import json
 import os
 import subprocess
 import sys
-from importlib import import_module, reload
+from importlib import import_module
+
+from prompt_toolkit import PromptSession
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
+from prompt_toolkit.lexers import Lexer
+from prompt_toolkit.completion import WordCompleter
 
 from cszp import cszp_lang
 
 
-def killsoccer():
-    try:
-        while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
-            subprocess.check_output("killall rcssserver", shell=True)
-    except subprocess.CalledProcessError:
-        pass
+class lexer(Lexer):
+    def __init__(self, color):
+        self.color = color
+
+    # def lex_document(self, document):
+    #     self.document = document
+    #     return self.get_line
+    #
+    # def get_line(self,lineno):
+    #     return list(map(lambda n:(self.color,n),self.document.lines[lineno]))
+
+    def lex_document(self, document):
+        def get_line(lineno):
+            return list(map(lambda n: (self.color, n), document.lines[lineno]))
+
+        return get_line
+
+
+class Input:
+    def __init__(self):
+        self.session = PromptSession()
+
+    def Input(self, text, normal=False, textcolor="#89e324", dotcolor="#ffffff", usercolor="#75a0d1", dot=True,
+              word=None):
+        if word is not None:
+            word = WordCompleter(word)
+        if dot:
+            text = [
+                (textcolor + " bold" * normal, text),
+                (dotcolor, ":")
+            ]
+        else:
+            text = [
+                (textcolor + " bold" * normal, text),
+            ]
+        if word is None:
+            inp = self.session.prompt(text, lexer=lexer(usercolor), auto_suggest=AutoSuggestFromHistory())
+        else:
+            inp = self.session.prompt(text, lexer=lexer(usercolor), completer=word,
+                                      auto_suggest=AutoSuggestFromHistory())
+        return inp
+
+
+def killsoccer(rcss=True):
+    if rcss:
+        try:
+            while len(subprocess.check_output("pidof rcssserver", shell=True).decode("utf-8").split()) != 0:
+                subprocess.check_output("killall rcssserver", shell=True)
+        except subprocess.CalledProcessError:
+            pass
     try:
         while len(subprocess.check_output("pidof soccerwindow2-qt4", shell=True).decode("utf-8").split()) != 0:
             subprocess.check_output("killall soccerwindow2-qt4", shell=True)
-    except subprocess.CalledProcessError:
-        pass
-    try:
-        while True:
-            serverpid = subprocess.check_output("ps o pid,cmd | grep -E 'python3.*http.*20000' | grep -v grep",
-                                                shell=True).decode("utf-8").split("\n")[0].split(" ")[0]
-            subprocess.check_output("kill " + serverpid, shell=True)
     except subprocess.CalledProcessError:
         pass
 
@@ -47,9 +89,10 @@ class Open:
 
 
 class terminal(cszp_lang.lang):
-    def question(self, key, note="cszp 簡単サッカー実行プログラム",inp=True):
+    def question(self, key, note="cszp 簡単サッカー実行プログラム", inp=True):
         title = []
         description = []
+        cmd = []
         for j in self.files:
             listf = open(j)
             listd = json.load(listf)
@@ -59,6 +102,8 @@ class terminal(cszp_lang.lang):
                     title.append(i["title"])
                 for i in listd[key]:
                     description.append(self.lang(i["description"]))
+                for i in listd[key]:
+                    cmd.append(i["cmd"])
 
         titlemax = len(max(title, key=lambda n: len(n)))
         title = list(map(lambda n: n.ljust(titlemax), title))
@@ -67,7 +112,7 @@ class terminal(cszp_lang.lang):
             temp += title[i] + " " * 4 + description[i] + "\n"
         if inp:
             temp += ">>> "
-        return temp
+        return temp, cmd
 
     def searchcmd(self, key, text):
         hit = 0
@@ -97,11 +142,10 @@ class terminal(cszp_lang.lang):
                         func.append(os.path.dirname(j).replace(".", "").replace("/", ".")[1:] + ".__init__")
         return path, func
 
-    def autostart(self,lang):
+    def autostart(self, lang):
         plugin_list = self.functo("auto_start", "auto_start")
         for i in plugin_list[0]:
             sys.path.append(i)
         for i in plugin_list[1]:
             plugin = import_module(i)
             plugin.autostart(lang)
-

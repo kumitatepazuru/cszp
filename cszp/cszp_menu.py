@@ -8,7 +8,9 @@ from importlib import import_module, reload
 import cuitools as subp
 
 from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module
-def menu(lang, module):
+
+
+def menu(lang, module, Input):
     cszp_module.killsoccer()
     inp = ""
     subp.reset()
@@ -19,35 +21,32 @@ def menu(lang, module):
         subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
         v.close()
         print("\n")
-        inp = subp.Input(lang.question("menu"), dot=False)
+        q = lang.question("menu")
+        inp = Input.Input(q[0], dot=False, normal=False, word=q[1])
         if not lang.searchcmd("menu", inp):
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
-            subp.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+            Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
     if inp == "exit":
         pass
     elif inp == "colortest":
         colortest.colortest()
-        subp.Input(lang.lang("Enterキーを押して続行..."))
-        menu(lang, module)
+        Input.Input(lang.lang("Enterキーを押して続行..."))
+        menu(lang, module, Input)
     elif inp == "setting":
-        cszp_setting.setting(lang, module)
-        menu(lang, module)
+        cszp_setting.setting(lang, module,Input)
+        menu(lang, module, Input)
     elif inp == "reset":
         data = open("./config/setting.conf", "w")
         data.write("name,command")
         data.close()
-        data = module.Open("./config/config.conf")
-        temp = open(data.read().split(",")[9] + "/data.csv", "w")
-        temp.close()
-        data.close()
-        subp.Input("\n\n\033[38;5;214m" + lang.lang("リセットが完了しました。\nEnterキーを押して続行..."), dot=False)
-        menu(lang, module)
+        Input.Input(lang.lang("\n\nリセットが完了しました。\nEnterキーを押して続行..."), dot=False, textcolor="#fdb100")
+        menu(lang, module, Input)
     elif inp == "test":
-        cszp_soccer.setting(lang, testmode=True, module=module)
-        menu(lang, module)
+        cszp_soccer.setting(lang,testmode=True, module=module, Input=Input)
+        menu(lang, module, Input)
     elif inp == "start":
-        cszp_soccer.setting(lang, module=module)
-        menu(lang, module)
+        cszp_soccer.setting(lang, module=module,Input=Input)
+        menu(lang, module, Input)
     elif inp == "lang":
         terminal_size = shutil.get_terminal_size()
         printtext = ["Select Language"]
@@ -95,24 +94,24 @@ def menu(lang, module):
         langf.write(str(select))
         langf.close()
         lang = cszp_module.terminal(noenter=True)
-        lang.autostart()
-        menu(lang, module)
+        lang.autostart(lang)
+        menu(lang, module, Input)
     elif inp == "loop":
-        cszp_soccer.setting(lang, loopmode=True, module=module)
-        menu(lang, module)
+        cszp_soccer.setting(lang, loopmode=True, module=module, Input=Input)
+        menu(lang, module, Input)
     elif inp == "server":
         print(lang.lang("Ctrl+Cで閲覧を終了します。"))
         try:
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
             pass
-        menu(lang, module)
+        menu(lang, module, Input)
     elif inp == "plugin":
         tmp = cszp_plugin.plugin(lang)
         if tmp is not None:
-            menu(tmp, module)
+            menu(tmp, module, Input)
         else:
-            menu(lang, module)
+            menu(lang, module, Input)
     elif inp == "about":
         print("\033[0m")
         v = open("./version")
@@ -132,13 +131,13 @@ def menu(lang, module):
             "PYTHON-IMPLEMENTATION:" + platform.python_implementation()
         ]
         subp.printlist("about cszp", printtext)
-        menu(lang, module)
+        menu(lang, module, Input)
     else:
         sys.path.append(lang.functo("menu", inp)[0][0])
         plugin = import_module(lang.functo("menu", inp)[1][0])
         reload(plugin)
         try:
-            plugin.plugin(lang,inp)
+            plugin.plugin(lang, inp)
         except Exception:
             import traceback
             temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
@@ -157,5 +156,4 @@ def menu(lang, module):
             k = ""
             while k != "\n":
                 k = subp.Key()
-        menu(lang, module)
-
+        menu(lang, module, Input)

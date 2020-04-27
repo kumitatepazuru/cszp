@@ -38,6 +38,7 @@ import locale
 import platform
 import shutil
 
+import cszp.cszp_module
 from cszp.cszp_module import Open, terminal
 
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
@@ -53,18 +54,6 @@ except ModuleNotFoundError:
     print(
         "\033[1mERR:\033[0mtexttable package is not installed.\ncszp (easy soccer run program) requires texttable.\n"
         "Execute the following command and try again.\n\033[38;5;11mpip3 install texttable"
-    )
-    sys.exit()
-
-try:
-    import tqdm
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mtqdm package is not installed.\ncszp (easy soccer run program) requires tqdm.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install tqdm"
     )
     sys.exit()
 
@@ -117,10 +106,6 @@ def main():
     if not os.path.isdir(path):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: csvdata")
         os.mkdir(path)
-    if not os.path.isfile(path + "/data.csv"):
-        print("\033[38;5;4m[INFO]\033[0mCreate file: data.csv")
-        temp = open(path + "/data.csv", "w")
-        temp.close()
     if not os.path.isdir("plugins"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: plugins")
         os.mkdir("plugins")
@@ -141,8 +126,9 @@ def main():
         langf.close()
     lang = terminal()
     lang.autostart(lang)
+    Input = cszp.cszp_module.Input()
     try:
-        cszp_menu.menu(lang, module)
+        cszp_menu.menu(lang, module,Input)
     except KeyboardInterrupt:
         pass
     except EOFError:

@@ -90,48 +90,86 @@ ERR:使える引数はONまたはOFFです。
 ERR:Only ON and OFF a allowed as argument.
 
 ERR:引数がありません。タイプミスを確認してください
-ERR:No argument found.Check for typo
+ERR:No argument found. Check for typo.
+
+ループ回数を指定
+Specify the number of loops
 
 #-------- cszp_soccer ---------
 設定確認
-Setting
+configuration check
 
-前画面に戻る場合はbackと入力
-Type back to Return to previous page
+問題ない場合はYesを、終了したい場合はNoを選択してください。
+Select Yes if no problem, or No if you want to exit.
 
-Team1(黄色)チームのパスを入力(リストの名前を入力したい場合はQキー)
-Enter Team1 (yellow) team path (To enter a name for the list, press Q.)
+Team1(黄色)チームのパスを選択
+Select Team 1 (yellow) Team Path
 
-Team1(黄色)チームのリストの名前を入力
-Team1 (yellow) Enter a name for the team list
+Team2(赤色)チームのパスを選択
+Select Team 2 (red) Team Path
 
-また、そのようなファイルも存在しません。
-Also,no such file exists.
+(選択方法の変更・終了はQキー)
+(To change or end the selection method, press Q.)
 
-Team1(黄色)チームのパス:
-Path for team1(yellow)team:
+簡単サッカー実行リストから選択しますか？
+Do you want to select from the Easy soccer execution list?
 
-Team2(赤色)チームのパスを入力(リストの名前を入力したい場合はQキー)
-Enter Team2 (red) team path (To enter a name for the list, press Q.)
+下のリストから選択してください。Spaceキーで選択できます。
+Please select from the list below. You can select with the SPACEBAR.
 
-Team2(赤色)チームのパス:
-Path for team2(red)team:
+キャンセルを選択すると選択方法の変更・終了ができます。
+Select Cancel to change or end the selection method.
 
-Team2(赤色)チームのリストの名前を入力
-Team2 (Red) Enter a name for the team list
+簡単サッカー実行リストにチームが設定されていないのでこの機能は使用できません。
+This function is not available because there are no teams on the Easy soccer execution list.
+
+settingコマンドでチームの追加ができます。詳しくはsettingコマンドを確認してください。
+You can add teams with the setting command. Check the setting command for more information.
+
+Cancelを押すとメニュー画面にもどります。
+Press Cancel to return to the menu screen.
+
+サーバーの引数を入力
+Enter server arguments
 
 サーバーの引数を入力（ない場合は空欄）
-Input server argument(leave blank if none)
+Enter server arguments (Leave blank if none)
 
-試合数を指定
-Please enter the number of matches
+同じチームと対戦させることは、仕様上不可能です。違うチームに変更してください。
+It is not possible to play against the same team. Please change to a different team.
 
-#------ SETUP ------
-cszp 簡単サッカー実行プログラム セットアップウィザードへようこそ
-Welcome to the cszp Easy soccer execution program Setup Wizard
+変更するチームを選択してください。Cancelを押すとホーム画面に戻ります。
+Please select a team to modify. Press Cancel to return to the Home screen.
 
-いくつかのステップでcszpをインストールしましょう
-Let's install cszp in several steps
+サーバーログの保存
+Save Server Log
+
+サーバーログを保存しますか？
+Save server log?
+
+プレイヤーログの保存
+Save player Log
+
+プレイヤーログを保存しますか？
+Save player log?
+
+csvログの保存
+Save csv Log
+
+csvログを保存しますか？
+Save csv log?
+
+保存先
+Save to
+
+csvのファイル名を指定
+Specify csv file name
+
+数値を半角で入力してください。
+Please enter a number in half-width.
+
+コマンド実行中にエラーが発生しました。
+An error occurred while executing the command.
 
 確認
 Confirm
@@ -142,53 +180,17 @@ Yes
 いいえ
 No
 
-cszp の実行に必要なプログラムがあるか確認し
-Make sure you have the necessary programs to run cszp.
-
-可能ならばインストールすることができます。
-You can install it if you can.
-
-この操作をスキップすることもできます。
-You can also skip this operation.
-
-ただし、手動で必要なプログラムをインストールする必要があります。
-However, you must manually install the required programs.
-
-cszp の実行に必要なプログラムがあるか確認しインストールしますか？
-Are you sure you have the program you need to run cszp and want to install it?
-
 エラー
 error
-
-インストール実行中にエラーが発生しました。
-An error occurred during installation.
 
 ログを確認してください
 Please check the log
 
-インストールするパスを選択
-Select the path to install
+synchモードでの実行
+Running in synch mode
 
-インストール中...
-Installing...
-
-インストール成功
-Installed!
-
-下記のソフトをインストールします
-Install the following software
-
-インストール済みのものも表示されます
-Installed ones are also displayed.
-
-とその依存
-and its dependencies
-
-インストールしますか？
-Do you want to install it?
-
-以下のライブラリをインストールしてください
-Please install the following libraries
+synchモードで実行しますか？
+Run in synch mode?
 
 # ------ cszp_soccer.py ------
 

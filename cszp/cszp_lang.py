@@ -1,6 +1,5 @@
 import json
 import os
-import cuitools
 
 
 def isfile(path):
@@ -26,7 +25,7 @@ class inname:
 
 
 class lang:
-    def __init__(self,noenter=False):
+    def __init__(self, noenter=False):
         file = open("lang")
         ld = file.read()
         file.close()
@@ -57,10 +56,10 @@ class lang:
                     langs.append("./plugins/" + i + "/language/" + self.enable_lang)
                 else:
                     if not noenter:
-                        cuitools.Input("\nPress enter key to run cszp")
+                        input("\nPress enter key to run cszp")
             else:
                 if not noenter:
-                    cuitools.Input("\nPress enter key to run cszp")
+                    input("\nPress enter key to run cszp")
 
         self.ld = ""
         for i in langs:

@@ -22,7 +22,7 @@ def _requires_from_file(filename):
     return open(filename).read().splitlines()
 
 
-cszp_files = ["index.html", "nofile.png", "version"] + find("cszp/language/*.lang")
+cszp_files = ["html/index.html", "html/nofile.png", "html/load.gif", "version"] + find("cszp/language/*.lang")
 cszp_files += find("cszp/*.json") + find("cszp/language/*.json")
 # print(find("cszp/language/*.lang"))
 setup(
@@ -41,10 +41,11 @@ setup(
         "numpy",
         "texttable",
         "matplotlib",
-        "tqdm",
         "pandas",
         "urllib3",
-        "cuitools>=1.6.6.5"
+        "cuitools==1.7.0.2",
+        "prompt-toolkit",
+        "dateutils"
     ],
     license="MIT",
     classifiers=[

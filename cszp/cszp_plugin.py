@@ -81,7 +81,7 @@ def plugin(lang):
                 else:
                     k = ""
                     lang = terminal(noenter=True)
-                    lang.autostart()
+                    lang.autostart(lang)
                     while k != "\n":
                         cuitools.box("完了", [
                             lang.lang("正常にプラグインが追加されました。"),
