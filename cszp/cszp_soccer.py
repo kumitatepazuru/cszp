@@ -283,7 +283,7 @@ class soccer:
                     sum(list_time)) + " s\n" + "━" * 50 + "\nresult")
                 bs = StringIO(result)
                 data = pd.DataFrame(list(csv.reader(bs))[1:],
-                                    columns=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'toku1', "toku2"))
+                                    columns=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'team1 goal difference', "team2 goal difference"))
                 data = data.set_index('date')
                 # print(data)
                 csvd = result.splitlines()[1:]
@@ -426,7 +426,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
         cuitools.reset()
         ok = 0
         csv_q = False
-        while ok != 7 + loopmode + csv_q:
+        while ok != 7 + loopmode + (csv_q is not False):
             if ok == 0:
                 path = team(1, lang, module)
             else:
@@ -596,7 +596,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                     continue
             else:
                 break
-        if ok == 7 + loopmode + csv_q:
+        if ok == 7 + loopmode + (csv_q is not False):
             if yes_no_dialog(
                     title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("確認"),
                     text="team1 path:" + team1 + "\n" +
@@ -608,8 +608,8 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                          "synch mode:" + str(synch) + "\n" +
                          lang.lang("\nEnterキーを押して続行...")).run():
 
-                arg += "server::auto_mode=true server::kick_off_wait=0 server::game_over_wait=0 " \
-                       "server::connect_wait=1500 " + "server::game_log_dir=" + \
+                arg += "server::auto_mode=true server::kick_off_wait=20 server::game_over_wait=20 " \
+                       "server::connect_wait=2000 " + "server::game_log_dir=" + \
                        datas.split(",")[9] + " server::text_log_dir=" + datas.split(",")[9]
                 if testmode:
                     arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \

@@ -1,4 +1,10 @@
 change log
+var 4.5.0.x:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
 var 4.5.0:
 Modification place:
     Rewrite the cszp_soccer.py file to use the prompt toolkit for everything else, as cuitools has been updated.
