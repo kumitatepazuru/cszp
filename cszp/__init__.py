@@ -85,13 +85,13 @@ except ModuleNotFoundError:
 def main():
     # noinspection PyBroadException
     print("")
-    if int(sys.version_info[0]) == 3 and int(sys.version_info[1]) > 2:
+    if int(sys.version_info[0]) == 3 and int(sys.version_info[1]) >= 6 and int(sys.version_info[2]) >= 1:
         sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     else:
         sys.stdout.write("\033[38;5;9m\033[1m[ERR] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
-        print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.2 or higher version.")
+        print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.6.1 or higher version.")
         sys.exit()
 
     if not os.path.isdir("config"):
