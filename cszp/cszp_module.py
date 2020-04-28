@@ -72,7 +72,7 @@ def killsoccer(rcss=True):
 class Open:
     def __init__(self):
         self.writelist = {
-            "config": "soccerwindow2start,on,automake,off,rcglog output,on,rcllog output,on,logfile output," +
+            "config": "soccerwindow2start,on,rcglog output,on,rcllog output,on,logfile output," +
                       os.path.expanduser("~") + "/csvdata",
             "setting": "name,command"
         }

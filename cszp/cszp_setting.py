@@ -112,7 +112,7 @@ def setting(lang, module,Input):
             data.close()
             setting(lang, module,Input)
 
-        elif inp.split(' ')[0] == "automake":
+        elif inp.split(' ')[0] == "rcg":
             data = module.Open("./config/config.conf")
             datas = data.read()
             datas = datas.split(",")
@@ -122,7 +122,7 @@ def setting(lang, module,Input):
             elif inp.split(' ')[1].lower() == "off":
                 datas[3] = "off"
             else:
-                print("\033[38;5;9m" + lang.lang("ERR:使える引数はONまたはOFFです。\nタイプミスを確認してください"))
+                print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             datat = datas
             datas = ""
@@ -134,7 +134,7 @@ def setting(lang, module,Input):
             data.close()
             setting(lang, module,Input)
 
-        elif inp.split(' ')[0] == "rcg":
+        elif inp.split(' ')[0] == "rcl":
             data = module.Open("./config/config.conf")
             datas = data.read()
             datas = datas.split(",")
@@ -156,34 +156,12 @@ def setting(lang, module,Input):
             data.close()
             setting(lang, module,Input)
 
-        elif inp.split(' ')[0] == "rcl":
-            data = module.Open("./config/config.conf")
-            datas = data.read()
-            datas = datas.split(",")
-            data.close()
-            if inp.split(' ')[1].lower() == "on":
-                datas[7] = "on"
-            elif inp.split(' ')[1].lower() == "off":
-                datas[7] = "off"
-            else:
-                print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
-                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            datat = datas
-            datas = ""
-            for i in datat:
-                datas += i + ","
-            datas = datas[:len(datas) - 1]
-            data = open("./config/config.conf", "w")
-            data.write(datas)
-            data.close()
-            setting(lang, module,Input)
-
         elif inp.split(' ')[0] == "fileout":
             data = module.Open("./config/config.conf")
             datas = data.read()
             datas = datas.split(",")
             data.close()
-            datas[9] = inp.split(" ")[1]
+            datas[7] = inp.split(" ")[1]
             datat = datas
             datas = ""
             for i in datat:

@@ -98,7 +98,7 @@ def main():
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
         os.mkdir("config")
     data = module.Open("./config/config.conf")
-    path = data.read().split(",")[9]
+    path = data.read().split(",")[7]
     data.close()
     if not os.path.isdir("html_logs"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")

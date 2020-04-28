@@ -1,4 +1,12 @@
 change log
+var 4.5.1:
+Modification place:
+    Fixed a bug that caused the CPU to become 100%.
+    Fixed a bug.
+    Fixed a bug that prevented the rcg output and rcl output commands from being used.
+Additional elements:
+    None
+
 var 4.5.0.x:
 Modification place:
     Bug fixed.

@@ -37,7 +37,7 @@ class soccerHTTPServer_Handler(BaseHTTPRequestHandler):
                 with open("./html/index.html") as f:
                     self.wfile.write(f.read().encode("utf-8"))
             except FileNotFoundError as e:
-                print("\t\033[38;5;3m[WARNING]",e)
+                print("\t\033[38;5;3m[WARNING]", e)
                 self.wfile.write("404 Not Found!".encode("utf-8"))
 
         elif self.path == "/html.csv":
@@ -127,7 +127,7 @@ class soccer:
         Handler = soccerHTTPServer_Handler
         try:
             socketserver.TCPServer.allow_reuse_address = True
-            self.httpd = socketserver.TCPServer(("", PORT), Handler)
+            self.httpd = socketserver.ThreadingTCPServer(("", PORT), Handler)
             print("\t\033[38;5;10m\033[1m[OK]\033[0mThe web server has been started. Port:", PORT)
             self.httpd.serve_forever()
         except OSError as e:
@@ -224,7 +224,7 @@ class soccer:
 
                     print("\t\033[38;5;4m[INFO]\033[0mrcssserver stop.")
                 except (subprocess.CalledProcessError, KeyboardInterrupt, EOFError, FileNotFoundError) as e:
-                    print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"),e)
+                    print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"), e)
                     cszp_module.killsoccer(False)
                     error = 1
                     break
@@ -243,7 +243,7 @@ class soccer:
                     data = module.Open("./config/config.conf")
                     df = data.read()
                     # print(df)
-                    temp = open(df.split(",")[9] + "/" + exittime + "_server.log", "w")
+                    temp = open(df.split(",")[7] + "/" + exittime + "_server.log", "w")
                     temp.write(logs)
                     temp.close()
 
@@ -251,10 +251,10 @@ class soccer:
                     data = module.Open("./config/config.conf")
                     df = data.read()
                     # print(df.split("'"))
-                    temp = open(df.split(",")[9] + "/" + exittime + "_team1.log", "w")
+                    temp = open(df.split(",")[7] + "/" + exittime + "_team1.log", "w")
                     temp.write(logt1)
                     temp.close()
-                    temp = open(df.split(",")[9] + "/" + exittime + "_team2.log", "w")
+                    temp = open(df.split(",")[7] + "/" + exittime + "_team2.log", "w")
                     temp.write(logt2)
                     temp.close()
 
@@ -262,7 +262,7 @@ class soccer:
                     data = module.Open("./config/config.conf")
                     df = data.read()
                     # print(df.split(",")[9] + "/" + file)
-                    temp = open(df.split(",")[9] + "/" + logs2[2], "a")
+                    temp = open(df.split(",")[7] + "/" + logs2[2], "a")
                     soccer = cszp_log.log(logs)
                     temp.write(
                         "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[
@@ -279,11 +279,13 @@ class soccer:
                 exittime = datetime.now().strftime("%Y%m%d_%H%M%S")
                 subprocess.check_call("mkdir ./html_logs/" + exittime, shell=True)
                 subprocess.check_call("cp ./html/index.html ./html_logs/" + exittime + "/", shell=True)
-                print("\033[38;5;10m\033[1m[OK]\033[0mDone! time:" + str(
-                    sum(list_time)) + " s\n" + "━" * 50 + "\nresult")
+                print("\033[38;5;10m\033[1m[OK]\033[0mDone! time:" + totime(
+                    int(sum(list_time))) + " s\n" + "━" * 50 + "\nresult")
                 bs = StringIO(result)
                 data = pd.DataFrame(list(csv.reader(bs))[1:],
-                                    columns=('date', 'team1', 'team2', 'team1_score', 'team2_score', 'team1 goal difference', "team2 goal difference"))
+                                    columns=(
+                                        'date', 'team1', 'team2', 'team1_score', 'team2_score', 'team1 goal difference',
+                                        "team2 goal difference"))
                 data = data.set_index('date')
                 # print(data)
                 csvd = result.splitlines()[1:]
@@ -301,7 +303,7 @@ class soccer:
                 with open("./html_logs/" + exittime + "/" + "html.csv", "w") as f:
                     f.write("プレイヤー1,プレイヤー２," + data["team1"][0] + "の得点," + data["team2"][0] + "の得点," + data["team1"][
                         0] + "の得失点差," +
-                     data["team2"][0] + "の得失点差\n" + csvd)
+                            data["team2"][0] + "の得失点差\n" + csvd)
                 data["team1_score"] = data["team1_score"].astype(int)
                 data["team2_score"] = data["team2_score"].astype(int)
                 print(data)
@@ -329,7 +331,7 @@ class soccer:
 
         finally:
             try:
-                self.httpd.socket.close()
+                self.httpd.shutdown()
             except AttributeError:
                 pass
             Input.Input("Enterキーを押して続行...", dot=False)
@@ -485,7 +487,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                         if ok == 3:
                             inp = button_dialog(
                                 title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("サーバーログの保存"),
-                                text=lang.lang("サーバーログを保存しますか？\n保存先") + " " + datas.split(",")[9],
+                                text=lang.lang("サーバーログを保存しますか？\n保存先") + " " + datas.split(",")[7],
                                 buttons=[
                                     ('Yes', True),
                                     ('No', False),
@@ -501,7 +503,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                             if ok == 4:
                                 inp = button_dialog(
                                     title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("プレイヤーログの保存"),
-                                    text=lang.lang("プレイヤーログを保存しますか？\n保存先") + " " + datas.split(",")[9],
+                                    text=lang.lang("プレイヤーログを保存しますか？\n保存先") + " " + datas.split(",")[7],
                                     buttons=[
                                         ('Yes', True),
                                         ('No', False),
@@ -517,7 +519,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                                 if ok == 5:
                                     inp = button_dialog(
                                         title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvログの保存"),
-                                        text=lang.lang("csvログを保存しますか？\n保存先") + " " + datas.split(",")[9],
+                                        text=lang.lang("csvログを保存しますか？\n保存先") + " " + datas.split(",")[7],
                                         buttons=[
                                             ('Yes', True),
                                             ('No', False),
@@ -610,11 +612,15 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
 
                 arg += "server::auto_mode=true server::kick_off_wait=20 server::game_over_wait=20 " \
                        "server::connect_wait=2000 " + "server::game_log_dir=" + \
-                       datas.split(",")[9] + " server::text_log_dir=" + datas.split(",")[9]
+                       datas.split(",")[7] + " server::text_log_dir=" + datas.split(",")[
+                           7] + " server::game_logging=" + ("true" * (datas.split(",")[3] == "on") + "false" * (
+                            datas.split(",")[3] == "off")) + " server::text_logging=" + (
+                                   "true" * (datas.split(",")[3] == "on") + "false" * (datas.split(",")[3] == "off"))
+
                 if testmode:
                     arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
                            "server::half_time=10"
-                print([team1, team2, arg], lang, loop, module, [server, player, csv_q, synch], Input)
+                # print([team1, team2, arg], lang, loop, module, [server, player, csv_q, synch], Input)
                 soccer([team1, team2, arg], lang, loop, module, [server, player, csv_q, synch], Input)
             else:
                 setting(lang, module, testmode, loopmode)
