@@ -178,11 +178,11 @@ class soccer:
                 try:
                     logtemp1 = subprocess.Popen(sc, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                     print("\t\033[38;5;4m[INFO]\033[0mrcssserver start.")
-                    logtemp2 = subprocess.Popen(cmd[0], stdout=subprocess.PIPE,
+                    logtemp2 = subprocess.Popen(cmd[0], shell=True, stdout=subprocess.PIPE,
                                                 stderr=subprocess.PIPE)
                     print("\t\033[38;5;4m[INFO]\033[0mteam1 start.")
                     time.sleep(1)
-                    logtemp3 = subprocess.Popen(cmd[1], stdout=subprocess.PIPE,
+                    logtemp3 = subprocess.Popen(cmd[1], shell=True, stdout=subprocess.PIPE,
                                                 stderr=subprocess.PIPE)
                     print("\t\033[38;5;4m[INFO]\033[0mteam2 start.")
                     stdout, stderr = logtemp2.communicate()
@@ -190,7 +190,8 @@ class soccer:
                     stdout = stdout.decode("utf-8")
                     logt1 += stdout + stderr
                     logt1 += "\n"
-                    if logtemp2.returncode == 1:
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp2.returncode))
+                    if logtemp2.returncode != 0:
                         logtemp3.kill()
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
@@ -204,7 +205,8 @@ class soccer:
                     stdout = stdout.decode("utf-8")
                     logt2 += stdout + stderr
                     logt2 += "\n"
-                    if logtemp3.returncode == 1:
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp3.returncode))
+                    if logtemp3.returncode != 0:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
@@ -216,7 +218,8 @@ class soccer:
                     stdout = stdout.decode("utf-8")
                     logs += stdout + stderr
                     logs += "\n"
-                    if logtemp1.returncode == 1:
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp1.returncode))
+                    if logtemp1.returncode != 0:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
@@ -554,8 +557,14 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                                                 "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvのファイル名を指定"),
                                                                text="filename").run()
                                             if inp is not None:
-                                                csv_q = inp
-                                                ok += 1
+                                                if inp != "":
+                                                    csv_q = inp
+                                                    ok += 1
+                                                else:
+                                                    message_dialog(title=lang.lang(
+                                                        "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvのファイル名を指定"),
+                                                                   text=lang.lang("ファイル名を入力してください。")).run()
+                                                    continue
                                             else:
                                                 ok -= 1
                                                 continue

@@ -1,4 +1,10 @@
 change log
+var 4.5.1.1:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
 var 4.5.1:
 Modification place:
     Fixed a bug that caused the CPU to become 100%.
