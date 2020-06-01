@@ -1,6 +1,6 @@
+import os
 import subprocess
 import sys
-import os
 
 sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
@@ -98,7 +98,7 @@ def main():
         print("\033[38;5;4m[INFO]\033[0mCreate directory: config")
         os.mkdir("config")
     data = module.Open("./config/config.conf")
-    path = data.read().split(",")[7]
+    path = data.read().splitlines()[0].split(",")[7]
     data.close()
     if not os.path.isdir("html_logs"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: html_logs")
@@ -128,7 +128,7 @@ def main():
     lang.autostart(lang)
     Input = cszp.cszp_module.Input()
     try:
-        cszp_menu.menu(lang, module,Input)
+        cszp_menu.menu(lang, module, Input)
     except KeyboardInterrupt:
         pass
     except EOFError:

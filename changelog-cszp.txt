@@ -1,5 +1,5 @@
 change log
-var 4.5.1.1:
+var 4.5.1.x:
 Modification place:
     Bug fixed.
 Additional elements:

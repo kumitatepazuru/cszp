@@ -1,24 +1,24 @@
 import csv
+import socketserver
 import subprocess
 import threading
 import time
-import numpy as np
 from datetime import datetime
+from http.server import BaseHTTPRequestHandler
 from io import StringIO, BytesIO
-import matplotlib.pyplot as plt
+
+import cuitools
 import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from dateutil.relativedelta import relativedelta
+from prompt_toolkit import HTML
+from prompt_toolkit.shortcuts import yes_no_dialog, radiolist_dialog, button_dialog, input_dialog, message_dialog
+from texttable import Texttable
 
 from cszp import cszp_log
 from cszp import cszp_module
-import cuitools
-from http.server import BaseHTTPRequestHandler
-import socketserver
-import pandas as pd
-
-from prompt_toolkit import HTML
-from dateutil.relativedelta import relativedelta
-from texttable import Texttable
-from prompt_toolkit.shortcuts import yes_no_dialog, radiolist_dialog, button_dialog, input_dialog, message_dialog
 
 matplotlib.use('Agg')
 
@@ -165,7 +165,7 @@ class soccer:
                 cszp_module.killsoccer()
 
                 data = module.Open("./config/config.conf")
-                datas = data.read()
+                datas = data.read().splitlines()[0]
                 data.close()
                 datas = datas.split(",")
 
@@ -355,7 +355,7 @@ def team(num, lang, module):
     ).run()
     if q:
         data = module.Open("./config/setting.conf")
-        datas = data.read()
+        datas = data.read().splitlines()[0]
         data.close()
         datas = datas.split(",")
         datal = []
@@ -414,9 +414,9 @@ result = ""
 def setting(lang, module, Input, testmode=False, loopmode=False):
     # noinspection PyBroadException
     data = module.Open("./config/config.conf")
-    datas = data.read()
+    datas = data.read().splitlines()[0]
     data.close()
-    datas = datas.split(",")
+    datas = datas[0].split(",")
     datal = []
     for i in range(0, len(datas), 2):
         datat = []
@@ -485,7 +485,7 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                             arg = inp
                             ok += 1
                         data = module.Open("./config/config.conf")
-                        datas = data.read()
+                        datas = data.read().splitlines()[0]
                         data.close()
                         if ok == 3:
                             inp = button_dialog(
@@ -629,7 +629,6 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                 if testmode:
                     arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
                            "server::half_time=10"
-                # print([team1, team2, arg], lang, loop, module, [server, player, csv_q, synch], Input)
-                soccer([team1, team2, arg], lang, loop, module, [server, player, csv_q, synch], Input)
+                soccer([team2, team1, arg], lang, loop, module, [server, player, csv_q, synch], Input)
             else:
                 setting(lang, module, testmode, loopmode)
