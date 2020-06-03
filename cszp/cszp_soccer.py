@@ -186,11 +186,11 @@ class soccer:
                                                 stderr=subprocess.PIPE)
                     print("\t\033[38;5;4m[INFO]\033[0mteam2 start.")
                     stdout, stderr = logtemp2.communicate()
-                    stderr = stderr.decode("utf-8")
-                    stdout = stdout.decode("utf-8")
+                    stderr = stderr.decode("utf-8", "replace")
+                    stdout = stdout.decode("utf-8", "replace")
                     logt1 += stdout + stderr
                     logt1 += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp2.returncode))
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp2.returncode))
                     if logtemp2.returncode != 0:
                         logtemp3.kill()
                         logtemp1.kill()
@@ -205,7 +205,7 @@ class soccer:
                     stdout = stdout.decode("utf-8")
                     logt2 += stdout + stderr
                     logt2 += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp3.returncode))
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp3.returncode))
                     if logtemp3.returncode != 0:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
@@ -218,7 +218,7 @@ class soccer:
                     stdout = stdout.decode("utf-8")
                     logs += stdout + stderr
                     logs += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:"+str(logtemp1.returncode))
+                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp1.returncode))
                     if logtemp1.returncode != 0:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
@@ -283,7 +283,7 @@ class soccer:
                 subprocess.check_call("mkdir ./html_logs/" + exittime, shell=True)
                 subprocess.check_call("cp ./html/index.html ./html_logs/" + exittime + "/", shell=True)
                 print("\033[38;5;10m\033[1m[OK]\033[0mDone! time:" + totime(
-                    int(sum(list_time))) + " s\n" + "━" * 50 + "\nresult")
+                    int(sum(list_time))) + "\n" + "━" * 50 + "\nresult")
                 bs = StringIO(result)
                 data = pd.DataFrame(list(csv.reader(bs))[1:],
                                     columns=(
@@ -414,7 +414,7 @@ result = ""
 def setting(lang, module, Input, testmode=False, loopmode=False):
     # noinspection PyBroadException
     data = module.Open("./config/config.conf")
-    datas = data.read().splitlines()[0]
+    datas = data.read().splitlines()
     data.close()
     datas = datas[0].split(",")
     datal = []
@@ -623,8 +623,8 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
                        "server::connect_wait=2000 " + "server::game_log_dir=" + \
                        datas.split(",")[7] + " server::text_log_dir=" + datas.split(",")[
                            7] + " server::game_logging=" + ("true" * (datas.split(",")[3] == "on") + "false" * (
-                            datas.split(",")[3] == "off")) + " server::text_logging=" + (
-                                   "true" * (datas.split(",")[3] == "on") + "false" * (datas.split(",")[3] == "off"))
+                        datas.split(",")[3] == "off")) + " server::text_logging=" + (
+                               "true" * (datas.split(",")[3] == "on") + "false" * (datas.split(",")[3] == "off"))
 
                 if testmode:
                     arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
