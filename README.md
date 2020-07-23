@@ -12,6 +12,7 @@ Operation check OS
 - debian 10.1
 - zorinos 15.2
 - ubuntu 18.04LTS
+- ubuntu 20.04LTS
 
 ## How to install
 
