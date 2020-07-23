@@ -34,6 +34,7 @@ class lang:
         file.close()
 
         self.enable_lang = self.lang_list[ld]
+        self.enable_lang_name = self.lang_list[ld].split(".")[0]
         path = "./plugins/"
         files = os.listdir(path)
         files_dir = [f for f in files if os.path.isdir(os.path.join(path, f))]

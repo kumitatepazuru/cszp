@@ -186,8 +186,13 @@ class soccer:
                                                 stderr=subprocess.PIPE)
                     print("\t\033[38;5;4m[INFO]\033[0mteam2 start.")
                     stdout, stderr = logtemp2.communicate()
-                    stderr = stderr.decode("utf-8", "replace")
-                    stdout = stdout.decode("utf-8", "replace")
+                    try:
+                        stderr = stderr.decode("utf-8")
+                        stdout = stdout.decode("utf-8")
+                    except UnicodeDecodeError as e:
+                        print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
+                        stderr = stderr.decode("utf-8", "replace")
+                        stdout = stdout.decode("utf-8", "replace")
                     logt1 += stdout + stderr
                     logt1 += "\n"
                     print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp2.returncode))

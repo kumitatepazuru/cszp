@@ -28,6 +28,12 @@ Check the previous loop log on the server
 cszpの情報を表示する
 Display cszp information
 
+cszpの使い方を表示する
+Display the usage of cszp
+
+soccerwindow2を起動する
+Run soccerwindow2
+
 終了する
 Exit
 
@@ -263,3 +269,17 @@ added
 
 正常にプラグインが追加されました。
 The plug-in was successfully added.
+
+# ------ その他 ------
+
+cszpのヘルプの参照
+Reference to cszp help
+
+cszpへようこそ！
+welcome to cszp!
+
+qキーで終了
+Press q is exit
+
+基本的な使い方
+Basic usage

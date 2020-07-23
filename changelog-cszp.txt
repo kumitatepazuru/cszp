@@ -1,4 +1,13 @@
 change log
+
+var 4.8.0 a1:
+Modification place:
+    Bug fixed.
+Additional elements:
+    Added new LICENSE.txt and LICENSE_jp.txt and changed the license to GNU General Public License version 3.
+    The window command now runs soccerwindow2.
+    Added a markdown viewer and the help command to see how to use it. (test)
+
 var 4.5.1.x:
 Modification place:
     Bug fixed.

@@ -40,6 +40,9 @@ import shutil
 
 import cszp.cszp_module
 from cszp.cszp_module import Open, terminal
+from cszp.cszp_markdown import to256_window
+from cszp import cszp_menu
+
 
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
@@ -111,7 +114,6 @@ def main():
         os.mkdir("plugins")
 
     # main
-    from cszp import cszp_menu
 
     if not os.path.isfile("lang"):
         file = open("language/lang.json")
@@ -127,6 +129,11 @@ def main():
     lang = terminal()
     lang.autostart(lang)
     Input = cszp.cszp_module.Input()
+    if not os.path.isfile("start"):
+        with open("start","w") as f:
+            f.write("1")
+        with open("./docs/welcome_to_cszp_"+lang.enable_lang_name+".md") as f:
+            to256_window(lang.lang("cszpへようこそ！")+" / "+lang.lang("qキーで終了"), f.read())
     try:
         cszp_menu.menu(lang, module, Input)
     except KeyboardInterrupt:

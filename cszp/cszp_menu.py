@@ -7,7 +7,7 @@ from importlib import import_module, reload
 
 import cuitools as subp
 
-from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module
+from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module, cszp_help
 
 
 def menu(lang, module, Input):
@@ -131,6 +131,12 @@ def menu(lang, module, Input):
             "PYTHON-IMPLEMENTATION:" + platform.python_implementation()
         ]
         subp.printlist("about cszp", printtext)
+        menu(lang, module, Input)
+    elif inp == "help":
+        cszp_help.Help(lang)
+        menu(lang, module, Input)
+    elif inp == "window":
+        subprocess.check_call("soccerwindow2")
         menu(lang, module, Input)
     else:
         sys.path.append(lang.functo("menu", inp)[0][0])
