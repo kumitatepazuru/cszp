@@ -43,9 +43,9 @@ Execute the help command on the menu screen (the first screen you start up) and 
 ## About the License.
 It is licensed under the GNU General Public License v3. See the following page for details.
 
-[English version](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE.txt)
+[English version](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE)
 
-[Japanese version](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE_jp.txt)
+[Japanese version](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE_jp)
 
 ## About Translations
 For translation, Deepl 翻訳, みらい翻訳, Google 翻訳 .

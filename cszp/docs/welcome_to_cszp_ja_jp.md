@@ -43,9 +43,9 @@ exit       終了する
 ## ライセンスについて
 ライセンスはGNU 一般公衆利用許諾書v3を使用しています。詳しくは以下のページをご覧ください。
 
-[英語版](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE.txt)
+[英語版](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE)
 
-[日本語版](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE_jp.txt)
+[日本語版](https://github.com/kumitatepazuru/cszp/blob/master/LICENSE_jp)
 ## 翻訳について
 翻訳についてはDeepl 翻訳、みらい翻訳、Google 翻訳を使用しています。機械翻訳を使用しているのでおかしい部分があるかもしれません。もし、改善できる部分がありましたら、cszpのissueやpull requestで教えてください。よろしくおねがいします。
 
