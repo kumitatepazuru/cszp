@@ -2,7 +2,7 @@ import json
 import zipfile
 
 import cuitools
-from cszp_module import terminal
+from cszp.cszp_module import terminal
 
 
 def plugin_text(lang, text):

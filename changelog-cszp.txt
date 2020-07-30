@@ -1,5 +1,11 @@
 change log
 
+var 4.8.0.x:
+Modification place:
+    Bug fixed.
+Additional elements:
+    None
+
 var 4.8.0 a1:
 Modification place:
     Bug fixed.

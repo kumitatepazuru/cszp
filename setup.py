@@ -43,11 +43,10 @@ setup(
         "texttable",
         "matplotlib",
         "pandas",
-        "urllib3",
         "cuitools==1.7.2.6",
         "prompt-toolkit>3.0",
         "pygments",
-        "mistune>=2.0.0a4"
+        "mistune==2.0.0a4"
     ],
     license="MIT",
     classifiers=[

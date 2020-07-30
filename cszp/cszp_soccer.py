@@ -137,6 +137,7 @@ class soccer:
 
     def __init__(self, cmd, lang, loop, module, logs2, Input):
         global result
+        result = ""
         cuitools.reset()
 
         sc = "rcssserver " + cmd[2]
@@ -411,9 +412,6 @@ def team(num, lang, module):
             raise KeyboardInterrupt
         else:
             return inp
-
-
-result = ""
 
 
 def setting(lang, module, Input, testmode=False, loopmode=False):
