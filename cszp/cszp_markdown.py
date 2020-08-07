@@ -152,7 +152,7 @@ def background(file):
         if no == 0:
             print("\033[1;1H",end="")
         for j in i:
-            print("\033[48;2;"+str(j[0])+";"+str(j[1])+";"+str(j[2])+"m  ",end="")
+            print("\033[48;2;"+str(j[0])+";"+str(j[1])+";"+str(j[2])+"m  ", end="")
         print("\033[0m",end="")
 
 

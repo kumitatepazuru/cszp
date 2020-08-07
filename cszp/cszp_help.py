@@ -9,6 +9,7 @@ def Help(lang):
         help_list = {
             "cszpへようこそ！": "welcome_to_cszp",
             "基本的な使い方": "basic_usage",
+            "start・test・loopコマンドの使い方": "basic_usage_2",
             "前ページへ戻る(ホーム)":"***"
         }
         keys = list(map(lang.lang,list(help_list.keys())))
