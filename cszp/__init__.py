@@ -6,17 +6,7 @@ sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
 try:
     import cuitools as subp
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mcuitools package is not installed.\ncszp (easy soccer run program) requires cuitools.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install cuitools"
-    )
-    sys.exit()
 
-try:
     subp.reset()
     print("\033[1;1H\033[0m\033[38;5;172m")
     ver = open("./version")
@@ -43,46 +33,10 @@ from cszp.cszp_module import Open, terminal
 from cszp.cszp_markdown import to256_window
 from cszp import cszp_menu
 
-
 # sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 
 module = Open()
-try:
-    from texttable import *
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mtexttable package is not installed.\ncszp (easy soccer run program) requires texttable.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install texttable"
-    )
-    sys.exit()
-
-try:
-    import matplotlib
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mmatplotlib package is not installed.\ncszp (easy soccer run program) requires matplotlib.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install matplotlib"
-    )
-    sys.exit()
-
-try:
-    import pandas
-except ModuleNotFoundError:
-    v = open("./version")
-    print("\033[2Jcszp " + v.read())
-    v.close()
-    print(
-        "\033[1mERR:\033[0mpandas package is not installed.\ncszp (easy soccer run program) requires pandas.\n"
-        "Execute the following command and try again.\n\033[38;5;11mpip3 install pandas"
-    )
-    sys.exit()
 
 
 def main():
@@ -130,10 +84,10 @@ def main():
     lang.autostart(lang)
     Input = cszp.cszp_module.Input()
     if not os.path.isfile("start"):
-        with open("start","w") as f:
+        with open("start", "w") as f:
             f.write("1")
-        with open("./docs/welcome_to_cszp_"+lang.enable_lang_name+".md") as f:
-            to256_window(lang.lang("cszpへようこそ！")+" / "+lang.lang("qキーで終了"), f.read())
+        with open("./docs/welcome_to_cszp_" + lang.enable_lang_name + ".md") as f:
+            to256_window(lang.lang("cszpへようこそ！") + " / " + lang.lang("qキーで終了"), f.read())
     try:
         cszp_menu.menu(lang, module, Input)
     except KeyboardInterrupt:

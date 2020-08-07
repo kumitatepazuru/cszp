@@ -22,8 +22,9 @@ def _requires_from_file(filename):
     return open(filename).read().splitlines()
 
 
-cszp_files = ["html/index.html", "html/nofile.png", "html/load.gif", "version"] + find("cszp/language/*.lang")
-cszp_files += find("cszp/*.json") + find("cszp/language/*.json")
+cszp_files = ["html/index.html", "html/nofile.png", "html/load.gif", "version", "docs/background.png"]
+cszp_files += find("cszp/*.json") + find("cszp/language/*.json") + find("cszp/docs/*.md") + find("cszp/language/*.lang")\
+              + find("cszp/mistune/*.py") + find("cszp/mistune/plugins/*.py") + find("cszp/mistune/directives/*.py")
 # print(find("cszp/language/*.lang"))
 setup(
     name="cszp",
@@ -46,7 +47,6 @@ setup(
         "cuitools==1.7.2.6",
         "prompt-toolkit>3.0",
         "pygments",
-        "mistune==2.0.0a4"
     ],
     license="MIT",
     classifiers=[
