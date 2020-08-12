@@ -118,7 +118,7 @@ def to256(text):
     return markdown(text)
 
 
-def reload(text, to256_ok=True):
+def reload(text):
     terminal_size = shutil.get_terminal_size()
     tmp = []
     for i in to256(text).split("\n"):
@@ -144,7 +144,6 @@ def scale_to_height(img, height):
 def background(file):
     img = Image.open(file)
     terminal_size = list(shutil.get_terminal_size())
-    terminal_size[0] /= 2
     img.thumbnail(terminal_size)
     img = np.array(img)
     for no, i in enumerate(img):
@@ -239,3 +238,6 @@ def to256_window(title, text, reset=True, background_file=None, place="c"):
                 if k == "B":
                     if scroll < len(tmp) - terminal_size[1] + 4:
                         scroll += 1
+
+if __name__ == '__main__':
+    background("docs/background.png")

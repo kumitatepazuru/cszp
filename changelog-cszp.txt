@@ -1,5 +1,12 @@
 change log
 
+var 5.0.1:
+Modification place:
+    Fixed bugs.
+
+Additional elements:
+    None
+
 var 5.0.0:
 Modification place:
     Solved the problem of cszp dying when there is some problem with soccerwindow2. poking at the soccerwindow2 bug won't cause any problems with cszp!

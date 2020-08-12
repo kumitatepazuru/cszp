@@ -797,9 +797,6 @@ def rrt(lang, module, Input_):
                 else:
                     selector.append(select)
         if ok:
-            print("\033[1;1H\033[0m\033[38;5;172m")
-            figlet("cszp " + v)
-            print("\033[0m")
             table = []
             tmp = [""]
             for i in selector:
@@ -836,6 +833,9 @@ def rrt(lang, module, Input_):
             results = []
             for i, j in zip(tmp, tmp2):
                 cuitools.reset()
+                print("\033[1;1H\033[0m\033[38;5;172m")
+                figlet("cszp " + v)
+                print("\033[0m")
                 print(Texttable().add_rows(table).draw() + "\n" + "━" * 50)
                 _ = soccer([i[0], i[1], arg], lang, 1, module, [False, False, False, synch],
                            Input_, False, False, False)
@@ -873,6 +873,9 @@ def rrt(lang, module, Input_):
                 with open(datas[7] + "/" + csv_save, "w") as f:
                     f.write("\n".join(list(map(lambda n: ",".join(map(str, n)), results))))
             cuitools.reset()
+            print("\033[1;1H\033[0m\033[38;5;172m")
+            figlet("cszp " + v)
+            print("\033[0m")
             print("\033[1m\033[38;5;11m"+lang.lang("集計結果")+"\033[0m\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
             tmp = []
             for i in results:
@@ -901,6 +904,6 @@ def rrt(lang, module, Input_):
                     tmp[j][1][2] += 1
             table = [["", "W", "D", "L", "Total"]]
             for i in tmp:
-                table.append([i[0], i[1][0], i[1][1], i[1][2], i[1][0] - i[1][1]])
+                table.append([i[0], i[1][0], i[1][2], i[1][1], i[1][0] - i[1][1]])
             print("\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
             Input_.Input(lang.lang("Enterキーを押して続行..."), dot=False)
