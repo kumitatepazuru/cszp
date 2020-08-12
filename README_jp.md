@@ -18,7 +18,6 @@
 
 ```
 pip3 install cszp
-sudo apt-get install figlet
 ```
 
 ## バグ・追加してほしい機能など

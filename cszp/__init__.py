@@ -1,39 +1,39 @@
+print("\033[38;5;2mloading Now...")
+
 import os
+print("1/12")
 import subprocess
+print("\033[1A2/12")
 import sys
+print("\033[1A3/12")
 
 sys.path.append(os.getcwd())
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
-try:
-    import cuitools as subp
-
-    subp.reset()
-    print("\033[1;1H\033[0m\033[38;5;172m")
-    ver = open("./version")
-    subprocess.check_call("figlet -ctk cszp " + ver.read(), shell=True)
-    ver.close()
-    print("\033[38;5;2mloading Now...")
-except Exception:
-    ver = open("./version")
-    print("\033[2Jcszp " + ver.read())
-    ver.close()
-    print(
-        "\033[1mERR:\033[0mfiglet package is not installed.\ncszp (easy soccer run program) requires figlet."
-        "\nExecute the following command and try again.\n\033[38;5;11msudo apt install figlet "
-    )
-    sys.exit()
 
 import json
+print("\033[1A4/12")
 import locale
+print("\033[1A5/12")
 import platform
+print("\033[1A6/12")
 import shutil
+print("\033[1A7/12")
 
-import cszp.cszp_module
-from cszp.cszp_module import Open, terminal
+from cszp.cszp_module import Open, terminal, figlet
+print("\033[1A8/12")
 from cszp.cszp_markdown import to256_window
+print("\033[1A9/12")
 from cszp import cszp_menu
+print("\033[1A10/12")
+import cuitools as subp
+print("\033[1A11/12")
+import cszp.cszp_module
+print("\033[1A12/12")
 
-# sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+subp.reset()
+print("\033[1;1H\033[0m\033[38;5;172m")
+ver = open("./version")
+figlet("cszp " + ver.read())
 
 
 module = Open()
@@ -46,9 +46,8 @@ def main():
         sys.stdout.write("\033[38;5;10m\033[1m[OK] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
     else:
-        sys.stdout.write("\033[38;5;9m\033[1m[ERR] ")
         print("\033[0m\033[38;5;2mpythonVersion\033[38;5;7m:\033[38;5;6m" + platform.python_version())
-        print("\033[38;5;9m\033[1mERR:\033[0mThis program requires python3.6.1 or higher version.")
+        print("\033[38;5;9m\033[1m[ERR] \033[0mThis program requires python3.6.1 or higher version.")
         sys.exit()
 
     if not os.path.isdir("config"):

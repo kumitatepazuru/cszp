@@ -50,4 +50,4 @@ def log(data):
         team2p = data[team2s:team2e]
         return team1n, team2n, team1p, team2p
     except IndexError:
-        return "","","0","0"
+        return "", "", "0", "0"

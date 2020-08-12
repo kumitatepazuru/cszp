@@ -118,7 +118,7 @@ def to256(text):
     return markdown(text)
 
 
-def reload(text):
+def reload(text, to256_ok=True):
     terminal_size = shutil.get_terminal_size()
     tmp = []
     for i in to256(text).split("\n"):
@@ -150,13 +150,13 @@ def background(file):
     for no, i in enumerate(img):
         print("")
         if no == 0:
-            print("\033[1;1H",end="")
+            print("\033[1;1H", end="")
         for j in i:
-            print("\033[48;2;"+str(j[0])+";"+str(j[1])+";"+str(j[2])+"m  ", end="")
-        print("\033[0m",end="")
+            print("\033[48;2;" + str(j[0]) + ";" + str(j[1]) + ";" + str(j[2]) + "m  ", end="")
+        print("\033[0m", end="")
 
 
-def to256_window(title, text, reset=True, background_file=None,place="c"):
+def to256_window(title, text, reset=True, background_file=None, place="c"):
     terminal_size = shutil.get_terminal_size()
     if terminal_size[0] < 15:
         cuitools.reset()

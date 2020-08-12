@@ -6,16 +6,17 @@ from importlib import import_module, reload
 
 import cuitools as subp
 from texttable import *
+from cszp.cszp_module import figlet
 
 
-def setting(lang, module,Input):
+def setting(lang, module, Input):
     subp.reset()
     inp = ""
     while not lang.searchcmd("setting", inp):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
         v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
+        figlet("cszp " + v.read())
         v.close()
         print("\n\n\033[1m\033[38;5;10m" + lang.lang("cszp 簡単サッカー実行プログラム"))
         print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
@@ -49,7 +50,7 @@ def setting(lang, module,Input):
         print(table.draw() + "\n\n")
 
         q = lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。")
-        inp = Input.Input(q[0], dot=False, normal=False,word=q[1])
+        inp = Input.Input(q[0], dot=False, normal=False, word=q[1])
         if not lang.searchcmd("setting", inp):
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
             Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
@@ -62,7 +63,7 @@ def setting(lang, module,Input):
             data = open("./config/setting.conf", "a")
             data.write("," + inp.split(' ')[1] + "," + inp.split(' ')[2])
             data.close()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "remove":
             data = module.Open("./config/setting.conf")
@@ -88,7 +89,7 @@ def setting(lang, module,Input):
                 print("\033[38;5;9m" + lang.lang("ERR:名前"), inp.split(" ")[1], lang.lang(
                     "は簡単サッカー実行リストに登録されていません。\nタイプミスを確認してください"))
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            setting(lang, module,Input)
+            setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "soccerwindow2":
             data = module.Open("./config/config.conf")
@@ -110,7 +111,7 @@ def setting(lang, module,Input):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "rcg":
             data = module.Open("./config/config.conf")
@@ -132,7 +133,7 @@ def setting(lang, module,Input):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "rcl":
             data = module.Open("./config/config.conf")
@@ -154,7 +155,7 @@ def setting(lang, module,Input):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "fileout":
             data = module.Open("./config/config.conf")
@@ -170,13 +171,13 @@ def setting(lang, module,Input):
             data = open("./config/config.conf", "w")
             data.write(datas)
             data.close()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
         else:
             sys.path.append(lang.functo("setting", inp)[0][0])
             plugin = import_module(lang.functo("setting", inp)[1][0])
             reload(plugin)
             try:
-                plugin.plugin(lang,inp)
+                plugin.plugin(lang, inp)
             except Exception:
                 import traceback
                 temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
@@ -194,8 +195,8 @@ def setting(lang, module,Input):
                 k = ""
                 while k != "\n":
                     k = subp.Key()
-            setting(lang, module,Input)
+            setting(lang, module, Input)
     except IndexError:
         print("\033[38;5;9m" + lang.lang("ERR:引数がありません。タイプミスを確認してください"))
         Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-        setting(lang, module,Input)
+        setting(lang, module, Input)

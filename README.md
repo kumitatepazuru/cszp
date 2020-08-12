@@ -18,7 +18,6 @@ Operation check OS
 
 ```
 pip3 install cszp
-sudo apt-get install figlet
 ```
 
 ## Bugs, features you want to add

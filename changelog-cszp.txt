@@ -1,5 +1,16 @@
 change log
 
+var 5.0.0:
+Modification place:
+    Solved the problem of cszp dying when there is some problem with soccerwindow2. poking at the soccerwindow2 bug won't cause any problems with cszp!
+    The ascii art of cszp was changed from figlet to pyfiglet. This makes it possible to run on other linux systems than debian. (Maybe you can run it on windows too...?)
+    Running the soccer just got so much simpler! For those of you who thought it was hard to run in multiple windows! It's much easier to use!
+Additional elements:
+    It is now possible to configure whether to start the server. Yay!
+    We've implemented a round-robin game. (beta) This isn't a dream come true for the officials to use...?
+
+    cszp one year anniversary! (A little early) Yay! Thank you all so much! I'll keep up the good work!
+
 var 4.8.0:
 Modification place:
     Bug fixed.
@@ -76,7 +87,7 @@ Modification place:
     Added user_input argument to pass to add-on.
     Arguments describe commands that the user has executed, and can be used to take arguments to the command itself or to distinguish commands.
 Additional elements:
-    Added a function to execute when cszp is started. __ init __.autostart.
+    Added a function to execute when cszp is started. __init__.autostart.
     json with the following statement:
     "auto_start":[
         {"cmd": "auto_start"}

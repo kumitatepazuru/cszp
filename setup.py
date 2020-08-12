@@ -46,7 +46,8 @@ setup(
         "pandas",
         "cuitools==1.7.2.6",
         "prompt-toolkit>3.0",
-        "pygments",
+        "pyfiglet",
+        "python-dateutil"
     ],
     license="MIT",
     classifiers=[

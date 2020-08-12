@@ -1,7 +1,9 @@
 import json
 import os
+import shutil
 import subprocess
 import sys
+from pyfiglet import Figlet
 from importlib import import_module
 
 from prompt_toolkit import PromptSession
@@ -12,16 +14,19 @@ from prompt_toolkit.completion import WordCompleter
 from cszp import cszp_lang
 
 
+def figlet(text, font="larry3d"):
+    print(
+        Figlet(
+            font=font,
+            justify="center",
+            width=shutil.get_terminal_size()[0]
+        ).renderText(text)
+    )
+
+
 class lexer(Lexer):
     def __init__(self, color):
         self.color = color
-
-    # def lex_document(self, document):
-    #     self.document = document
-    #     return self.get_line
-    #
-    # def get_line(self,lineno):
-    #     return list(map(lambda n:(self.color,n),self.document.lines[lineno]))
 
     def lex_document(self, document):
         def get_line(lineno):

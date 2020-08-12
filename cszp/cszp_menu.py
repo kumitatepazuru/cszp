@@ -18,7 +18,7 @@ def menu(lang, module, Input):
         subprocess.check_call("clear", shell=True)
         print("\033[0m\033[38;5;172m")
         v = open("./version")
-        subprocess.check_call("figlet -ctk cszp " + v.read(), shell=True)
+        cszp_module.figlet("cszp " + v.read())
         v.close()
         print("\n")
         q = lang.question("menu")
@@ -42,10 +42,13 @@ def menu(lang, module, Input):
         Input.Input(lang.lang("\n\nリセットが完了しました。\nEnterキーを押して続行..."), dot=False, textcolor="#fdb100")
         menu(lang, module, Input)
     elif inp == "test":
-        cszp_soccer.setting(lang,testmode=True, module=module, Input=Input)
+        cszp_soccer.setting(lang,testmode=True, module=module, Input_=Input)
         menu(lang, module, Input)
     elif inp == "start":
-        cszp_soccer.setting(lang, module=module,Input=Input)
+        cszp_soccer.setting(lang, module=module,Input_=Input)
+        menu(lang, module, Input)
+    elif inp == "rrt":
+        cszp_soccer.rrt(lang, module=module, Input_=Input)
         menu(lang, module, Input)
     elif inp == "lang":
         terminal_size = shutil.get_terminal_size()
@@ -97,7 +100,7 @@ def menu(lang, module, Input):
         lang.autostart(lang)
         menu(lang, module, Input)
     elif inp == "loop":
-        cszp_soccer.setting(lang, loopmode=True, module=module, Input=Input)
+        cszp_soccer.setting(lang, loopmode=True, module=module, Input_=Input)
         menu(lang, module, Input)
     elif inp == "server":
         print(lang.lang("Ctrl+Cで閲覧を終了します。"))
@@ -105,6 +108,8 @@ def menu(lang, module, Input):
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
             pass
+        except subprocess.CalledProcessError:
+            Input(lang.lang("Enterキーを押して続行..."))
         menu(lang, module, Input)
     elif inp == "plugin":
         tmp = cszp_plugin.plugin(lang)
@@ -136,7 +141,12 @@ def menu(lang, module, Input):
         cszp_help.Help(lang)
         menu(lang, module, Input)
     elif inp == "window":
-        subprocess.check_call("soccerwindow2")
+        try:
+            subprocess.check_call("soccerwindow2")
+        except KeyboardInterrupt:
+            pass
+        except subprocess.CalledProcessError:
+            Input(lang.lang("Enterキーを押して続行..."))
         menu(lang, module, Input)
     else:
         sys.path.append(lang.functo("menu", inp)[0][0])

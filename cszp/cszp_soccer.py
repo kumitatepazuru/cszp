@@ -1,4 +1,6 @@
 import csv
+import os
+import shutil
 import socketserver
 import subprocess
 import threading
@@ -13,12 +15,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from dateutil.relativedelta import relativedelta
-from prompt_toolkit import HTML
-from prompt_toolkit.shortcuts import yes_no_dialog, radiolist_dialog, button_dialog, input_dialog, message_dialog
+from prompt_toolkit.shortcuts import yes_no_dialog
 from texttable import Texttable
 
 from cszp import cszp_log
 from cszp import cszp_module
+from cszp.cszp_module import figlet, Input
 
 matplotlib.use('Agg')
 
@@ -28,7 +30,6 @@ class soccerHTTPServer_Handler(BaseHTTPRequestHandler):
         return
 
     def do_GET(self):
-        print(self.path)
         if self.path == "/":
             self.send_response(200)
             self.send_header("Content-Type", "text/html")
@@ -121,7 +122,6 @@ def totime(sec):
 
 
 class soccer:
-
     def server(self):
         PORT = 20000
         Handler = soccerHTTPServer_Handler
@@ -135,10 +135,12 @@ class soccer:
             time.sleep(5)
             self.server()
 
-    def __init__(self, cmd, lang, loop, module, logs2, Input):
+    def __init__(self, cmd, lang, loop, module, logs2, Input, s_start, reset=True, exit=True):
         global result
         result = ""
-        cuitools.reset()
+        self.result_list = []
+        if reset:
+            cuitools.reset()
 
         sc = "rcssserver " + cmd[2]
         wc = "soccerwindow2 > /dev/null 2>&1"
@@ -151,7 +153,7 @@ class soccer:
         print("WINDOW-CMD : " + wc + "\033[0m")
         error = 0
         list_time = []
-        if loop > 1:
+        if loop > 1 and s_start:
             server = threading.Thread(target=self.server)
             server.setDaemon(True)
             server.start()
@@ -201,14 +203,18 @@ class soccer:
                         logtemp3.kill()
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
-                        Input.Input("Enterキーを押して続行...")
                         error = 1
-                        break
+                        continue
 
                     print("\t\033[38;5;4m[INFO]\033[0mteam1 stop.")
                     stdout, stderr = logtemp3.communicate()
-                    stderr = stderr.decode("utf-8")
-                    stdout = stdout.decode("utf-8")
+                    try:
+                        stderr = stderr.decode("utf-8")
+                        stdout = stdout.decode("utf-8")
+                    except UnicodeDecodeError as e:
+                        print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
+                        stderr = stderr.decode("utf-8", "replace")
+                        stdout = stdout.decode("utf-8", "replace")
                     logt2 += stdout + stderr
                     logt2 += "\n"
                     print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp3.returncode))
@@ -216,12 +222,17 @@ class soccer:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
-                        break
+                        continue
 
                     print("\t\033[38;5;4m[INFO]\033[0mteam2 stop.")
                     stdout, stderr = logtemp1.communicate()
-                    stderr = stderr.decode("utf-8")
-                    stdout = stdout.decode("utf-8")
+                    try:
+                        stderr = stderr.decode("utf-8")
+                        stdout = stdout.decode("utf-8")
+                    except UnicodeDecodeError as e:
+                        print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
+                        stderr = stderr.decode("utf-8", "replace")
+                        stdout = stdout.decode("utf-8", "replace")
                     logs += stdout + stderr
                     logs += "\n"
                     print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp1.returncode))
@@ -229,11 +240,15 @@ class soccer:
                         logtemp1.kill()
                         print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
-                        break
+                        continue
 
                     print("\t\033[38;5;4m[INFO]\033[0mrcssserver stop.")
-                except (subprocess.CalledProcessError, KeyboardInterrupt, EOFError, FileNotFoundError) as e:
+                except (subprocess.CalledProcessError, EOFError, FileNotFoundError) as e:
                     print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"), e)
+                    cszp_module.killsoccer(False)
+                    error = 1
+                    continue
+                except KeyboardInterrupt:
                     cszp_module.killsoccer(False)
                     error = 1
                     break
@@ -247,6 +262,9 @@ class soccer:
                 result += "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[
                     3] + "," + \
                           str(int(soccer[2]) - int(soccer[3])) + "," + str(int(soccer[3]) - int(soccer[2]))
+                self.result_list.append(
+                    [exittime, soccer[0], soccer[1], int(soccer[2]), int(soccer[3]), int(soccer[2]) - int(soccer[3]),
+                     int(soccer[3]) - int(soccer[2])])
 
                 if logs2[0]:
                     data = module.Open("./config/config.conf")
@@ -271,7 +289,7 @@ class soccer:
                     data = module.Open("./config/config.conf")
                     df = data.read()
                     # print(df.split(",")[9] + "/" + file)
-                    temp = open(df.split(",")[7] + "/" + logs2[2], "a")
+                    temp = open(df.split(",")[7] + "/" + logs2[2], "w")
                     soccer = cszp_log.log(logs)
                     temp.write(
                         "\n" + exittime + "," + soccer[0] + "," + soccer[1] + "," + soccer[2] + "," + soccer[
@@ -343,79 +361,53 @@ class soccer:
                 self.httpd.shutdown()
             except AttributeError:
                 pass
-            Input.Input("Enterキーを押して続行...", dot=False)
+            if exit:
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+
+    def get_result(self):
+        return self.result_list
 
 
-def team(num, lang, module):
-    q = button_dialog(
-        title=HTML("<style fg='red'>" * (num - 1) + "<style fg='olive'>" * abs(num - 2) + lang.lang(
-            "cszp 簡単サッカー実行プログラム") + "/" +
-                   lang.lang("Team" + str(num) + "(黄色)" * abs(num - 2) + "(赤色)" * (
-                           num - 1) + "チームのパスを選択") + "</style>"),
-        text=lang.lang("簡単サッカー実行リストから選択しますか？"),
-        buttons=[
-            ("Yes", True),
-            ("No", False),
-            ("Cancel", None)
-        ]
-    ).run()
-    if q:
-        data = module.Open("./config/setting.conf")
-        datas = data.read().splitlines()[0]
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(2, len(datas), 2):
-            datal.append((datas[i + 1], datas[i]))
-        if len(datal) != 0:
-            result = radiolist_dialog(
-                title=HTML("<style fg='red'>" * (num - 1) + "<style fg='olive'>" * abs(num - 2) + lang.lang(
-                    "cszp 簡単サッカー実行プログラム") + "/" +
-                           lang.lang("Team" + str(num) + "(黄色)" * abs(num - 2) + "(赤色)" * (
-                                   num - 1) + "チームのパスを選択") + "</style>"),
-                text=lang.lang("下のリストから選択してください。Spaceキーで選択できます。\nキャンセルを選択すると選択方法の変更・終了ができます。"),
-                values=datal
-            ).run()
-            if result is not None:
-                return result
-            else:
-                return team(num, lang, module)
+def check_path(text):
+    if not os.path.isfile(text[1][1]):
+        text[1][2] = 0
+    else:
+        text[1][2] = 1
+    if not os.path.isfile(text[2][1]):
+        text[2][2] = 0
+    else:
+        text[2][2] = 1
+    if text[1][1] == text[2][1]:
+        text[1][2] = 0
+        text[2][2] = 0
+    return text
+
+
+def yesno(title, text):
+    tmp = 0
+    k = ""
+    while k != "\n":
+        if tmp == 0:
+            cuitools.box(title,
+                         text + ["\033[7mYes\033[0m  No"])
         else:
-            if button_dialog(
-                    title=HTML("<style fg='red'>" * (num - 1) + "<style fg='olive'>" * abs(num - 2) + lang.lang(
-                        "cszp 簡単サッカー実行プログラム") + "/" +
-                               lang.lang("Team" + str(num) + "(黄色)" * abs(num - 2) + "(赤色)" * (
-                                       num - 1) + "チームのパスを選択") + "</style>"),
-                    text=lang.lang("簡単サッカー実行リストにチームが設定されていないのでこの機能は使用できません。\n"
-                                   "settingコマンドでチームの追加ができます。詳しくはsettingコマンドを確認してください。\n"
-                                   "Cancelを押すとメニュー画面にもどります。"),
-                    buttons=[
-                        ('Ok', True),
-                        ('Cancel', False),
-                    ]).run():
-                inp = cuitools.Inputfilegui(
-                    lang.lang("Team" + str(num) + "(黄色)" * abs(num - 2) + "(赤色)" * (num - 1) + "チームのパスを選択") + lang.lang(
-                        "(選択方法の変更・終了はQキー)"))
-                if inp == -1:
-                    return team(num, lang, module)
-                elif inp == -2:
-                    raise KeyboardInterrupt
-                else:
-                    return inp
-    elif not q and q is not None:
-        inp = cuitools.Inputfilegui(
-            lang.lang("Team" + str(num) + "(黄色)" * abs(num - 2) + "(赤色)" * (num - 1) + "チームのパスを選択") + lang.lang(
-                "(選択方法の変更・終了はQキー)"))
-        if inp == -1:
-            return team(num, lang, module)
-        elif inp == -2:
-            raise KeyboardInterrupt
-        else:
-            return inp
+            cuitools.box(title,
+                         text + ["Yes  \033[7mNo\033[0m"])
+        k = cuitools.Key()
+        if k == "\x1b":
+            k = cuitools.Key()
+            if k == "[":
+                k = cuitools.Key()
+                if k == "C":
+                    if tmp == 0:
+                        tmp = 1
+                elif k == "D":
+                    if tmp == 1:
+                        tmp = 0
+    return tmp
 
 
-def setting(lang, module, Input, testmode=False, loopmode=False):
-    # noinspection PyBroadException
+def kakunin(module):
     data = module.Open("./config/config.conf")
     datas = data.read().splitlines()
     data.close()
@@ -427,211 +419,488 @@ def setting(lang, module, Input, testmode=False, loopmode=False):
         datal.append(datat)
     table = Texttable()
     table.add_rows(datal)
+    return table
+
+
+def setting(lang, module, Input_, testmode=False, loopmode=False):
+    data = module.Open("./config/config.conf")
+    datas = data.read().splitlines()
+    data.close()
+    datas = datas[0].split(",")
+    table = kakunin(module)
 
     if yes_no_dialog(
             title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("設定確認"),
             text=table.draw() + lang.lang("\nEnterキーを押して続行...")).run():
-        cuitools.reset()
-        ok = 0
-        csv_q = False
-        while ok != 7 + loopmode + (csv_q is not False):
-            if ok == 0:
-                path = team(1, lang, module)
-            else:
-                path = True
-            if path is not None:
-                if ok == 0:
-                    team1 = path
-                    ok += 1
-                if ok == 1:
-                    path = team(2, lang, module)
-                else:
-                    path = True
-                if path is not None:
-                    if ok == 1:
-                        team2 = path
-                        ok += 1
-
-                    if team1 == team2:
-                        inp = button_dialog(
-                            title=HTML("<style fg='red'>" + lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang(
-                                "Team2(赤色)チームのパスを選択") + "</style>"),
-                            text=lang.lang("同じチームと対戦させることは、仕様上不可能です。違うチームに変更してください。\n"
-                                           "変更するチームを選択してください。Cancelを押すとホーム画面に戻ります。"),
-                            buttons=[
-                                ('Team1', True),
-                                ('Team2', False),
-                                ("Cancel", None)
-                            ]).run()
-                        if inp:
-                            path = team(1, lang, module)
-                            if path is not None:
-                                # print(ok)
-                                team1 = path
-                                continue
-                            else:
-                                break
-                        elif not inp and inp is not None:
-                            ok -= 1
-                            continue
-                        else:
-                            break
-
-                    if ok == 2:
-                        inp = input_dialog(title=lang.lang(
-                            "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("サーバーの引数を入力"),
-                                           text=lang.lang("サーバーの引数を入力（ない場合は空欄）")).run()
+        k = ""
+        ok = False
+        select = 0
+        text = [
+            ["\033[38;5;10m" + lang.lang("前ページへ戻る(ホーム)"), False],
+            ["\033[38;5;11m" + lang.lang("Team1(黄色)チームのパスを選択"), "None", 0],
+            ["\033[38;5;9m" + lang.lang("Team2(赤色)チームのパスを選択"), "None", 0],
+            ["\033[38;5;10m" + "─" * shutil.get_terminal_size()[0], None],
+            ["\033[38;5;12m" + lang.lang("サーバーの引数を入力（ない場合は空欄）"), "", None],
+            ["\033[38;5;10m" + "─" * shutil.get_terminal_size()[0], None],
+            ["\033[38;5;9m" + lang.lang("保存先") + " " + datas[7], None],
+            ["\033[38;5;11m" + lang.lang("サーバーログの保存"), "No", None],
+            ["\033[38;5;11m" + lang.lang("プレイヤーログの保存"), "No", None],
+            ["\033[38;5;11m" + lang.lang("csvログの保存"), "No", None],
+            ["\033[38;5;10m" + "─" * shutil.get_terminal_size()[0], None],
+            ["\033[38;5;14m" + lang.lang("synchモードでの実行"), "No", None],
+            ["\033[38;5;14m" + lang.lang("サーバーの起動"), "Yes", None],
+        ]
+        if loopmode:
+            text += [
+                ["\033[38;5;10m" + "─" * shutil.get_terminal_size()[0], None],
+                ["\033[38;5;15m" + lang.lang("ループ回数を指定"), 3, 1]
+            ]
+        if testmode:
+            text += [
+                ["", None],
+                ["\033[38;5;11m" + lang.lang("*テストモードで実行しています"), None]
+            ]
+        else:
+            text += [["", None]]
+        text += [
+            ["\033[38;5;10m" + lang.lang("サッカーを実行"), False]
+        ]
+        ver = open("./version")
+        v = ver.read()
+        ver.close()
+        while k != "\n" or ok is False:
+            cuitools.reset()
+            print("\033[1;1H\033[0m\033[38;5;172m")
+            figlet("cszp " + v)
+            for i, j in enumerate(text):
+                if j[1] is False:
+                    if i == select:
+                        print("\033[1m\033[38;5;9m> " + j[0] + "\033[0m")
                     else:
-                        inp = True
-                    if inp is not None:
-                        if ok == 2:
-                            arg = inp
-                            ok += 1
-                        data = module.Open("./config/config.conf")
+                        print("  " + j[0] + "\033[0m")
+                elif j[1] is not None:
+                    if j[2] is None:
+                        if i == select:
+                            print(
+                                "\033[1m\033[38;5;9m> " + j[0] + ":\033[0m\033[4m\033[38;5;14m" + str(j[1]) + "\033[0m")
+                        else:
+                            print("  " + j[0] + ":\033[0m\033[4m\033[38;5;14m" + str(j[1]) + "\033[0m")
+                    else:
+                        if i == select:
+                            print(
+                                "\033[1m\033[38;5;9m> " + j[0] + ":\033[0m\033[4m\033[38;5;14m" + str(
+                                    j[1]) + "\033[0m " + (
+                                        "\033[38;5;9m✖" * ((j[2] - 1) * -1) + "\033[38;5;10m✔" * j[2]) + "\033[0m ")
+                        else:
+                            print("  " + j[0] + ":\033[0m\033[4m\033[38;5;14m" + str(j[1]) + "\033[0m " + (
+                                    "\033[38;5;9m✖" * ((j[2] - 1) * -1) + "\033[38;5;10m✔" * j[2]) + "\033[0m ")
+                else:
+                    print(j[0])
+            print("\n")
+
+            k = cuitools.Key()
+            if k == "\n":
+                if select == 0:
+                    break
+                elif select == 1 or select == 2:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("簡単サッカー実行リストから選択しますか？")])
+                    if tmp == 0:
+                        data = module.Open("./config/setting.conf")
                         datas = data.read().splitlines()[0]
                         data.close()
-                        if ok == 3:
-                            inp = button_dialog(
-                                title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("サーバーログの保存"),
-                                text=lang.lang("サーバーログを保存しますか？\n保存先") + " " + datas.split(",")[7],
-                                buttons=[
-                                    ('Yes', True),
-                                    ('No', False),
-                                    ('Cancel', None)
-                                ],
-                            ).run()
+                        datas = datas.split(",")
+                        datal = []
+                        for i in range(2, len(datas), 2):
+                            datal.append((datas[i + 1], datas[i]))
+                        if len(datal) == 0:
+                            k = ""
+                            while k != "\n":
+                                cuitools.box(lang.lang("エラー"), [
+                                    lang.lang("簡単サッカー実行リストにチームが設定されていないのでこの機能は使用できません。"),
+                                    lang.lang("settingコマンドでチームの追加ができます。詳しくはsettingコマンドを確認してください。"),
+                                    lang.lang("Enterキーを押して続行...")
+                                ])
+                                k = cuitools.Key()
                         else:
-                            inp = True
-                        if inp is not None:
-                            if ok == 3:
-                                server = inp
-                                ok += 1
-                            if ok == 4:
-                                inp = button_dialog(
-                                    title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("プレイヤーログの保存"),
-                                    text=lang.lang("プレイヤーログを保存しますか？\n保存先") + " " + datas.split(",")[7],
-                                    buttons=[
-                                        ('Yes', True),
-                                        ('No', False),
-                                        ('Cancel', None)
-                                    ],
-                                ).run()
-                            else:
-                                inp = True
-                            if inp is not None:
-                                if ok == 4:
-                                    player = inp
-                                    ok += 1
-                                if ok == 5:
-                                    inp = button_dialog(
-                                        title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvログの保存"),
-                                        text=lang.lang("csvログを保存しますか？\n保存先") + " " + datas.split(",")[7],
-                                        buttons=[
-                                            ('Yes', True),
-                                            ('No', False),
-                                            ('Cancel', None)
-                                        ],
-                                    ).run()
-                                else:
-                                    inp = True
-                                if inp is not None:
-                                    if ok == 5:
-                                        csv_q = inp
-                                        ok += 1
-
-                                    if ok == 6:
-                                        inp = button_dialog(
-                                            title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("synchモードでの実行"),
-                                            text=lang.lang("synchモードで実行しますか？"),
-                                            buttons=[
-                                                ('Yes', True),
-                                                ('No', False),
-                                                ('Cancel', None)
-                                            ],
-                                        ).run()
-                                    else:
-                                        inp = True
-                                    if inp is not None:
-                                        if ok == 6:
-                                            synch = inp
-                                            ok += 1
-                                        if csv_q and ok == 7:
-                                            inp = input_dialog(title=lang.lang(
-                                                "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvのファイル名を指定"),
-                                                               text="filename").run()
-                                            if inp is not None:
-                                                if inp != "":
-                                                    csv_q = inp
-                                                    ok += 1
-                                                else:
-                                                    message_dialog(title=lang.lang(
-                                                        "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("csvのファイル名を指定"),
-                                                                   text=lang.lang("ファイル名を入力してください。")).run()
-                                                    continue
-                                            else:
-                                                ok -= 1
-                                                continue
-
-                                        if loopmode:
-                                            inp = input_dialog(title=lang.lang(
-                                                "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("ループ回数を指定"),
-                                                               text=lang.lang("ループ回数を指定")).run()
-                                            if inp is not None:
-                                                try:
-                                                    loop = int(inp)
-                                                    ok += 1
-                                                except ValueError:
-                                                    message_dialog(title=lang.lang(
-                                                        "cszp 簡単サッカー実行プログラム") + "/" + lang.lang("ループ回数を指定"),
-                                                                   text=lang.lang("数値を半角で入力してください。")).run()
-                                                    continue
-                                            else:
-                                                ok -= 1
-                                                continue
-                                        else:
-                                            loop = 1
-                                    else:
-                                        ok -= 1
-                                        continue
-                                else:
-                                    ok -= 1
-                                    continue
-                            else:
-                                ok -= 1
-                                continue
-                        else:
-                            ok -= 1
-                            continue
+                            tmp = Input()
+                            tmp = tmp.Input(lang.lang("簡単サッカー実行リストで設定した名前を指定（Tabで一覧が確認できます）"),
+                                            word=list(map(lambda n: n[1], datal)))
+                            text[select][1] = "None"
+                            text = check_path(text)
+                            for i in datal:
+                                if i[1] == tmp:
+                                    text[select][1] = i[0]
+                                    text = check_path(text)
+                                    break
                     else:
-                        ok -= 1
-                        continue
+                        if select == 1:
+                            tmp = cuitools.Inputfilegui(lang.lang("Team1(黄色)チームのパスを選択") + lang.lang("(選択方法の変更・終了はQキー)"))
+                        else:
+                            tmp = cuitools.Inputfilegui(lang.lang("Team2(赤色)チームのパスを選択") + lang.lang("(選択方法の変更・終了はQキー)"))
+                        if tmp == -1:
+                            pass
+                        elif tmp == -2:
+                            raise KeyboardInterrupt
+                        else:
+                            text[select][1] = tmp
+                            text = check_path(text)
+                elif select == 4:
+                    tmp = Input()
+                    text[select][1] = tmp.Input(lang.lang("サーバーの引数を入力（ない場合は空欄）"))
+
+                elif select == 7:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("サーバーログを保存しますか？")])
+                    if tmp == 0:
+                        text[select][1] = "Yes"
+                    else:
+                        text[select][1] = "No"
+                elif select == 8:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("プレイヤーログを保存しますか？")])
+                    if tmp == 0:
+                        text[select][1] = "Yes"
+                    else:
+                        text[select][1] = "No"
+                elif select == 9:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("csvログを保存しますか？")])
+                    if tmp == 0:
+                        tmp = Input()
+                        tmp = tmp.Input("filename")
+                        if len(tmp.split(".")) == 1:
+                            tmp += ".csv"
+                        text[select][1] = tmp
+                    else:
+                        text[select][1] = "No"
+                elif select == 11:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("synchモードで実行しますか？")])
+                    if tmp == 0:
+                        text[select][1] = "Yes"
+                    else:
+                        text[select][1] = "No"
+                elif select == 12:
+                    tmp = yesno(lang.lang("選択"), [lang.lang("サーバーを起動させますか？")])
+                    if tmp == 0:
+                        text[select][1] = "Yes"
+                    else:
+                        text[select][1] = "No"
+                elif select == 14 and loopmode:
+                    tmp = Input()
+                    tmp = tmp.Input(lang.lang("ループ回数を指定"))
+                    try:
+                        text[select][1] = int(tmp)
+                    except ValueError:
+                        text[select][1] = 0
+                    if text[select][1] == 0:
+                        text[select][2] = 0
+                    else:
+                        text[select][2] = 1
+                elif select == len(text) - 1:
+                    ok = True
+                    for i in text:
+                        if len(i) == 3:
+                            if i[2] == 0:
+                                k = ""
+                                ok = False
+                                while k != "\n":
+                                    cuitools.box(lang.lang("エラー"), [lang.lang("問題箇所があります。確認してください。"),
+                                                                    lang.lang("Enterキーを押して続行...")])
+                                    k = cuitools.Key()
+                                break
+
+            if k == "\x1b":
+                k = cuitools.Key()
+                if k == "[":
+                    k = cuitools.Key()
+                    if k == "B":
+                        if len(text) - 1 > select:
+                            select += 1
+                            while text[select][1] is None:
+                                select += 1
+                    elif k == "A":
+                        if 0 < select:
+                            select -= 1
+                            while text[select][1] is None:
+                                select -= 1
+
+        if ok:
+            data = module.Open("./config/config.conf")
+            datas = data.read().splitlines()
+            data.close()
+            datas = datas[0].split(",")
+            arg = text[4][1]
+            arg += "server::auto_mode=true server::kick_off_wait=20 server::game_over_wait=20 " \
+                   "server::connect_wait=2000 server::game_log_dir=" + datas[7] + " server::text_log_dir=" + datas[
+                       7] + " server::game_logging=" + (
+                           "true" * (datas[3] == "on") + "false" * (datas[3] == "off")) + " server::text_logging=" + (
+                           "true" * (datas[3] == "on") + "false" * (datas[3] == "off"))
+
+            if testmode:
+                arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
+                       "server::half_time=10"
+            if loopmode:
+                loop = text[14][1]
+            else:
+                loop = 1
+            if text[12][1] == "Yes":
+                s = True
+            else:
+                s = False
+            if text[11][1] == "Yes":
+                synch = True
+            else:
+                synch = False
+            if text[9][1] == "Yes":
+                tmp1 = True
+            else:
+                tmp1 = False
+            if text[8][1] == "Yes":
+                tmp2 = True
+            else:
+                tmp2 = False
+            if text[7][1] == "Yes":
+                tmp3 = True
+            else:
+                tmp3 = False
+            soccer([text[2][1], text[1][1], arg], lang, loop, module, [tmp3, tmp2, tmp1, synch],
+                   Input_, s)
+
+
+def rrt(lang, module, Input_):
+    table = kakunin(module)
+
+    data = module.Open("./config/setting.conf")
+    datas = data.read().splitlines()[0]
+    data.close()
+    datas = datas.split(",")
+    datal = []
+    for i in range(2, len(datas), 2):
+        datal.append((datas[i + 1], datas[i]))
+    if len(datal) == 0:
+        k = ""
+        while k != "\n":
+            cuitools.box(lang.lang("エラー"), [
+                lang.lang("簡単サッカー実行リストにチームが設定されていないのでこの機能は使用できません。"),
+                lang.lang("settingコマンドでチームの追加ができます。詳しくはsettingコマンドを確認してください。"),
+                lang.lang("Enterキーを押して続行...")
+            ])
+            k = cuitools.Key()
+    elif yes_no_dialog(
+            title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("設定確認"),
+            text=table.draw() + lang.lang("\nEnterキーを押して続行...")).run():
+        k = ""
+        csv_save = False
+        ok = False
+        ver = open("./version")
+        v = ver.read()
+        ver.close()
+        kantan_list = list(map(lambda n: n[1], datal))
+        kantan_cmd = list(map(lambda n: n[0], datal))
+        select = 0
+        selector = []
+        synch = False
+        while k != "\n" or not ok:
+            cuitools.reset()
+            print("\033[1;1H\033[0m\033[38;5;172m")
+            figlet("cszp " + v)
+            if select == -1:
+                print("\033[1m\033[38;5;9m>  \033[38;5;10m" + lang.lang("前ページへ戻る(ホーム)") + "\033[0m\n")
+            else:
+                print("   \033[38;5;10m" + lang.lang("前ページへ戻る(ホーム)") + "\033[0m\n")
+            print("\033[38;5;12m" + lang.lang("総当たり戦をさせるチームを選択してください。"))
+            for i, j in enumerate(kantan_list):
+                if i in selector:
+                    if select == i:
+                        print("\033[1m\033[38;5;9m>\033[38;5;11m* \033[38;5;10m" + j + "\033[0m")
+                    else:
+                        print("\033[38;5;11m * \033[38;5;10m" + j + "\033[0m")
+                elif select == i:
+                    print("\033[1m\033[38;5;9m>  \033[38;5;10m" + j + "\033[0m")
                 else:
-                    ok -= 1
-                    continue
+                    print("   \033[38;5;10m" + j + "\033[0m")
+            print("")
+            if select == len(kantan_list):
+                print("\033[1m\033[38;5;9m>  \033[38;5;14m" + lang.lang(
+                    "synchモードでの実行") + ":\033[0m\033[4m\033[38;5;14m" + "No" * (
+                              (synch - 1) * -1) + "Yes" * synch + "\033[0m")
             else:
+                print("   \033[38;5;14m" + lang.lang("synchモードでの実行") + ":\033[0m\033[4m\033[38;5;14m" + "No" * (
+                        (synch - 1) * -1) + "Yes" * synch + "\033[0m")
+            if select == len(kantan_list) + 1:
+                if csv_save is False:
+                    print("\033[1m\033[38;5;9m>  \033[38;5;11m" + lang.lang("csvログの保存") + ":\033[0m\033[4m\033["
+                                                                                          "38;5;14mNo\033[0m")
+                else:
+                    print("\033[1m\033[38;5;9m>  \033[38;5;11m" + lang.lang(
+                        "csvログの保存") + ":\033[0m\033[4m\033[38;5;14m" + csv_save + "\033[0m")
+            else:
+                if csv_save is False:
+                    print(
+                        "   \033[38;5;11m" + lang.lang("csvログの保存") + ":\033[0m\033[4m\033[38;5;14mNo\033[0m")
+                else:
+                    print(
+                        "   \033[38;5;11m" + lang.lang(
+                            "csvログの保存") + ":\033[0m\033[4m\033[38;5;14m" + csv_save + "\033[0m")
+            if select == len(kantan_list) + 2 and len(selector) > 1:
+                print("\033[1m\033[38;5;9m>  \033[38;5;10m" + lang.lang("サッカーを実行") + "\033[0m")
+            elif len(selector) < 2:
+                print("   \033[38;5;243m" + lang.lang("サッカーを実行") + "\033[0m")
+            else:
+                print("   \033[38;5;10m" + lang.lang("サッカーを実行") + "\033[0m")
+
+            table = []
+            tmp = [""]
+            for i in selector:
+                tmp.append(kantan_list[i])
+            table.append(tmp)
+            for i in selector:
+                table.append([kantan_list[i]] + [""] * len(selector))
+            print(Texttable().add_rows(table).draw())
+            k = cuitools.Key()
+            if k == "\x1b":
+                k = cuitools.Key()
+                if k == "[":
+                    k = cuitools.Key()
+                    if k == "B":
+                        if len(kantan_list) + 2 > select:
+                            select += 1
+                            if len(kantan_list) + 2 == select and len(selector) < 2:
+                                select -= 1
+                    elif k == "A":
+                        if -1 < select:
+                            select -= 1
+            if (k == " " or k == "\n") and select == -1:
                 break
-        if ok == 7 + loopmode + (csv_q is not False):
-            if yes_no_dialog(
-                    title=lang.lang("cszp 簡単サッカー実行プログラム") + "/" + lang.lang("確認"),
-                    text="team1 path:" + team1 + "\n" +
-                         "team2 path:" + team2 + "\n" +
-                         "server arg:" + arg + "\n" +
-                         "server log:" + str(server) + "\n" +
-                         "player log:" + str(player) + "\n" +
-                         "csv log:" + str(csv_q) + "\n" +
-                         "synch mode:" + str(synch) + "\n" +
-                         lang.lang("\nEnterキーを押して続行...")).run():
+            elif (k == " " or k == "\n") and select == len(kantan_list) + 2:
+                ok = True
+                break
+            elif (k == " " or k == "\n") and select == len(kantan_list) + 1:
+                tmp = yesno(lang.lang("選択"), [lang.lang("csvログを保存しますか？")])
+                if tmp == 0:
+                    tmp = Input()
+                    tmp = tmp.Input("filename")
+                    if len(tmp.split(".")) == 1:
+                        tmp += ".csv"
+                    csv_save = tmp
+                else:
+                    csv_save = False
+            elif (k == " " or k == "\n") and select == len(kantan_list):
+                tmp = yesno(lang.lang("選択"), [lang.lang("synchモードで実行しますか？")])
+                if tmp == 0:
+                    synch = True
+                else:
+                    synch = False
+            elif (k == " " or k == "\n") and select > -1:
+                if select in selector:
+                    for i, j in enumerate(selector):
+                        if j == select:
+                            del selector[i]
+                            break
+                else:
+                    selector.append(select)
+        if ok:
+            print("\033[1;1H\033[0m\033[38;5;172m")
+            figlet("cszp " + v)
+            print("\033[0m")
+            table = []
+            tmp = [""]
+            for i in selector:
+                tmp.append(kantan_list[i])
+            table.append(tmp)
+            for i in selector:
+                table.append([kantan_list[i]] + [""] * len(selector))
+            for i in range(len(table)):
+                if i != 0:
+                    table[i][i] = "N/A"
+            tmp = []
+            for i in selector:
+                for j in selector:
+                    if kantan_cmd[i] != kantan_cmd[j] and not [kantan_cmd[j], kantan_cmd[i]] in tmp:
+                        tmp.append([kantan_cmd[i], kantan_cmd[j]])
+            tmp2 = []
+            for i in selector:
+                for j in selector:
+                    if kantan_cmd[i] != kantan_cmd[j] and not [kantan_list[j], kantan_list[i]] in tmp2:
+                        tmp2.append([kantan_list[i], kantan_list[j]])
+            # print(tmp)
+            data = module.Open("./config/config.conf")
+            datas = data.read().splitlines()
+            data.close()
+            datas = datas[0].split(",")
+            arg = "server::auto_mode=true server::kick_off_wait=20 server::game_over_wait=20 " \
+                  "server::connect_wait=2000 server::game_log_dir=" + datas[7] + " server::text_log_dir=" + datas[
+                      7] + " server::game_logging=" + (
+                          "true" * (datas[3] == "on") + "false" * (datas[3] == "off")) + " server::text_logging=" + (
+                          "true" * (datas[3] == "on") + "false" * (datas[3] == "off"))
+            # arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
+            #        "server::half_time=10"
+            s = [0, 1]
+            results = []
+            for i, j in zip(tmp, tmp2):
+                cuitools.reset()
+                print(Texttable().add_rows(table).draw() + "\n" + "━" * 50)
+                _ = soccer([i[0], i[1], arg], lang, 1, module, [False, False, False, synch],
+                           Input_, False, False, False)
+                result = _.get_result()
+                if len(result) == 0:
+                    table[s[0] + 1][s[1] + 1] = "Error"
+                else:
+                    tmp3 = result[0]
+                    tmp3[1] = table[s[0] + 1][0]
+                    tmp3[2] = table[0][s[1] + 1]
+                    results.append(tmp3)
+                    table[s[0] + 1][s[1] + 1] = str(result[0][3]) + "-" + str(result[0][4])
+                s[1] += 1
+                if s[1] > len(selector) - 1:
+                    s[0] += 1
+                    s[1] = 0
+                tmp3 = list(map(lambda n: n + 1, s))
+                while [j[1], j[0]] != [table[tmp3[0]][0], table[0][tmp3[1]]]:
+                    print([table[tmp3[0]][0], table[0][tmp3[1]]], [j[1], j[0]])
+                    tmp3[1] += 1
+                    if tmp3[1] > len(selector):
+                        tmp3[0] += 1
+                        tmp3[1] = 0
+                if len(result) == 0:
+                    table[tmp3[0]][tmp3[1]] = "Error"
+                else:
+                    table[tmp3[0]][tmp3[1]] = str(result[0][4]) + "-" + str(result[0][3])
 
-                arg += "server::auto_mode=true server::kick_off_wait=20 server::game_over_wait=20 " \
-                       "server::connect_wait=2000 " + "server::game_log_dir=" + \
-                       datas.split(",")[7] + " server::text_log_dir=" + datas.split(",")[
-                           7] + " server::game_logging=" + ("true" * (datas.split(",")[3] == "on") + "false" * (
-                        datas.split(",")[3] == "off")) + " server::text_logging=" + (
-                               "true" * (datas.split(",")[3] == "on") + "false" * (datas.split(",")[3] == "off"))
+                while s[1] <= s[0]:
+                    s[1] += 1
+                    if s[1] > len(selector):
+                        s[0] += 1
+                        s[1] = 0
+            if csv_save is not False:
+                with open(datas[7] + "/" + csv_save, "w") as f:
+                    f.write("\n".join(list(map(lambda n: ",".join(map(str, n)), results))))
+            cuitools.reset()
+            print("\033[1m\033[38;5;11m"+lang.lang("集計結果")+"\033[0m\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
+            tmp = []
+            for i in results:
+                if not i[1] in list(map(lambda n: n[0], tmp)):
+                    tmp.append([i[1], [0, 0, 0]])
+                for j, k in enumerate(tmp):
+                    if k[0] == i[1]:
+                        break
+                if i[3] > i[4]:
+                    tmp[j][1][0] += 1
+                elif i[3] < i[4]:
+                    tmp[j][1][1] += 1
+                else:
+                    tmp[j][1][2] += 1
 
-                if testmode:
-                    arg += " server::nr_normal_halfs=1 server::nr_extra_halfs=0 server::penalty_shoot_outs=0 " \
-                           "server::half_time=10"
-                soccer([team2, team1, arg], lang, loop, module, [server, player, csv_q, synch], Input)
-            else:
-                setting(lang, module, testmode, loopmode)
+                if not i[2] in list(map(lambda n: n[0], tmp)):
+                    tmp.append([i[2], [0, 0, 0]])
+                for j, k in enumerate(tmp):
+                    if k[0] == i[2]:
+                        break
+                if i[4] > i[3]:
+                    tmp[j][1][0] += 1
+                elif i[4] < i[3]:
+                    tmp[j][1][1] += 1
+                else:
+                    tmp[j][1][2] += 1
+            table = [["", "W", "D", "L", "Total"]]
+            for i in tmp:
+                table.append([i[0], i[1][0], i[1][1], i[1][2], i[1][0] - i[1][1]])
+            print("\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
+            Input_.Input(lang.lang("Enterキーを押して続行..."), dot=False)

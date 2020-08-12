@@ -7,6 +7,9 @@ Play a match
 テスト試合をする
 Play a test match
 
+総当り戦をする
+Play a round robin tournament
+
 設定をする
 Setting
 
@@ -108,6 +111,9 @@ Enter file name
 設定確認
 configuration check
 
+選択
+selection
+
 問題ない場合はYesを、終了したい場合はNoを選択してください。
 Select Yes if no problem, or No if you want to exit.
 
@@ -123,8 +129,8 @@ Select Team 2 (red) Team Path
 簡単サッカー実行リストから選択しますか？
 Do you want to select from the Easy soccer execution list?
 
-下のリストから選択してください。Spaceキーで選択できます。
-Please select from the list below. You can select with the SPACEBAR.
+簡単サッカー実行リストで設定した名前を指定（Tabで一覧が確認できます）
+Specify the name you set in the Easy Soccer Run List (you can see the list in the Tab)
 
 キャンセルを選択すると選択方法の変更・終了ができます。
 Select Cancel to change or end the selection method.
@@ -135,8 +141,20 @@ This function is not available because there are no teams on the Easy soccer exe
 settingコマンドでチームの追加ができます。詳しくはsettingコマンドを確認してください。
 You can add teams with the setting command. Check the setting command for more information.
 
-Cancelを押すとメニュー画面にもどります。
-Press Cancel to return to the menu screen.
+*テストモードで実行しています
+*You're running in test mode.
+
+サッカーを実行
+Run soccer
+
+サーバーの起動
+Start the server
+
+サーバーを起動させますか？
+Do you want to start the server?
+
+問題箇所があります。確認してください。
+There is a problem area. Please check.
 
 サーバーの引数を入力
 Enter server arguments
@@ -201,28 +219,11 @@ Running in synch mode
 synchモードで実行しますか？
 Run in synch mode?
 
-# ------ cszp_soccer.py ------
+総当たり戦をさせるチームを選択してください。
+Please select a team to play a round-robin game.
 
-プログラムログを保存しますか？ Y/n
-Do you want to save the program log? Y/n
-
-サーバーログを保存しますか？ Y/n
-Do you want to save the server log? Y/n
-
-試合の結果をcsvファイルに保存しますか？ Y/n
-Would you like to collect the results of the battle in a csv file? Y/n
-
-makeログを保存しますか? Y/n
-Do you want to save the make log? Y/n
-
-yまたはnで答えてください
-Please answer with y or n
-
-synch_modeで試合をしますか？ Y/n
-Do you play games with synch_mode? Y/n
-
-ERR:数字を入力してください
-ERR: Please enter a number
+集計結果
+aggregate results
 
 #------ cszp_plugin.py ------
 プラグインを選択
