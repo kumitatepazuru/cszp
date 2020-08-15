@@ -1,5 +1,6 @@
 # cszp Easy soccer execution program
 [![Build Status](https://travis-ci.org/kumitatepazuru/cszp.svg?branch=master)](https://travis-ci.org/kumitatepazuru/cszp)
+
 ![Logo](https://raw.githubusercontent.com/kumitatepazuru/cszp/master/logo.png)
 
 [日本語ページはこちら](https://github.com/kumitatepazuru/cszp/blob/master/README_jp.md)
