@@ -5,3 +5,4 @@ python:
   - "3.8"
 install:
   - pip install "pillow" "numpy" "texttable" "matplotlib" "pandas" "cuitools==1.7.2.6" "prompt-toolkit>3.0" "pyfiglet" "python-dateutil"
+  - python setup.py install
