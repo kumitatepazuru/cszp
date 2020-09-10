@@ -243,14 +243,16 @@ class soccer:
                         continue
 
                     print("\t\033[38;5;4m[INFO]\033[0mrcssserver stop.")
-                except (subprocess.CalledProcessError, EOFError, FileNotFoundError) as e:
+                except (subprocess.CalledProcessError, FileNotFoundError) as e:
                     print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"), e)
                     cszp_module.killsoccer(False)
                     error = 1
                     continue
-                except KeyboardInterrupt:
+                except (EOFError, KeyboardInterrupt):
                     cszp_module.killsoccer(False)
                     error = 1
+                    if not exit:
+                        raise KeyboardInterrupt
                     break
 
                 logs += "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S")
@@ -368,13 +370,19 @@ class soccer:
         return self.result_list
 
 
-def check_path(text):
+def check_path(text, module):
     if not os.path.isfile(text[1][1]):
-        text[1][2] = 0
+        if not text[1][1] in module.hogo:
+            text[1][2] = 0
+        else:
+            text[1][2] = 1
     else:
         text[1][2] = 1
     if not os.path.isfile(text[2][1]):
-        text[2][2] = 0
+        if not text[2][1] in module.hogo:
+            text[2][2] = 0
+        else:
+            text[2][2] = 1
     else:
         text[2][2] = 1
     if text[1][1] == text[2][1]:
@@ -526,11 +534,11 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                             tmp = tmp.Input(lang.lang("簡単サッカー実行リストで設定した名前を指定（Tabで一覧が確認できます）"),
                                             word=list(map(lambda n: n[1], datal)))
                             text[select][1] = "None"
-                            text = check_path(text)
+                            text = check_path(text, module)
                             for i in datal:
                                 if i[1] == tmp:
                                     text[select][1] = i[0]
-                                    text = check_path(text)
+                                    text = check_path(text, module)
                                     break
                     else:
                         if select == 1:
@@ -543,7 +551,7 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                             raise KeyboardInterrupt
                         else:
                             text[select][1] = tmp
-                            text = check_path(text)
+                            text = check_path(text, module)
                 elif select == 4:
                     tmp = Input()
                     text[select][1] = tmp.Input(lang.lang("サーバーの引数を入力（ない場合は空欄）"))
@@ -837,8 +845,11 @@ def rrt(lang, module, Input_):
                 figlet("cszp " + v)
                 print("\033[0m")
                 print(Texttable().add_rows(table).draw() + "\n" + "━" * 50)
-                _ = soccer([i[0], i[1], arg], lang, 1, module, [False, False, False, synch],
-                           Input_, False, False, False)
+                try:
+                    _ = soccer([i[0], i[1], arg], lang, 1, module, [False, False, False, synch],
+                               Input_, False, False, False)
+                except KeyboardInterrupt:
+                    break
                 result = _.get_result()
                 if len(result) == 0:
                     table[s[0] + 1][s[1] + 1] = "Error"
@@ -876,7 +887,8 @@ def rrt(lang, module, Input_):
             print("\033[1;1H\033[0m\033[38;5;172m")
             figlet("cszp " + v)
             print("\033[0m")
-            print("\033[1m\033[38;5;11m"+lang.lang("集計結果")+"\033[0m\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
+            print("\033[1m\033[38;5;11m" + lang.lang("集計結果") + "\033[0m\n" + "━" * 50 + "\n" + Texttable().add_rows(
+                table).draw())
             tmp = []
             for i in results:
                 if not i[1] in list(map(lambda n: n[0], tmp)):
@@ -905,5 +917,5 @@ def rrt(lang, module, Input_):
             table = [["", "W", "D", "L", "Total"]]
             for i in tmp:
                 table.append([i[0], i[1][0], i[1][2], i[1][1], i[1][0] - i[1][1]])
-            print("\n"+"━"*50+"\n"+Texttable().add_rows(table).draw())
+            print("\n" + "━" * 50 + "\n" + Texttable().add_rows(table).draw())
             Input_.Input(lang.lang("Enterキーを押して続行..."), dot=False)

@@ -112,7 +112,7 @@ def menu(lang, module, Input):
             Input(lang.lang("Enterキーを押して続行..."))
         menu(lang, module, Input)
     elif inp == "plugin":
-        tmp = cszp_plugin.plugin(lang)
+        tmp = cszp_plugin.plugin(module,lang)
         if tmp is not None:
             menu(tmp, module, Input)
         else:

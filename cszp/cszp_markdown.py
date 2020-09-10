@@ -2,7 +2,7 @@ import pygments.util
 import cuitools
 import shutil
 import numpy as np
-import mistune
+from . import mistune
 from PIL import Image
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name

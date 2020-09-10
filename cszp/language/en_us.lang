@@ -107,6 +107,9 @@ Specify the number of loops
 ファイル名を入力してください
 Enter file name
 
+ERR:削除しようとしているリストの項目は保護されています。
+ERR:The item in the list you are trying to delete is protected.
+
 #-------- cszp_soccer ---------
 設定確認
 configuration check
@@ -270,6 +273,45 @@ added
 
 正常にプラグインが追加されました。
 The plug-in was successfully added.
+
+バイナリファイルデータの追加・変更
+Add or change binary file data
+
+必要なデータをダウンロード中...
+I'm downloading all the data I need...
+
+この機能を使用するにはネットワーク接続が必要です。
+A network connection is required to use this feature.
+
+以下のサイトににアクセスできるかどうか確認してください。
+Please make sure you have access to the following sites.
+
+前ページへ戻る
+Return to previous page
+
+インストール済み
+installed
+
+選手一覧
+Player List
+
+未インストール
+not installed
+
+インストールする
+install now
+
+これには数分~数十分かかることがあります。
+This can take a few minutes to a few dozen minutes.
+
+データをコピー中...
+Copying data...
+
+データを解凍中...
+Extracting data...
+
+この機能を使用するにはunzipをインストールする必要があります。
+You will need to install unzip to use this feature.
 
 # ------ その他 ------
 

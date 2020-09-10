@@ -72,10 +72,13 @@ def setting(lang, module, Input):
             data.close()
             i = 0
             try:
-                while datas[i] != inp.split(" ")[1]:
-                    i += 2
-                if i < 2:
+                try:
+                    while datas[i] != inp.split(" ")[1]:
+                        i += 2
+                except:
                     raise TypeError("data_ERROR")
+                if datas[i+1] in module.hogo:
+                    raise AttributeError("protected")
                 del datas[i:i + 2]
                 datat = datas
                 datas = ""
@@ -88,6 +91,9 @@ def setting(lang, module, Input):
             except TypeError:
                 print("\033[38;5;9m" + lang.lang("ERR:名前"), inp.split(" ")[1], lang.lang(
                     "は簡単サッカー実行リストに登録されていません。\nタイプミスを確認してください"))
+                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+            except AttributeError:
+                print("\033[38;5;9m" + lang.lang("ERR:削除しようとしているリストの項目は保護されています。"))
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
             setting(lang, module, Input)
 

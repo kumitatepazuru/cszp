@@ -65,6 +65,9 @@ def main():
     if not os.path.isdir("plugins"):
         print("\033[38;5;4m[INFO]\033[0mCreate directory: plugins")
         os.mkdir("plugins")
+    if not os.path.isdir("teams"):
+        print("\033[38;5;4m[INFO]\033[0mCreate directory: teams")
+        os.mkdir("teams")
 
     # main
 

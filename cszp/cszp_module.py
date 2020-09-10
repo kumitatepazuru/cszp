@@ -3,6 +3,9 @@ import os
 import shutil
 import subprocess
 import sys
+from io import StringIO
+
+import cuitools
 from pyfiglet import Figlet
 from importlib import import_module
 
@@ -12,6 +15,8 @@ from prompt_toolkit.lexers import Lexer
 from prompt_toolkit.completion import WordCompleter
 
 from cszp import cszp_lang
+import requests
+from tqdm import tqdm
 
 
 def figlet(text, font="larry3d"):
@@ -81,15 +86,20 @@ class Open:
                       os.path.expanduser("~") + "/csvdata",
             "setting": "name,command"
         }
+        self.hogo = json.load(open("config/hogo.json"))
+        with open("config/plus.txt") as f:
+            self.plus = f.read()
 
-    def Open(self, file):
+    def Open(self, file,mode="r"):
         if os.path.isfile(file):
-            data = open(file, "r")
+            data = open(file, mode)
         else:
             data = open(file, "w")
             data.write(self.writelist[os.path.splitext(os.path.basename(file))[0]])
             data.close()
             data = open(file, "r")
+        if os.path.splitext(os.path.basename(file))[0] == "setting":
+                data = StringIO(data.read() + self.plus)
         return data
 
 
@@ -154,3 +164,37 @@ class terminal(cszp_lang.lang):
         for i in plugin_list[1]:
             plugin = import_module(i)
             plugin.autostart(lang)
+
+
+def download_files_progress(lang, file_urls):
+    for url in file_urls:
+        file_url = url
+        try:
+            res = requests.get(file_url, stream=True)
+        except requests.exceptions.ConnectionError:
+            cuitools.box("エラー", [lang.lang("この機能を使用するにはネットワーク接続が必要です。"),
+                                 lang.lang("以下のサイトににアクセスできるかどうか確認してください。"), "https://raw.githubusercontent.com/",
+                                 lang.lang("Enterキーを押して続行...")])
+            k = ""
+            while k != "\n":
+                k = cuitools.Key()
+            break
+        file_size = int(res.headers.get('content-length', 0))
+        pbar = tqdm(total=file_size, unit="B", unit_scale=True)
+        with open("/tmp/" + url.split("/")[-1], 'wb') as file:
+            for chunk in res.iter_content(chunk_size=1024):
+                file.write(chunk)
+                pbar.update(len(chunk))
+            pbar.close()
+
+
+def download_file_mem(lang, file_url):
+    try:
+        return requests.get(file_url).text
+    except requests.exceptions.ConnectionError:
+        cuitools.box("エラー", [lang.lang("この機能を使用するにはネットワーク接続が必要です。"),
+                             lang.lang("以下のサイトににアクセスできるかどうか確認してください。"), "https://raw.githubusercontent.com/",
+                             lang.lang("Enterキーを押して続行...")])
+        k = ""
+        while k != "\n":
+            k = cuitools.Key()

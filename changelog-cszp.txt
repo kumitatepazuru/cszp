@@ -1,5 +1,12 @@
 change log
 
+var 5.2.0:
+Modification place:
+    Fixed bugs.
+
+Additional elements:
+    With the author's permission, we have incorporated some of the team binaries from the unofficial 2020 tournament in Japan. It can be called up from the Easy Soccer Run List.
+
 var 5.0.1:
 Modification place:
     Fixed bugs.
