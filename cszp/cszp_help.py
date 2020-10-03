@@ -1,5 +1,5 @@
 import cuitools
-from cszp import to256_window
+from cszp.cszp_markdown import to256_window
 
 
 

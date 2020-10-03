@@ -122,7 +122,7 @@ def plugin(module, lang):
                                 with zipfile.ZipFile("/tmp/" + folder_list[num] + ".zip") as existing_zip:
                                     existing_zip.extractall("/tmp")
                                 try:
-                                    cmd = ["unzip", "-uqd", "/tmp", "/tmp/" + folder_list[num] + ".zip"]
+                                    cmd = ["unzip", "-od", "/tmp", "/tmp/" + folder_list[num] + ".zip"]
                                     print(" ".join(cmd))
                                     subprocess.check_call(cmd)
                                 except FileNotFoundError:
