@@ -67,7 +67,7 @@ setup(
     entry_points="""
       # -*- Entry points: -*-
       [console_scripts]
-      cszp = cszp.__init__:main
+      cszp = cszp.__init__:run
     """,
     package_data={"cszp": cszp_files}
 )

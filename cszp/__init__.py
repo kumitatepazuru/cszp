@@ -1,4 +1,36 @@
 def main():
+    print("\033[38;5;2mloading Now...")
+    import os
+    print("1/12")
+    import subprocess
+    print("\033[1A2/12")
+    import sys
+    print("\033[1A3/12")
+    sys.path.append(os.getcwd())
+    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    import json
+    print("\033[1A4/12")
+    import locale
+    print("\033[1A5/12")
+    import platform
+    print("\033[1A6/12")
+    import shutil
+    print("\033[1A7/12")
+    from cszp.cszp_module import Open, terminal, figlet
+    print("\033[1A8/12")
+    from cszp.cszp_markdown import to256_window
+    print("\033[1A9/12")
+    from cszp import cszp_menu
+    print("\033[1A10/12")
+    import cuitools as subp
+    print("\033[1A11/12")
+    import cszp.cszp_module
+    print("\033[1A12/12")
+    subp.reset()
+    print("\033[1;1H\033[0m\033[38;5;172m")
+    ver = open("./version")
+    figlet("cszp " + ver.read())
+    module = Open()
     # noinspection PyBroadException
     print("")
     if int(sys.version_info[0]) == 3 and int(sys.version_info[1]) >= 6 and int(sys.version_info[2]) >= 1:
@@ -79,38 +111,6 @@ def main():
 
 
 if __name__ == '__main__':
-    print("\033[38;5;2mloading Now...")
-    import os
-    print("1/12")
-    import subprocess
-    print("\033[1A2/12")
-    import sys
-    print("\033[1A3/12")
-    sys.path.append(os.getcwd())
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
-    import json
-    print("\033[1A4/12")
-    import locale
-    print("\033[1A5/12")
-    import platform
-    print("\033[1A6/12")
-    import shutil
-    print("\033[1A7/12")
-    from cszp.cszp_module import Open, terminal, figlet
-    print("\033[1A8/12")
-    from cszp.cszp_markdown import to256_window
-    print("\033[1A9/12")
-    from cszp import cszp_menu
-    print("\033[1A10/12")
-    import cuitools as subp
-    print("\033[1A11/12")
-    import cszp.cszp_module
-    print("\033[1A12/12")
-    subp.reset()
-    print("\033[1;1H\033[0m\033[38;5;172m")
-    ver = open("./version")
-    figlet("cszp " + ver.read())
-    module = Open()
     main()
 else:
     print("\033[38;5;4m[OK]\tThank you for using cszp.")
