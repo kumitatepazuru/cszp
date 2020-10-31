@@ -1,12 +1,41 @@
-import os
-import shutil
 import subprocess
 import sys
 from importlib import import_module, reload
 
 import cuitools as subp
 from texttable import *
-from cszp.cszp_module import figlet
+from cszp.cszp_module import figlet, error_dump
+import logging
+
+
+def write_conf(datas):
+    logger = logging.getLogger("write_conf")
+    datat = datas
+    datas = ""
+    for i in datat:
+        datas += i + ","
+    datas = datas[:-1]
+    logger.debug("write_data " + datas)
+    data = open("./config/config.conf", "w")
+    data.write(datas)
+    logging.info("saved")
+    data.close()
+
+
+def draw_table(data):
+    logger = logging.getLogger("draw_table")
+    datas = data.read()
+    data.close()
+    datas = datas.split(",")
+    datal = []
+    for i in range(0, len(datas), 2):
+        datat = []
+        datat += datas[i:i + 2]
+        datal.append(datat)
+    table = Texttable()
+    table.add_rows(datal)
+    logger.debug(table.draw())
+    print(table.draw() + "\n\n")
 
 
 def setting(lang, module, Input):
@@ -22,32 +51,12 @@ def setting(lang, module, Input):
         print("\n\033[38;5;39m" + lang.lang("簡単サッカー実行リスト"))
         # noinspection PyBroadException
         data = module.Open("./config/setting.conf")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\n\n")
+        draw_table(data)
 
         print("\033[38;5;39m" + lang.lang("設定"))
         # noinspection PyBroadException
         data = module.Open("./config/config.conf")
-        datas = data.read()
-        data.close()
-        datas = datas.split(",")
-        datal = []
-        for i in range(0, len(datas), 2):
-            datat = []
-            datat += datas[i:i + 2]
-            datal.append(datat)
-        table = Texttable()
-        table.add_rows(datal)
-        print(table.draw() + "\n\n")
+        draw_table(data)
 
         q = lang.question("setting", "※  注 [文字列] は引数を表します。 文字列は引数名です。")
         inp = Input.Input(q[0], dot=False, normal=False, word=q[1])
@@ -75,9 +84,9 @@ def setting(lang, module, Input):
                 try:
                     while datas[i] != inp.split(" ")[1]:
                         i += 2
-                except:
+                except IndexError:
                     raise TypeError("data_ERROR")
-                if datas[i+1] in module.hogo:
+                if datas[i + 1] in module.hogo:
                     raise AttributeError("protected")
                 del datas[i:i + 2]
                 datat = datas
@@ -109,14 +118,7 @@ def setting(lang, module, Input):
             else:
                 print("\033[38;5;9m" + lang.lang("ERR:使える引数はONまたはOFFです。\nタイプミスを確認してください"))
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            datat = datas
-            datas = ""
-            for i in datat:
-                datas += i + ","
-            datas = datas[:len(datas) - 1]
-            data = open("./config/config.conf", "w")
-            data.write(datas)
-            data.close()
+            write_conf(datas)
             setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "rcg":
@@ -131,14 +133,7 @@ def setting(lang, module, Input):
             else:
                 print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            datat = datas
-            datas = ""
-            for i in datat:
-                datas += i + ","
-            datas = datas[:len(datas) - 1]
-            data = open("./config/config.conf", "w")
-            data.write(datas)
-            data.close()
+            write_conf(datas)
             setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "rcl":
@@ -153,14 +148,7 @@ def setting(lang, module, Input):
             else:
                 print("\033[38;5;9mERR:使える引数はONまたはOFFです。\nタイプミスを確認してください")
                 Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
-            datat = datas
-            datas = ""
-            for i in datat:
-                datas += i + ","
-            datas = datas[:len(datas) - 1]
-            data = open("./config/config.conf", "w")
-            data.write(datas)
-            data.close()
+            write_conf(datas)
             setting(lang, module, Input)
 
         elif inp.split(' ')[0] == "fileout":
@@ -169,14 +157,7 @@ def setting(lang, module, Input):
             datas = datas.split(",")
             data.close()
             datas[7] = inp.split(" ")[1]
-            datat = datas
-            datas = ""
-            for i in datat:
-                datas += i + ","
-            datas = datas[:len(datas) - 1]
-            data = open("./config/config.conf", "w")
-            data.write(datas)
-            data.close()
+            write_conf(datas)
             setting(lang, module, Input)
         else:
             sys.path.append(lang.functo("setting", inp)[0][0])
@@ -185,22 +166,7 @@ def setting(lang, module, Input):
             try:
                 plugin.plugin(lang, inp)
             except Exception:
-                import traceback
-                temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
-                file = open("./errorlog.log", "w")
-                temp += "---------- error log ----------\n" + traceback.format_exc() + "\n"
-                temp += "---------- computer information ----------\nwhich python3 : " + shutil.which(
-                    'python3') + "\n" + "\n".join(map(lambda n: "=".join(n), list(os.environ.items())))
-                temp += "\n\n---------- file list ----------\n" + subprocess.check_output("ls -al", shell=True).decode(
-                    "utf-8")
-                file.write(temp)
-                file.close()
-                print("\033[0m")
-                subp.box(lang.lang("エラー"), [temp.splitlines()[0], lang.lang("ログを確認してください"), "",
-                                            os.getcwd() + "/errorlog.log", "", lang.lang("Enterキーを押して続行...")])
-                k = ""
-                while k != "\n":
-                    k = subp.Key()
+                error_dump(lang, "PLUGIN ERROR")
             setting(lang, module, Input)
     except IndexError:
         print("\033[38;5;9m" + lang.lang("ERR:引数がありません。タイプミスを確認してください"))

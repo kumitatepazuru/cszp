@@ -3,14 +3,17 @@ import platform
 import shutil
 import subprocess
 import sys
+import logging
 from importlib import import_module, reload
 
 import cuitools as subp
 
-from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module, cszp_help
+from cszp import colortest, cszp_plugin, cszp_setting, cszp_soccer, cszp_module
+from cszp.cszp_module import error_dump
 
 
 def menu(lang, module, Input):
+    logger = logging.getLogger("menu")
     cszp_module.killsoccer()
     inp = ""
     subp.reset()
@@ -24,36 +27,54 @@ def menu(lang, module, Input):
         q = lang.question("menu")
         inp = Input.Input(q[0], dot=False, normal=False, word=q[1])
         if not lang.searchcmd("menu", inp):
+            logger.warning(lang.lang("ERR:そのようなコマンドはありません。"))
             print("\033[38;5;9m" + lang.lang("ERR:そのようなコマンドはありません。"))
             Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
     if inp == "exit":
         pass
     elif inp == "colortest":
+        logger.info("select colortest")
         colortest.colortest()
+        logger.info("printed colortest")
         Input.Input(lang.lang("Enterキーを押して続行..."))
         menu(lang, module, Input)
     elif inp == "setting":
-        cszp_setting.setting(lang, module,Input)
+        logger.info("select setting")
+        cszp_setting.setting(lang, module, Input)
+        logger.info("exited setting")
         menu(lang, module, Input)
     elif inp == "reset":
-        data = open("./config/setting.conf", "w")
-        data.write("name,command")
-        data.close()
+        logger.info("select reset")
+        os.remove("./config/*")
+        shutil.rmtree("plugins")
+        shutil.rmtree("teams")
+        logger.info("reseted")
         Input.Input(lang.lang("\n\nリセットが完了しました。\nEnterキーを押して続行..."), dot=False, textcolor="#fdb100")
+        logger.info("exited reset")
         menu(lang, module, Input)
     elif inp == "test":
-        cszp_soccer.setting(lang,testmode=True, module=module, Input_=Input)
+        logger.info("select test")
+        cszp_soccer.setting(lang, testmode=True, module=module, Input_=Input)
+        logger.info("exited test")
         menu(lang, module, Input)
     elif inp == "start":
-        cszp_soccer.setting(lang, module=module,Input_=Input)
+        logger.info("select start")
+        cszp_soccer.setting(lang, module=module, Input_=Input)
+        logger.info("exited start")
         menu(lang, module, Input)
     elif inp == "rrt":
+        logger.info("select rrt")
         cszp_soccer.rrt(lang, module=module, Input_=Input)
+        logger.info("exited rrt")
         menu(lang, module, Input)
     elif inp == "lang":
         terminal_size = shutil.get_terminal_size()
         printtext = ["Select Language"]
         select = 0
+        logger.info("select lang")
+        logger.info("list " + str(lang.lang_list))
+        logger.info("length " + str(len(lang.lang_list)))
+        logger.info("enable lang name " + lang.enable_lang_name)
         for i in range(len(lang.lang_list)):
             if lang.lang_list[str(i)] == lang.enable_lang:
                 select = i
@@ -97,27 +118,40 @@ def menu(lang, module, Input):
         langf.write(str(select))
         langf.close()
         lang = cszp_module.terminal(noenter=True)
+        logger.info("reloaded")
+        logger.info("select lang name " + lang.enable_lang_name)
         lang.autostart(lang)
+        logger.info("autostart executed")
+        logger.info("exited lang")
         menu(lang, module, Input)
     elif inp == "loop":
+        logger.info("select loop")
         cszp_soccer.setting(lang, loopmode=True, module=module, Input_=Input)
+        logger.info("exited loop")
         menu(lang, module, Input)
     elif inp == "server":
+        logger.info("select server")
         print(lang.lang("Ctrl+Cで閲覧を終了します。"))
         try:
+            logger.info("call", "cd html_logs/ && python3 -m http.server 20000")
             subprocess.check_call("cd html_logs/ && python3 -m http.server 20000", shell=True)
         except KeyboardInterrupt:
             pass
-        except subprocess.CalledProcessError:
+        except subprocess.CalledProcessError as e:
+            logger.warning(e)
             Input(lang.lang("Enterキーを押して続行..."))
+        logger.info("exited server")
         menu(lang, module, Input)
     elif inp == "plugin":
-        tmp = cszp_plugin.plugin(module,lang)
+        logger.info("select plugin")
+        tmp = cszp_plugin.plugin(module, lang)
+        logger.info("exited plugin")
         if tmp is not None:
             menu(tmp, module, Input)
         else:
             menu(lang, module, Input)
     elif inp == "about":
+        logger.info("select about")
         print("\033[0m")
         v = open("./version")
         vd = v.read().splitlines()[0]
@@ -136,40 +170,31 @@ def menu(lang, module, Input):
             "PYTHON-IMPLEMENTATION:" + platform.python_implementation()
         ]
         subp.printlist("about cszp", printtext)
-        menu(lang, module, Input)
-    elif inp == "help":
-        cszp_help.Help(lang)
+        logger.info("exited about")
         menu(lang, module, Input)
     elif inp == "window":
+        logger.info("select window")
         try:
+            logger.info("call soccerwindow2")
             subprocess.check_call("soccerwindow2")
         except KeyboardInterrupt:
             pass
-        except subprocess.CalledProcessError:
+        except subprocess.CalledProcessError as e:
+            logger.warning(e)
             Input(lang.lang("Enterキーを押して続行..."))
+        logger.info("exited window")
         menu(lang, module, Input)
     else:
+        logger.info("select other")
         sys.path.append(lang.functo("menu", inp)[0][0])
         plugin = import_module(lang.functo("menu", inp)[1][0])
         reload(plugin)
+        logger.info("reload plugin module")
         try:
+            logger.info("start plugin mode")
             plugin.plugin(lang, inp)
+            logger.info("exited plugin mode")
         except Exception:
-            import traceback
-            temp = "PLUGIN ERROR\ncszp=" + open("version").read() + "\n"
-            file = open("./errorlog.log", "w")
-            temp += "---------- error log ----------\n" + traceback.format_exc() + "\n"
-            temp += "---------- computer information ----------\nwhich python3 : " + shutil.which(
-                'python3') + "\n" + "\n".join(map(lambda n: "=".join(n), list(os.environ.items())))
-            temp += "\n\n---------- file list ----------\n" + subprocess.check_output("ls -al", shell=True).decode(
-                "utf-8")
-            file.write(temp)
-            file.close()
-            print("\033[0m")
-            subp.box(lang.lang("エラー"),
-                     [temp.splitlines()[0], lang.lang("ログを確認してください"), "", os.getcwd() + "/errorlog.log", "",
-                      lang.lang("Enterキーを押して続行...")])
-            k = ""
-            while k != "\n":
-                k = subp.Key()
+            error_dump(lang, "PLUGIN ERROR")
+        logger.info("exited other")
         menu(lang, module, Input)

@@ -1,4 +1,6 @@
 import json
+import locale
+import logging
 import os
 import shutil
 import subprocess
@@ -6,6 +8,7 @@ import sys
 from io import StringIO
 
 import cuitools
+import cuitools as subp
 from pyfiglet import Figlet
 from importlib import import_module
 
@@ -90,7 +93,7 @@ class Open:
         with open("config/plus.txt") as f:
             self.plus = f.read()
 
-    def Open(self, file,mode="r"):
+    def Open(self, file, mode="r"):
         if os.path.isfile(file):
             data = open(file, mode)
         else:
@@ -99,7 +102,7 @@ class Open:
             data.close()
             data = open(file, "r")
         if os.path.splitext(os.path.basename(file))[0] == "setting":
-                data = StringIO(data.read() + self.plus)
+            data = StringIO(data.read() + self.plus)
         return data
 
 
@@ -198,3 +201,18 @@ def download_file_mem(lang, file_url):
         k = ""
         while k != "\n":
             k = cuitools.Key()
+
+
+def error_dump(lang, ERR_TYPE="CSZP PROGRAM ERROR",e=False):
+    logger = logging.getLogger("error_dump")
+    import traceback
+    logger.error(ERR_TYPE)
+    logger.error(traceback.format_exc())
+    print("\033[0m")
+    with open("logs/cszp_log.log") as f:
+        print(f.read())
+    print(lang.lang("ログを確認してください")+"\n"+os.getcwd() + "/logs/cszp_log.log\n"+"-"*50)
+    if e:
+        raise SystemError
+    else:
+        subp.Key()

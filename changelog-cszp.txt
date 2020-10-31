@@ -1,4 +1,18 @@
 change log
+var 5.4.0.1:
+Modification place:
+    Fixed bugs.
+
+Additional elements:
+    None
+
+var 5.4.0:
+Modification place:
+    Fixed bugs.
+    Enhanced API functionality.
+
+Additional elements:
+    You can now remove team plugins.
 
 var 5.2.0:
 Modification place:

@@ -1,5 +1,6 @@
 import glob
 import json
+import logging
 import os
 import shutil
 import subprocess
@@ -27,6 +28,7 @@ def gen_rand_str_hex(length):
 
 
 def plugin(module, lang):
+    logger = logging.getLogger("plugin")
     print("\033[0m")
     select = cuitools.printlist(lang.lang("プラグインを選択"), plugin_text(lang, "name") + [
         lang.lang("バイナリファイルデータの追加・変更"), lang.lang("プラグインを追加"), lang.lang("前ページへ戻る(ホーム)")])
@@ -89,6 +91,7 @@ def plugin(module, lang):
                                 text="download URL:" + url_list[num] + "\n" + lang.lang("インストール済み"),
                                 buttons=[
                                     (lang.lang('前ページへ戻る'), True),
+                                    (lang.lang("削除する"), False),
                                     (lang.lang("選手一覧"), None)
                                 ]
                             ).run()
@@ -98,6 +101,47 @@ def plugin(module, lang):
                                 cuitools.reset()
                                 print("\n".join(json.loads(cszp_module.download_file_mem(lang, team_data_list[num]))))
                                 input(lang.lang("Enterキーを押して続行..."))
+                            else:
+                                cuitools.reset()
+                                logger.info("removing " + folder_list[num])
+                                print(lang.lang("削除中です..."))
+                                with open("./config/" + folder_list[num]) as fl:
+                                    id = fl.read().splitlines()[0]
+                                    with open("config/hogo.json") as F:
+                                        data = json.load(F)
+                                        js = []
+                                        for i in data:
+                                            logger.debug(i + " " + str(i.find(id)))
+                                            if i.find(id) == -1:
+                                                js.append(i)
+                                    with open("config/hogo.json", "w") as i:
+                                        json.dump(js, i)
+                                    shutil.rmtree("teams/"+id)
+                                os.remove("./config/" + folder_list[num])
+                                logger.debug(id)
+                                with module.Open("config/plus.txt") as f:
+                                    p = []
+                                    for i,j in enumerate(f.read()[1:].split(",")):
+                                        if i%2 == 0:
+                                            p.append([j])
+                                        else:
+                                            p[-1].append(j)
+                                    logger.debug(p)
+                                    j = 0
+                                    while j < len(p):
+                                        i = p[j]
+                                        logger.debug(f"{j} {i} {i[1].find(id)}")
+                                        if i[1].find(id) != -1:
+                                            del p[j]
+                                        else:
+                                            j += 1
+                                with module.Open("config/plus.txt", "w") as f:
+                                    logger.debug(","+",".join(list(map(lambda n:n[0]+","+n[1],p))))
+                                    tmp = ",".join(list(map(lambda n:n[0]+","+n[1],p)))
+                                    if len(tmp) != 0:
+                                        f.write(","+tmp)
+                                logger.info("removed.")
+                                input("\n" + lang.lang("Enterキーを押して続行..."))
                         else:
                             result = button_dialog(
                                 title=lang.lang("詳細情報") + "/" + text_list[num],
@@ -160,6 +204,8 @@ def plugin(module, lang):
                                 for i in tqdm(
                                         glob.glob("/tmp/Soccer-binary-files-for-cszp-" + folder_list[num] + "/libs/*")):
                                     shutil.copy(i, "teams/" + h + "/libs")
+                                shutil.copy("/tmp/Soccer-binary-files-for-cszp-" + folder_list[num] + "/hogo.json",
+                                            "teams/" + h)
                                 with open("config/" + folder_list[num], "w") as f:
                                     f.write(h)
                                 # module = cszp_module.Open()

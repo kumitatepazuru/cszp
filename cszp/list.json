@@ -51,11 +51,6 @@
       "cmd": "about"
     },
     {
-      "title": "help",
-      "description": "cszpの使い方を表示する",
-      "cmd": "help"
-    },
-    {
       "title": "window",
       "description": "soccerwindow2を起動する",
       "cmd": "window"

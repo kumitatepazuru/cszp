@@ -82,3 +82,8 @@ class lang:
             else:
                 after.append("")
         return "\n".join(after)
+
+
+class fake_lang:
+    def lang(self, text):
+        return text

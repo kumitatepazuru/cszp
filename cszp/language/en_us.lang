@@ -229,6 +229,12 @@ Please select a team to play a round-robin game.
 aggregate results
 
 #------ cszp_plugin.py ------
+削除する
+remove
+
+Removing...
+削除中です...
+
 プラグインを選択
 select plugin
 

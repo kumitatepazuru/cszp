@@ -1,10 +1,15 @@
 import csv
+import json
+import locale
+import logging
 import os
 import shutil
 import socketserver
 import subprocess
+import sys
 import threading
 import time
+from concurrent.futures.thread import ThreadPoolExecutor
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler
 from io import StringIO, BytesIO
@@ -18,15 +23,69 @@ from dateutil.relativedelta import relativedelta
 from prompt_toolkit.shortcuts import yes_no_dialog
 from texttable import Texttable
 
+from cszp import cszp_lang
 from cszp import cszp_log
 from cszp import cszp_module
-from cszp.cszp_module import figlet, Input
+from cszp.cszp_module import figlet, Input, Open
 
 matplotlib.use('Agg')
 
 
+def err(proc):
+    return proc.stderr.readline()
+
+
+def run_and_capture(name, cmd):
+    # ここでプロセスが (非同期に) 開始する.
+    logger = logging.getLogger("run_and_capture")
+    proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    buf_out = []
+    buf_err = []
+    print("\033[38;5;4m[INFO]\033[0m" + name + " start.")
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        e = executor.submit(err, proc)
+        while True:
+            # バッファから1行読み込む.
+            line = proc.stdout.readline()
+            buf_out.append(line)
+            if e.cancel():
+                r = e.result()
+                e = executor.submit(err, proc)
+                if len(r) != 0:
+                    try:
+                        sys.stderr.write(
+                            "\033[38;5;3m[WARNING]\033[0m\033[38;5;10m[" + name + "] \033[0m" + r.decode("utf-8"))
+                        logger.warning("[" + name + "] \033[0m" + r.decode("utf-8"))
+                        buf_err.append(r)
+                    except UnicodeDecodeError as e:
+                        print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
+                        logger.warning(str(e))
+                        sys.stderr.write(
+                            "\033[38;5;3m[WARNING]\033[0m\033[38;5;10m[" + name + "] \033[0m" + r.decode("utf-8",
+                                                                                                         "replace"))
+                        logger.warning("[" + name + "] \033[0m" + r.decode("utf-8", "replace"))
+            if len(line) != 0:
+                try:
+                    sys.stdout.write("\033[38;5;4m[INFO]\033[38;5;10m[" + name + "] \033[0m" + line.decode("utf-8"))
+                    logger.info("[" + name + "] \033[0m" + line.decode("utf-8"))
+                except UnicodeDecodeError as e:
+                    print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
+                    logger.warning(str(e))
+                    sys.stdout.write(
+                        "\033[38;5;4m[INFO]\033[38;5;10m[" + name + "] \033[0m" + line.decode("utf-8", "replace"))
+                    logger.info("[" + name + "] \033[0m" + line.decode("utf-8", "replace"))
+                sys.stdout.flush()
+
+            # バッファが空 + プロセス終了.
+            if not line and proc.poll() is not None:
+                break
+
+    print("\033[38;5;4m[INFO]\033[0m" + name + " stop.")
+    return b''.join(buf_out), b''.join(buf_err), proc
+
+
 class soccerHTTPServer_Handler(BaseHTTPRequestHandler):
-    def log_message(self, format, *args):
+    def log_message(self, _, *args):
         return
 
     def do_GET(self):
@@ -38,7 +97,7 @@ class soccerHTTPServer_Handler(BaseHTTPRequestHandler):
                 with open("./html/index.html") as f:
                     self.wfile.write(f.read().encode("utf-8"))
             except FileNotFoundError as e:
-                print("\t\033[38;5;3m[WARNING]", e)
+                print("\033[38;5;3m[WARNING]", e)
                 self.wfile.write("404 Not Found!".encode("utf-8"))
 
         elif self.path == "/html.csv":
@@ -128,14 +187,31 @@ class soccer:
         try:
             socketserver.TCPServer.allow_reuse_address = True
             self.httpd = socketserver.ThreadingTCPServer(("", PORT), Handler)
-            print("\t\033[38;5;10m\033[1m[OK]\033[0mThe web server has been started. Port:", PORT)
+            print("\033[38;5;10m\033[1m[OK]\033[0mThe web server has been started. Port:", PORT)
             self.httpd.serve_forever()
         except OSError as e:
-            print("\t\033[38;5;3m[WARNING]\033[0mCould not start web server port", PORT, ":" + str(e))
+            print("\033[38;5;3m[WARNING]\033[0mCould not start web server port", PORT, ":" + str(e))
             time.sleep(5)
             self.server()
 
     def __init__(self, cmd, lang, loop, module, logs2, Input, s_start, reset=True, exit=True):
+        sys.path.append(os.getcwd())
+        os.chdir(os.path.abspath(os.path.dirname(__file__)))
+        if module is None:
+            module = cszp_module.Open()
+        if lang is None:
+            if not os.path.isfile("lang"):
+                file = open("language/lang.json")
+                lang_list = json.load(file)
+                file.close()
+                langf = open("lang", "w")
+                langn = [k for k, n in lang_list.items() if n == locale.getlocale()[0].lower() + ".lang"]
+                if len(langn) == 1:
+                    langf.write(langn[0])
+                else:
+                    langf.write("1")
+                langf.close()
+            lang = cszp_lang.lang()
         global result
         result = ""
         self.result_list = []
@@ -146,7 +222,7 @@ class soccer:
         wc = "soccerwindow2 > /dev/null 2>&1"
         if logs2[3]:
             sc += " server::synch_mode=true"
-        print("\t\033[1m\033[38;5;172m" + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
+        print("\033[1m\033[38;5;172m" + datetime.now().strftime("%Y/%m/%d %H:%M:%S"))
         print("\033[38;5;2mTeam1-CMD : " + cmd[0])
         print("Team2-CMD : " + cmd[1])
         print("\033[38;5;2mSERVER-CMD : " + sc)
@@ -160,11 +236,11 @@ class soccer:
 
         try:
             for i in range(loop):
-                print("\t\033[38;5;4m[INFO]\033[0mLOOP:", i + 1, "/", loop)
+                print("\033[38;5;4m[INFO]\033[0mLOOP:", i + 1, "/", loop)
                 tmp_time = time.time()
-                logs = "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n" + "SERVER-CMD : " + sc + "\n"
-                logt1 = "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n"
-                logt2 = "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n"
+                logs = "" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n" + "SERVER-CMD : " + sc + "\n"
+                logt1 = "" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n"
+                logt2 = "" + datetime.now().strftime("%Y/%m/%d %H:%M:%S") + "\n"
                 cszp_module.killsoccer()
 
                 data = module.Open("./config/config.conf")
@@ -179,72 +255,62 @@ class soccer:
                         print("\033[38;5;3m[WARNING]\033[0m" + "SOCCERWINDOW2_ERROR" + str(e))
 
                 try:
-                    logtemp1 = subprocess.Popen(sc, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    print("\t\033[38;5;4m[INFO]\033[0mrcssserver start.")
-                    logtemp2 = subprocess.Popen(cmd[0], shell=True, stdout=subprocess.PIPE,
-                                                stderr=subprocess.PIPE)
-                    print("\t\033[38;5;4m[INFO]\033[0mteam1 start.")
-                    time.sleep(1)
-                    logtemp3 = subprocess.Popen(cmd[1], shell=True, stdout=subprocess.PIPE,
-                                                stderr=subprocess.PIPE)
-                    print("\t\033[38;5;4m[INFO]\033[0mteam2 start.")
-                    stdout, stderr = logtemp2.communicate()
+                    with ThreadPoolExecutor(max_workers=10) as executor:
+                        t1 = executor.submit(run_and_capture, "rcssserver", sc)
+                        time.sleep(1)
+                        t2 = executor.submit(run_and_capture, "team1", cmd[0])
+                        time.sleep(1)
+                        t3 = executor.submit(run_and_capture, "team2", cmd[1])
+                    logtemp1 = t1.result()
+                    logtemp2 = t2.result()
+                    logtemp3 = t3.result()
                     try:
-                        stderr = stderr.decode("utf-8")
-                        stdout = stdout.decode("utf-8")
+                        stderr = logtemp2[1].decode("utf-8")
+                        stdout = logtemp2[0].decode("utf-8")
                     except UnicodeDecodeError as e:
                         print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
-                        stderr = stderr.decode("utf-8", "replace")
-                        stdout = stdout.decode("utf-8", "replace")
+                        stderr = logtemp2[1].decode("utf-8", "replace")
+                        stdout = logtemp2[0].decode("utf-8", "replace")
                     logt1 += stdout + stderr
                     logt1 += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp2.returncode))
-                    if logtemp2.returncode != 0:
-                        logtemp3.kill()
-                        logtemp1.kill()
-                        print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
+                    print("\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp2[2].returncode))
+                    if logtemp2[2].returncode != 0:
+                        print("\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
                         continue
 
-                    print("\t\033[38;5;4m[INFO]\033[0mteam1 stop.")
-                    stdout, stderr = logtemp3.communicate()
                     try:
-                        stderr = stderr.decode("utf-8")
-                        stdout = stdout.decode("utf-8")
+                        stderr = logtemp3[1].decode("utf-8")
+                        stdout = logtemp3[0].decode("utf-8")
                     except UnicodeDecodeError as e:
                         print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
-                        stderr = stderr.decode("utf-8", "replace")
-                        stdout = stdout.decode("utf-8", "replace")
+                        stderr = logtemp3[1].decode("utf-8", "replace")
+                        stdout = logtemp3[0].decode("utf-8", "replace")
                     logt2 += stdout + stderr
                     logt2 += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp3.returncode))
-                    if logtemp3.returncode != 0:
-                        logtemp1.kill()
-                        print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
+                    print("\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp3[2].returncode))
+                    if logtemp3[2].returncode != 0:
+                        print("\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
                         continue
 
-                    print("\t\033[38;5;4m[INFO]\033[0mteam2 stop.")
-                    stdout, stderr = logtemp1.communicate()
                     try:
-                        stderr = stderr.decode("utf-8")
-                        stdout = stdout.decode("utf-8")
+                        stderr = logtemp1[1].decode("utf-8")
+                        stdout = logtemp1[0].decode("utf-8")
                     except UnicodeDecodeError as e:
                         print("\033[38;5;3m[WARNING]\033[0m\t" + str(e))
-                        stderr = stderr.decode("utf-8", "replace")
-                        stdout = stdout.decode("utf-8", "replace")
+                        stderr = logtemp1[1].decode("utf-8", "replace")
+                        stdout = logtemp1[0].decode("utf-8", "replace")
                     logs += stdout + stderr
                     logs += "\n"
-                    print("\t\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp1.returncode))
-                    if logtemp1.returncode != 0:
-                        logtemp1.kill()
-                        print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
+                    print("\033[38;5;4m[INFO]\033[0mreturncode:" + str(logtemp1[2].returncode))
+                    if logtemp1[2].returncode != 0:
+                        print("\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。"))
                         error = 1
                         continue
 
-                    print("\t\033[38;5;4m[INFO]\033[0mrcssserver stop.")
                 except (subprocess.CalledProcessError, FileNotFoundError) as e:
-                    print("\t\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"), e)
+                    print("\033[38;5;9m\033[1m[ERR]\033[0m" + lang.lang("コマンド実行中にエラーが発生しました。\n"), e)
                     cszp_module.killsoccer(False)
                     error = 1
                     continue
@@ -255,9 +321,9 @@ class soccer:
                         raise KeyboardInterrupt
                     break
 
-                logs += "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-                logt1 += "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S")
-                logt2 += "\t" + datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                logs += datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                logt1 += datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+                logt2 += datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                 exittime = datetime.now().strftime("%Y%m%d_%H%M%S")
                 cszp_module.killsoccer(False)
                 soccer = cszp_log.log(logs)
@@ -287,7 +353,7 @@ class soccer:
                     temp.write(logt2)
                     temp.close()
 
-                if logs2[2] is not False:
+                if logs2[2]:
                     data = module.Open("./config/config.conf")
                     df = data.read()
                     # print(df.split(",")[9] + "/" + file)
@@ -340,6 +406,7 @@ class soccer:
                 heikin = data.mean()
                 x = np.array(range(max(max(data["team1_score"]), max(data["team2_score"])) + 1))
                 y = np.array([0] * (max(max(data["team1_score"]), max(data["team2_score"])) + 1))
+
                 for i in data["team1_score"]:
                     y[i] += 1
                 plt.bar(x - 0.15, y, color="y", width=0.3,
@@ -364,7 +431,10 @@ class soccer:
             except AttributeError:
                 pass
             if exit:
-                Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
+                if Input is None:
+                    input(lang.lang("Enterキーを押して続行..."))
+                else:
+                    Input.Input(lang.lang("Enterキーを押して続行..."), dot=False)
 
     def get_result(self):
         return self.result_list
@@ -431,6 +501,7 @@ def kakunin(module):
 
 
 def setting(lang, module, Input_, testmode=False, loopmode=False):
+    logger = logging.getLogger("setting")
     data = module.Open("./config/config.conf")
     datas = data.read().splitlines()
     data.close()
@@ -471,7 +542,7 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
         else:
             text += [["", None]]
         text += [
-            ["\033[38;5;10m" + lang.lang("サッカーを実行"), False]
+            ["\033[38;5;243m" + lang.lang("サッカーを実行"), False]
         ]
         ver = open("./version")
         v = ver.read()
@@ -557,14 +628,12 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                     text[select][1] = tmp.Input(lang.lang("サーバーの引数を入力（ない場合は空欄）"))
 
                 elif select == 7:
-                    tmp = yesno(lang.lang("選択"), [lang.lang("サーバーログを保存しますか？")])
-                    if tmp == 0:
+                    if text[select][1] == "No":
                         text[select][1] = "Yes"
                     else:
                         text[select][1] = "No"
                 elif select == 8:
-                    tmp = yesno(lang.lang("選択"), [lang.lang("プレイヤーログを保存しますか？")])
-                    if tmp == 0:
+                    if text[select][1] == "No":
                         text[select][1] = "Yes"
                     else:
                         text[select][1] = "No"
@@ -579,14 +648,12 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                     else:
                         text[select][1] = "No"
                 elif select == 11:
-                    tmp = yesno(lang.lang("選択"), [lang.lang("synchモードで実行しますか？")])
-                    if tmp == 0:
+                    if text[select][1] == "No":
                         text[select][1] = "Yes"
                     else:
                         text[select][1] = "No"
                 elif select == 12:
-                    tmp = yesno(lang.lang("選択"), [lang.lang("サーバーを起動させますか？")])
-                    if tmp == 0:
+                    if text[select][1] == "No":
                         text[select][1] = "Yes"
                     else:
                         text[select][1] = "No"
@@ -603,16 +670,14 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                         text[select][2] = 1
                 elif select == len(text) - 1:
                     ok = True
-                    for i in text:
-                        if len(i) == 3:
-                            if i[2] == 0:
-                                k = ""
-                                ok = False
-                                while k != "\n":
-                                    cuitools.box(lang.lang("エラー"), [lang.lang("問題箇所があります。確認してください。"),
-                                                                    lang.lang("Enterキーを押して続行...")])
-                                    k = cuitools.Key()
-                                break
+            s = True
+            text[-1][0] = "\033[38;5;10m" + lang.lang("サッカーを実行")
+            for i in text:
+                if len(i) == 3:
+                    if i[2] == 0:
+                        s = False
+                        text[-1][0] = "\033[38;5;243m" + lang.lang("サッカーを実行")
+                        break
 
             if k == "\x1b":
                 k = cuitools.Key()
@@ -623,6 +688,8 @@ def setting(lang, module, Input_, testmode=False, loopmode=False):
                             select += 1
                             while text[select][1] is None:
                                 select += 1
+                            if not s and select == len(text) - 1:
+                                select -= 2
                     elif k == "A":
                         if 0 < select:
                             select -= 1
