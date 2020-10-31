@@ -1,5 +1,9 @@
 import logging
 import os
+import sys
+
+sys.path.append(os.getcwd())
+os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 try:
     os.mkdir("logs")
@@ -17,31 +21,26 @@ def main():
     logger = logging.getLogger("main")
     print("\033[38;5;2mloading Now...")
     logger.info("loading Now...")
-    print("1/12")
-    import sys
-    logger.debug("imported sys module")
-    print("\033[1A3/12")
-    sys.path.append(os.getcwd())
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
+    print("1/7")
     logger.debug("set python path:" + os.getcwd())
     import json
     logger.debug("imported json module")
-    print("\033[1A4/12")
+    print("\033[1A2/7")
     import locale
     logger.debug("imported locale module")
-    print("\033[1A5/12")
+    print("\033[1A3/7")
     import platform
     logger.debug("imported platform module")
-    print("\033[1A6/12")
+    print("\033[1A4/7")
     from cszp.cszp_module import Open, terminal, figlet, error_dump, Input
     logger.debug("imported Open, terminal, figlet, error_dump, Input at cszp.cszp_module")
-    print("\033[1A7/12")
+    print("\033[1A5/7")
     from cszp import cszp_menu
     logger.debug("imported cszp_menu at cszp")
-    print("\033[1A8/12")
+    print("\033[1A6/7")
     import cuitools as subp
     logger.debug("imported cuitools module")
-    print("\033[1A9/12")
+    print("\033[1A7/7")
     subp.reset()
     logger.debug("imported subp module")
     print("\033[1;1H\033[0m\033[38;5;172m")
