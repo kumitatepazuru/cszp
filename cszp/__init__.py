@@ -11,7 +11,7 @@ except FileExistsError:
     pass
 
 logging.basicConfig(format='[%(asctime)s] - %(filename)s > %(name)s > %(lineno)d [%(levelname)s]: %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, filename="cszp/logs/cszp_log.log", filemode="w")
+                    datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG, filename="logs/cszp_log.log", filemode="w")
 
 logging.info("level: DEBUG")
 logging.debug("Running in module mode.")

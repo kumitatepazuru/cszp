@@ -1,5 +1,5 @@
 change log
-var 5.4.0.1:
+var 5.4.0.x:
 Modification place:
     Fixed bugs.
 
